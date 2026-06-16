@@ -129,6 +129,40 @@ class InviteRoleHierarchyTests(TestCase):
         self.assertTrue(Invitation.objects.filter(email="editor@example.com").exists())
 
 
+class OrgRoleChoiceGatingTests(TestCase):
+    """GET /members/ — the Admin org-role option is offered only to owners.
+
+    Non-owners can never grant Admin (services.create_invitation enforces it),
+    so the UI must not present the choice in the first place. Guards against the
+    option silently reappearing in the invite form or role dropdown.
+    """
+
+    def setUp(self):
+        self.org = Organization.objects.create(name="Test Org")
+        self.owner = _make_user("owner@example.com")
+        self.admin = _make_user("admin@example.com")
+        OrgMembership.objects.create(user=self.owner, organization=self.org, org_role="owner")
+        OrgMembership.objects.create(user=self.admin, organization=self.org, org_role="admin")
+        self.url = reverse("members:list")
+
+    def test_admin_is_not_offered_the_admin_role(self):
+        _login(self.client, self.admin)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        # `value="admin"` renders only for an org-role control (invite radio /
+        # role <option>); workspace roles have no "admin". Its absence proves
+        # the option is gated for this non-owner viewer.
+        self.assertNotContains(response, 'value="admin"')
+        self.assertContains(response, 'value="member"')
+
+    def test_owner_is_offered_the_admin_role(self):
+        _login(self.client, self.owner)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'value="admin"')
+        self.assertContains(response, 'value="member"')
+
+
 class UpdateMemberRoleHierarchyTests(TestCase):
     """POST /members/<id>/role/ — admin cannot demote owner."""
 

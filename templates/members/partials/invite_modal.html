@@ -21,7 +21,8 @@
             <form hx-post="{% url 'members:invite' %}"
                   hx-target="#invitations-list"
                   hx-swap="beforeend"
-                  @htmx:after-request.window="if(event.detail.successful) { showInviteModal = false; document.getElementById('no-invites-placeholder')?.remove(); }"
+                  data-inline-error="#invite-error"
+                  @htmx:after-request.window="if(event.detail.successful) { showInviteModal = false; document.getElementById('no-invites-placeholder')?.remove(); document.getElementById('invite-error').textContent = ''; }"
                   class="px-6 py-5 overflow-y-auto">
                 {% csrf_token %}
 
@@ -80,8 +81,8 @@
                     </p>
                 </div>
 
-                <!-- Error container -->
-                <div id="invite-error" class="mb-3"></div>
+                <!-- Error container (populated by the global htmx:responseError handler in base.html) -->
+                <div id="invite-error" class="mb-3 text-sm text-red-600 empty:hidden"></div>
 
                 <!-- Submit -->
                 <div class="flex justify-end gap-3">

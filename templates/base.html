@@ -212,6 +212,49 @@
             event.detail.headers['X-CSRFToken'] = document.querySelector('[name=csrfmiddlewaretoken]').value;
         });
     </script>
+
+    {% comment %}
+      Global htmx error surface. htmx does not swap non-2xx responses, so a
+      server's error text would otherwise be silently dropped (only a console
+      error remains). This listener reads that text (XSS-safe via DOMParser)
+      and either routes it to a form's inline container (via
+      data-inline-error="#selector") or shows the dismissible toast below.
+      A context can opt out entirely with data-no-error-toast.
+    {% endcomment %}
+    <div x-data="{ show: false, message: '', timer: null }"
+         x-show="show"
+         x-cloak
+         x-transition.opacity
+         @htmx-error.window="message = $event.detail.message; show = true; clearTimeout(timer); timer = setTimeout(() => show = false, 6000)"
+         class="fixed top-4 right-4 z-[100] max-w-sm"
+         role="alert" aria-live="assertive">
+        <div class="flex items-start gap-3 rounded-lg px-4 py-3 shadow-lg"
+             style="background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B;">
+            <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p class="text-sm flex-1" x-text="message"></p>
+            <button type="button" @click="show = false" class="flex-shrink-0 cursor-pointer" style="color: #DC2626;" aria-label="Dismiss">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+    </div>
+    <script nonce="{{ request.csp_nonce }}">
+        document.body.addEventListener('htmx:responseError', function(event) {
+            var elt = event.detail.elt;
+            // Contexts that manage their own error UI opt out entirely.
+            if (elt && elt.closest('[data-no-error-toast]')) return;
+            // Extract plain text from the response without executing or loading it.
+            var responseText = (event.detail.xhr && event.detail.xhr.responseText) || '';
+            var body = new DOMParser().parseFromString(responseText, 'text/html').body;
+            var message = (body.textContent || '').trim() || 'Something went wrong. Please try again.';
+            // Inline opt-in: write into the form's declared container instead of the toast.
+            var inline = elt && elt.closest('[data-inline-error]');
+            if (inline) {
+                var target = document.querySelector(inline.getAttribute('data-inline-error'));
+                if (target) { target.textContent = message; return; }
+            }
+            window.dispatchEvent(new CustomEvent('htmx-error', { detail: { message: message } }));
+        });
+    </script>
     {% if user.is_authenticated %}
     <div class="flex h-screen overflow-hidden"
          style="background: var(--surface-page);"
