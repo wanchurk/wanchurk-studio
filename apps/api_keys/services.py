@@ -212,6 +212,80 @@ def issue_api_key(
     return IssuedKey(api_key=api_key, plaintext_token=plaintext)
 
 
+def update_api_key(api_key: ApiKey, *, editor, permissions: list[str], social_accounts, expires_at=None) -> ApiKey:
+    """Edit an existing key's permissions, account allowlist, and expiry in place.
+
+    Used by the org UI's "Edit" action so a key's scope can change after
+    creation without re-issuing (which would mint a new token and break every
+    agent already using it). The token, ``workspace``, and ``issued_by`` are
+    immutable here.
+
+    Authorization mirrors ``issue_api_key`` — re-checked server-side so a
+    tampered form post can't escape it:
+      * ``editor`` must hold the org-level ``manage_api_keys`` permission.
+      * ``editor`` must have a ``WorkspaceMembership`` in the key's workspace.
+      * Every account must belong to that workspace; the allowlist stays >= 1.
+
+    Permissions get the one twist issuance doesn't need: the editor may only
+    flip permissions **within their own grantable set** (their effective
+    workspace permissions ∩ ``PERMISSION_KEYS``). Any permission the key
+    already holds that the editor cannot grant — e.g. granted by a
+    higher-privileged admin — is **preserved**, never silently stripped. The
+    ``& editor_grantable`` clamp also means a tampered post naming a permission
+    the editor lacks is dropped rather than raising.
+
+    Persists via ``save(update_fields=[...])`` + ``social_accounts.set`` so the
+    ``post_save`` and ``m2m_changed`` signals bust the ``verify_token`` row
+    cache immediately — the new scope applies on the very next API request.
+    """
+    from django.db import transaction
+
+    from apps.members.models import (
+        PERMISSION_KEYS,
+        OrgMembership,
+        WorkspaceMembership,
+        has_org_permission,
+    )
+
+    workspace = api_key.workspace
+
+    # Org-level gate first — same ordering as issue_api_key, so a non-admin
+    # with rich workspace perms still can't edit a key.
+    org_membership = OrgMembership.objects.filter(user=editor, organization_id=workspace.organization_id).first()
+    if not has_org_permission(org_membership, "manage_api_keys"):
+        raise ValueError(
+            f"User {editor} lacks the org-level 'manage_api_keys' permission "
+            f"for organization {workspace.organization_id}; cannot edit API keys."
+        )
+
+    try:
+        membership = WorkspaceMembership.objects.get(user=editor, workspace=workspace)
+    except WorkspaceMembership.DoesNotExist as exc:
+        raise ValueError(
+            f"User {editor} has no membership in workspace {workspace}; cannot edit an API key there."
+        ) from exc
+
+    # Accounts: non-empty, all in the key's workspace (mirrors issue_api_key).
+    sa_list = list(social_accounts)
+    if not sa_list:
+        raise ValueError("An API key must allowlist at least one connected account.")
+    for sa in sa_list:
+        if sa.workspace_id != workspace.id:
+            raise ValueError(f"SocialAccount {sa.id} does not belong to workspace {workspace.id}.")
+
+    # Permissions: flip only within the editor's grantable set; preserve the rest.
+    editor_grantable = {k for k, v in membership.effective_permissions.items() if v and k in PERMISSION_KEYS}
+    current = set(api_key.permissions or [])
+    new_permissions = (set(permissions or []) & editor_grantable) | (current - editor_grantable)
+
+    with transaction.atomic():
+        api_key.permissions = sorted(new_permissions)
+        api_key.expires_at = expires_at
+        api_key.save(update_fields=["permissions", "expires_at"])  # post_save → cache bust
+        api_key.social_accounts.set(sa_list)  # m2m_changed → cache bust
+    return api_key
+
+
 def revoke_api_key(api_key: ApiKey) -> None:
     """Mark a key revoked and bust the in-process cache.
 

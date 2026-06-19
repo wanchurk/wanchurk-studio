@@ -390,6 +390,23 @@ class TestIssue:
         assert ApiKey.objects.count() == 0
         assert b"do not belong to that workspace" in r.content
 
+    def test_malformed_account_id_redirects_not_500(self, admin_client, workspace, social_account):
+        """A tampered, non-UUID ``social_account_ids`` must yield a graceful
+        validation error + redirect, not a 500 from UUIDField coercion.
+        """
+        r = admin_client.post(
+            reverse("api_keys:issue"),
+            {
+                "name": "tamper-uuid",
+                "workspace_id": str(workspace.id),
+                "social_account_ids": ["not-a-uuid"],
+            },
+            follow=True,
+        )
+        assert r.status_code == 200  # followed the redirect — not a 500
+        assert b"do not belong to that workspace" in r.content
+        assert ApiKey.objects.count() == 0
+
 
 # ---------------------------------------------------------------------------
 # Revoke
@@ -464,3 +481,177 @@ class TestRevoke:
         assert r.status_code == 404
         foreign_key.api_key.refresh_from_db()
         assert foreign_key.api_key.revoked_at is None
+
+
+# ---------------------------------------------------------------------------
+# Edit
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+class TestEditKey:
+    def _issue(self, admin_user, workspace, social_account, permissions):
+        from apps.api_keys import services
+
+        return services.issue_api_key(
+            workspace=workspace,
+            social_accounts=[social_account],
+            issued_by=admin_user,
+            name="editable",
+            permissions=permissions,
+        ).api_key
+
+    def test_get_is_not_allowed(self, admin_client, admin_user, workspace, social_account):
+        key = self._issue(admin_user, workspace, social_account, [])
+        r = admin_client.get(reverse("api_keys:edit", args=[key.id]))
+        assert r.status_code == 405
+
+    def test_member_without_manage_api_keys_is_forbidden(self, member_client):
+        from uuid import uuid4
+
+        # The decorator runs before the key lookup, so a random id still 403s.
+        r = member_client.post(reverse("api_keys:edit", args=[uuid4()]))
+        assert r.status_code == 403
+
+    def test_success_updates_permissions_accounts_and_expiry(
+        self, admin_client, admin_user, workspace, social_account
+    ):
+        from apps.social_accounts.models import SocialAccount
+
+        second = SocialAccount.objects.create(
+            workspace=workspace,
+            platform="linkedin_personal",
+            account_platform_id="li-second-ui",
+            account_name="Second UI",
+            connection_status=SocialAccount.ConnectionStatus.CONNECTED,
+        )
+        key = self._issue(admin_user, workspace, social_account, ["create_posts"])
+        r = admin_client.post(
+            reverse("api_keys:edit", args=[key.id]),
+            {
+                "permissions": ["approve_posts"],
+                "social_account_ids": [str(second.id)],
+                "expires_at": "2030-01-01",
+            },
+        )
+        assert r.status_code == 302
+        assert r.headers["Location"] == reverse("api_keys:list")
+        key.refresh_from_db()
+        assert key.permissions == ["approve_posts"]
+        assert set(key.social_accounts.values_list("id", flat=True)) == {second.id}
+        assert key.expires_at is not None
+        assert key.expires_at.year == 2030
+
+    def test_empty_accounts_is_rejected(self, admin_client, admin_user, workspace, social_account):
+        key = self._issue(admin_user, workspace, social_account, ["create_posts"])
+        r = admin_client.post(
+            reverse("api_keys:edit", args=[key.id]),
+            {"permissions": ["create_posts"]},  # no social_account_ids
+            follow=True,
+        )
+        assert r.status_code == 200
+        assert b"Select at least one connected account" in r.content
+        key.refresh_from_db()
+        # Unchanged.
+        assert key.permissions == ["create_posts"]
+        assert set(key.social_accounts.values_list("id", flat=True)) == {social_account.id}
+
+    def test_empty_permissions_is_allowed(self, admin_client, admin_user, workspace, social_account):
+        """Submitting no permission checkboxes clears the (grantable) set —
+        an empty key is valid. admin_user is a workspace OWNER, so every perm
+        is theirs to grant and nothing is preserved."""
+        key = self._issue(admin_user, workspace, social_account, ["create_posts"])
+        r = admin_client.post(
+            reverse("api_keys:edit", args=[key.id]),
+            {"social_account_ids": [str(social_account.id)]},  # no permissions
+        )
+        assert r.status_code == 302
+        key.refresh_from_db()
+        assert key.permissions == []
+
+    def test_inactive_key_is_rejected(self, admin_client, admin_user, workspace, social_account):
+        from apps.api_keys import services
+
+        key = self._issue(admin_user, workspace, social_account, ["create_posts"])
+        services.revoke_api_key(key)
+        r = admin_client.post(
+            reverse("api_keys:edit", args=[key.id]),
+            {"permissions": [], "social_account_ids": [str(social_account.id)]},
+            follow=True,
+        )
+        assert r.status_code == 200
+        assert b"is not active" in r.content
+        key.refresh_from_db()
+        # Permissions untouched despite the POST.
+        assert key.permissions == ["create_posts"]
+
+    def test_cross_org_key_404s(self, admin_client, db):
+        from apps.accounts.models import User
+        from apps.api_keys import services
+        from apps.organizations.models import Organization
+        from apps.social_accounts.models import SocialAccount
+        from apps.workspaces.models import Workspace
+
+        other_org = Organization.objects.create(name="Other")
+        foreign_ws = Workspace.objects.create(name="Foreign", organization=other_org)
+        foreign_user = User.objects.create_user(
+            email="foreign-edit@example.com",
+            password="testpass123",
+            name="Foreign Edit",
+            tos_accepted_at=timezone.now(),
+        )
+        OrgMembership.objects.create(
+            user=foreign_user, organization=other_org, org_role=OrgMembership.OrgRole.OWNER
+        )
+        WorkspaceMembership.objects.create(
+            user=foreign_user,
+            workspace=foreign_ws,
+            workspace_role=WorkspaceMembership.WorkspaceRole.OWNER,
+        )
+        foreign_sa = SocialAccount.objects.create(
+            workspace=foreign_ws,
+            platform="linkedin_personal",
+            account_platform_id="li-foreign-edit",
+            account_name="Foreign Edit LinkedIn",
+            connection_status=SocialAccount.ConnectionStatus.CONNECTED,
+        )
+        foreign_key = services.issue_api_key(
+            workspace=foreign_ws,
+            social_accounts=[foreign_sa],
+            issued_by=foreign_user,
+            name="other-org-key",
+            permissions=["create_posts"],
+        ).api_key
+
+        r = admin_client.post(
+            reverse("api_keys:edit", args=[foreign_key.id]),
+            {"permissions": [], "social_account_ids": [str(foreign_sa.id)]},
+        )
+        assert r.status_code == 404
+        foreign_key.refresh_from_db()
+        assert foreign_key.permissions == ["create_posts"]
+
+    def test_list_renders_edit_modal(self, admin_client, admin_user, workspace, social_account):
+        self._issue(admin_user, workspace, social_account, ["create_posts"])
+        r = admin_client.get(reverse("api_keys:list"))
+        html = r.content.decode()
+        assert "showEditModal" in html
+        assert "Edit API key" in html
+        assert "Save changes" in html
+        assert reverse("api_keys:edit", args=[ApiKey.objects.first().id]) in html
+
+    def test_malformed_account_id_redirects_not_500(self, admin_client, admin_user, workspace, social_account):
+        """A tampered, non-UUID ``social_account_ids`` must redirect with a
+        validation error and leave the key untouched — not 500.
+        """
+        key = self._issue(admin_user, workspace, social_account, ["create_posts"])
+        r = admin_client.post(
+            reverse("api_keys:edit", args=[key.id]),
+            {"permissions": ["create_posts"], "social_account_ids": ["not-a-uuid"]},
+            follow=True,
+        )
+        assert r.status_code == 200  # followed the redirect — not a 500
+        assert b"do not belong to that workspace" in r.content
+        key.refresh_from_db()
+        assert key.permissions == ["create_posts"]
+        assert set(key.social_accounts.values_list("id", flat=True)) == {social_account.id}

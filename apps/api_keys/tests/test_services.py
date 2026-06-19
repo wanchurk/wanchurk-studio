@@ -419,6 +419,228 @@ class TestIssuanceGuards:
 
 
 # ---------------------------------------------------------------------------
+# Edit — update_api_key (permissions / accounts / expiry on an existing key)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+class TestUpdateApiKey:
+    def _issue(self, workspace, issuer, social_account, permissions):
+        return services.issue_api_key(
+            workspace=workspace,
+            social_accounts=[social_account],
+            issued_by=issuer,
+            name="editable",
+            permissions=permissions,
+        ).api_key
+
+    def test_owner_can_narrow_permissions(self, workspace, workspace_owner, social_account):
+        key = self._issue(workspace, workspace_owner.user, social_account, ["create_posts", "approve_posts"])
+        services.update_api_key(
+            key,
+            editor=workspace_owner.user,
+            permissions=["create_posts"],
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        key.refresh_from_db()
+        assert key.permissions == ["create_posts"]
+
+    def test_owner_can_add_permissions(self, workspace, workspace_owner, social_account):
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        services.update_api_key(
+            key,
+            editor=workspace_owner.user,
+            permissions=["create_posts"],
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        key.refresh_from_db()
+        assert key.permissions == ["create_posts"]
+
+    def test_editor_cannot_strip_ungrantable_permission(
+        self, workspace, workspace_owner, workspace_viewer, social_account
+    ):
+        """A viewer (holds only ``view_analytics``) editing a key that an owner
+        granted ``create_posts`` must NOT be able to strip ``create_posts`` —
+        even by submitting an empty permission set. ``view_analytics`` is in
+        the viewer's grant set, so an empty submit does drop that one.
+        """
+        key = self._issue(workspace, workspace_owner.user, social_account, ["create_posts", "view_analytics"])
+        services.update_api_key(
+            key,
+            editor=workspace_viewer.user,
+            permissions=[],  # viewer unchecks everything they can see
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        key.refresh_from_db()
+        # create_posts preserved (viewer can't grant it); view_analytics dropped.
+        assert key.permissions == ["create_posts"]
+
+    def test_editor_can_toggle_within_their_grant_set(
+        self, workspace, workspace_owner, workspace_viewer, social_account
+    ):
+        """The viewer can add a permission they hold (``view_analytics``) while
+        a perm they can't grant (``create_posts``) rides through untouched.
+        """
+        key = self._issue(workspace, workspace_owner.user, social_account, ["create_posts"])
+        services.update_api_key(
+            key,
+            editor=workspace_viewer.user,
+            permissions=["view_analytics"],
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        key.refresh_from_db()
+        assert key.permissions == ["create_posts", "view_analytics"]
+
+    def test_clamps_tampered_ungrantable_permission(self, workspace, workspace_viewer, workspace_owner, social_account):
+        """A tampered submit naming a perm the editor lacks is dropped, not
+        raised — the modal never offers it, so this is a fail-closed clamp.
+        """
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        services.update_api_key(
+            key,
+            editor=workspace_viewer.user,
+            permissions=["publish_directly"],  # viewer can't grant this
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        key.refresh_from_db()
+        assert key.permissions == []
+
+    def test_account_allowlist_swap_persists(self, workspace, workspace_owner, social_account):
+        from apps.social_accounts.models import SocialAccount
+
+        other = SocialAccount.objects.create(
+            workspace=workspace,
+            platform="linkedin_personal",
+            account_platform_id="li-second",
+            account_name="Second LinkedIn",
+        )
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        services.update_api_key(
+            key,
+            editor=workspace_owner.user,
+            permissions=[],
+            social_accounts=[other],
+            expires_at=None,
+        )
+        assert set(key.social_accounts.values_list("id", flat=True)) == {other.id}
+
+    def test_rejects_foreign_workspace_account(
+        self, workspace, workspace_owner, social_account, foreign_social_account
+    ):
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        with pytest.raises(ValueError, match="does not belong to workspace"):
+            services.update_api_key(
+                key,
+                editor=workspace_owner.user,
+                permissions=[],
+                social_accounts=[foreign_social_account],
+                expires_at=None,
+            )
+
+    def test_rejects_empty_allowlist(self, workspace, workspace_owner, social_account):
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        with pytest.raises(ValueError, match="at least one"):
+            services.update_api_key(
+                key,
+                editor=workspace_owner.user,
+                permissions=[],
+                social_accounts=[],
+                expires_at=None,
+            )
+
+    def test_sets_and_clears_expiry(self, workspace, workspace_owner, social_account):
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        when = timezone.now() + timedelta(days=30)
+        services.update_api_key(
+            key,
+            editor=workspace_owner.user,
+            permissions=[],
+            social_accounts=[social_account],
+            expires_at=when,
+        )
+        key.refresh_from_db()
+        assert key.expires_at == when
+        # Now clear it.
+        services.update_api_key(
+            key,
+            editor=workspace_owner.user,
+            permissions=[],
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        key.refresh_from_db()
+        assert key.expires_at is None
+
+    def test_rejects_editor_lacking_org_manage_api_keys(
+        self, workspace, workspace_owner, org_member_with_workspace_owner_role, social_account
+    ):
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        with pytest.raises(ValueError, match="manage_api_keys"):
+            services.update_api_key(
+                key,
+                editor=org_member_with_workspace_owner_role.user,
+                permissions=[],
+                social_accounts=[social_account],
+                expires_at=None,
+            )
+
+    def test_rejects_editor_with_no_workspace_membership(
+        self, workspace, workspace_owner, organization, social_account, db
+    ):
+        from apps.accounts.models import User
+
+        stranger = User.objects.create_user(
+            email="edit-stranger@example.com",
+            password="testpass123",
+            name="Edit Stranger",
+            tos_accepted_at=timezone.now(),
+        )
+        OrgMembership.objects.create(
+            user=stranger,
+            organization=organization,
+            org_role=OrgMembership.OrgRole.ADMIN,
+        )
+        key = self._issue(workspace, workspace_owner.user, social_account, [])
+        with pytest.raises(ValueError, match="no membership"):
+            services.update_api_key(
+                key,
+                editor=stranger,
+                permissions=[],
+                social_accounts=[social_account],
+                expires_at=None,
+            )
+
+    def test_update_busts_verify_token_cache(self, workspace, workspace_owner, social_account):
+        from django.core.cache import cache as _cache
+
+        issued = services.issue_api_key(
+            workspace=workspace,
+            social_accounts=[social_account],
+            issued_by=workspace_owner.user,
+            name="cache-edit",
+            permissions=["create_posts"],
+        )
+        # Warm the row cache via the auth path.
+        assert services.verify_token(issued.plaintext_token) is not None
+        assert _cache.get(services._active_cache_key(issued.api_key.lookup_prefix)) is not None
+
+        services.update_api_key(
+            issued.api_key,
+            editor=workspace_owner.user,
+            permissions=[],
+            social_accounts=[social_account],
+            expires_at=None,
+        )
+        # post_save / m2m_changed signals must have busted the cached row.
+        assert _cache.get(services._active_cache_key(issued.api_key.lookup_prefix)) is None
+
+
+# ---------------------------------------------------------------------------
 # Touch / last_used debounce
 # ---------------------------------------------------------------------------
 

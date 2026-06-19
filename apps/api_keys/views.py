@@ -104,7 +104,11 @@ def list_keys(request):
     )
     if not show_all:
         qs = qs.filter(revoked_at__isnull=True)
-    rows = [_row_context(k) for k in qs]
+    # Per-request memo (keyed by workspace id) so the Edit modal's grantable
+    # permissions + connected accounts are computed once per workspace, not
+    # once per key.
+    memo: dict = {"grantable": {}, "accounts": {}}
+    rows = [_row_context(k, user=request.user, memo=memo) for k in qs]
     # Surface a "Show N revoked" toggle only when there's actually something
     # behind it — avoids a noisy control on an org that's never revoked a key.
     revoked_count = ApiKey.objects.filter(workspace__organization=org, revoked_at__isnull=False).count()
@@ -127,25 +131,78 @@ def list_keys(request):
     return render(request, "api_keys/list.html", context)
 
 
-def _row_context(api_key: ApiKey) -> dict:
-    """Adapt an ``ApiKey`` row into the dict the list template expects."""
+def _row_context(api_key: ApiKey, *, user, memo: dict) -> dict:
+    """Adapt an ``ApiKey`` row into the dict the list template expects.
+
+    ``memo`` is a per-request cache (``{"grantable": {ws_id: ...},
+    "accounts": {ws_id: ...}}``) so the Edit modal's grantable-permission and
+    connected-account lookups run once per workspace, not once per key.
+    """
     if api_key.revoked_at is not None:
         status = "revoked"
     elif api_key.expires_at and api_key.expires_at <= timezone.now():
         status = "expired"
     else:
         status = "active"
+
+    on_key_accounts = list(api_key.social_accounts.all())
+
+    # Edit-modal context — only active keys get an Edit button, so don't pay
+    # the grantable/connected queries for revoked or expired rows.
+    editable_permissions: list[tuple[str, str, bool]] = []
+    locked_permissions: list[str] = []
+    editable_accounts: list[tuple] = []
+    if status == "active":
+        workspace = api_key.workspace
+        grantable = memo["grantable"].get(workspace.id)
+        if grantable is None:
+            # include_hidden=True so the modal's grantable set matches exactly
+            # what ``services.update_api_key`` grants over — no silent drop of a
+            # held-but-issuance-hidden permission.
+            grantable = _grantable_permissions(user, workspace, include_hidden=True)
+            memo["grantable"][workspace.id] = grantable
+        connected = memo["accounts"].get(workspace.id)
+        if connected is None:
+            connected = list(
+                SocialAccount.objects.filter(
+                    workspace=workspace,
+                    connection_status=SocialAccount.ConnectionStatus.CONNECTED,
+                ).order_by("platform", "account_name")
+            )
+            memo["accounts"][workspace.id] = connected
+
+        current = set(api_key.permissions or [])
+        grantable_keys = {k for k, _ in grantable}
+        editable_permissions = [(perm_key, label, perm_key in current) for perm_key, label in grantable]
+        # Perms the key holds that this editor can't grant — shown locked so
+        # the editor sees the full scope but can't strip what they don't control.
+        locked_permissions = sorted(current - grantable_keys)
+
+        # Account checkboxes = connected-in-workspace ∪ accounts already on the
+        # key, so an allowlisted-but-now-disconnected account stays pre-checked
+        # rather than silently dropping off on save.
+        on_key_ids = {a.id for a in on_key_accounts}
+        connected_ids = {sa.id for sa in connected}
+        editable_accounts = [(sa, sa.id in on_key_ids) for sa in connected]
+        for sa in on_key_accounts:
+            if sa.id not in connected_ids:
+                editable_accounts.append((sa, True))
+
     return {
         "id": api_key.id,
         "name": api_key.name,
         "workspace_name": api_key.workspace.name,
-        "accounts": list(api_key.social_accounts.all()),
+        "accounts": on_key_accounts,
         "permissions": list(api_key.permissions or []),
         "last_used_at": api_key.last_used_at,
         "issued_by": api_key.issued_by,
         "created_at": api_key.created_at,
         "expires_at": api_key.expires_at,
         "status": status,
+        # Edit-modal context (empty for non-active rows).
+        "editable_permissions": editable_permissions,  # [(key, label, checked)]
+        "locked_permissions": locked_permissions,  # [str]
+        "editable_accounts": editable_accounts,  # [(SocialAccount, checked)]
     }
 
 
@@ -211,9 +268,16 @@ def workspace_options_partial(request):
     return render(request, "api_keys/_workspace_options.html", context)
 
 
-def _grantable_permissions(user, workspace) -> list[tuple[str, str]]:
+def _grantable_permissions(user, workspace, *, include_hidden: bool = False) -> list[tuple[str, str]]:
     """Return ``[(perm_key, label), ...]`` of permissions the user can
     grant in ``workspace``.
+
+    ``include_hidden`` keeps issuance-hidden permissions in the list. The
+    issuance picker leaves it ``False`` (don't offer not-yet-shipped
+    features when minting a key); the *edit* modal sets it ``True`` so the
+    modal's grantable set matches exactly what ``services.update_api_key``
+    grants over (``held ∩ PERMISSION_KEYS``) — otherwise a held permission
+    that's hidden-from-issuance could be silently stripped on save.
 
     The rule mirrors what ``services.issue_api_key`` will enforce
     server-side: an issuer can only grant a permission they themselves
@@ -239,6 +303,64 @@ def _grantable_permissions(user, workspace) -> list[tuple[str, str]]:
 # ---------------------------------------------------------------------------
 # Issue
 # ---------------------------------------------------------------------------
+
+
+def _parse_expires_at(expires_at_str: str):
+    """Parse the optional ``expires_at`` form value.
+
+    Accepts either a full ISO timestamp or a date-only value from
+    ``<input type="date">`` (treated as end-of-day in the current timezone).
+    Returns ``(datetime | None, error | None)`` — an empty string is "no
+    expiry" (``(None, None)``), an unparseable value yields an error string.
+    Shared by ``issue_key`` and ``edit_key`` so the two endpoints agree.
+    """
+    if not expires_at_str:
+        return None, None
+
+    from datetime import datetime, time
+
+    from django.utils.dateparse import parse_date, parse_datetime
+
+    try:
+        dt = parse_datetime(expires_at_str)
+        date_only = parse_date(expires_at_str)
+    except ValueError:
+        return None, "Could not parse expires_at."
+
+    if dt is None and date_only is None:
+        return None, "Could not parse expires_at."
+
+    if date_only is not None:
+        # Date-only value (e.g. ``<input type="date">``) → end of that day, so
+        # a key set to expire on a date stays valid through it. ``parse_datetime``
+        # would otherwise hand back a naive *midnight*, expiring it a day early.
+        dt = datetime.combine(date_only, time.max)
+
+    if timezone.is_naive(dt):
+        dt = timezone.make_aware(dt, timezone.get_current_timezone())
+    return dt, None
+
+
+def _resolve_account_allowlist(account_ids, workspace) -> tuple[list, str | None]:
+    """Resolve posted ``social_account_ids`` to SocialAccounts in ``workspace``.
+
+    Returns ``(accounts, error | None)``. A tampered POST can carry a non-UUID
+    ``social_account_ids`` value; the ``UUIDField`` coercion then raises
+    ``ValueError``/``ValidationError`` when the queryset is evaluated — the same
+    failure the ``workspace_id`` path guards against (see
+    ``workspace_options_partial``). Catch it and treat it identically to
+    "accounts not in this workspace" so a malformed post yields a clean
+    validation error + redirect rather than a 500.
+
+    Shared by ``issue_key`` and ``edit_key`` so the two endpoints agree.
+    """
+    try:
+        accounts = list(SocialAccount.objects.filter(id__in=account_ids, workspace=workspace))
+    except (ValueError, DjangoValidationError):
+        return [], "Some selected accounts do not belong to that workspace."
+    if len(accounts) != len(set(account_ids)):
+        return accounts, "Some selected accounts do not belong to that workspace."
+    return accounts, None
 
 
 @_require_manage_api_keys
@@ -276,25 +398,13 @@ def issue_key(request):
 
     accounts: list[SocialAccount] = []
     if workspace is not None:
-        accounts = list(SocialAccount.objects.filter(id__in=account_ids, workspace=workspace))
-        if len(accounts) != len(set(account_ids)):
-            errors.append("Some selected accounts do not belong to that workspace.")
+        accounts, acct_err = _resolve_account_allowlist(account_ids, workspace)
+        if acct_err:
+            errors.append(acct_err)
 
-    expires_at = None
-    if expires_at_str:
-        from django.utils.dateparse import parse_datetime
-
-        # Accept either a full ISO timestamp or a date-only value from
-        # ``<input type="date">``.
-        expires_at = parse_datetime(expires_at_str)
-        if expires_at is None:
-            from datetime import datetime, time
-
-            try:
-                d = datetime.fromisoformat(expires_at_str).date()
-                expires_at = datetime.combine(d, time.max).replace(tzinfo=timezone.get_current_timezone())
-            except ValueError:
-                errors.append("Could not parse expires_at.")
+    expires_at, exp_err = _parse_expires_at(expires_at_str)
+    if exp_err:
+        errors.append(exp_err)
 
     if errors:
         for e in errors:
@@ -358,4 +468,66 @@ def revoke_key(request, key_id):
         messages.success(request, f"Revoked key “{key.name}”.")
     else:
         messages.info(request, f"Key “{key.name}” was already revoked.")
+    return redirect("api_keys:list")
+
+
+# ---------------------------------------------------------------------------
+# Edit
+# ---------------------------------------------------------------------------
+
+
+@_require_manage_api_keys
+@require_http_methods(["POST"])
+def edit_key(request, key_id):
+    """Update an existing key's permissions, account allowlist, and expiry.
+
+    A plain POST + redirect (PRG), like ``issue_key``/``revoke_key`` — not
+    HTMX — so we sidestep the teleport/HTMX interplay and reuse the flash
+    messages. Org-scoping mirrors ``revoke_key`` (defence in depth), and the
+    heavy lifting + re-validation lives in ``services.update_api_key``.
+    """
+    key = get_object_or_404(
+        ApiKey.objects.select_related("workspace", "workspace__organization"),
+        id=key_id,
+    )
+    # Defence in depth — never edit a key outside the current org.
+    if key.workspace.organization_id != request.org.id:
+        raise Http404()
+
+    # Only active keys are editable (mirror the row's Edit button gating).
+    if not key.is_active:
+        messages.info(request, f"Key “{key.name}” is not active; it can't be edited.")
+        return redirect("api_keys:list")
+
+    account_ids = request.POST.getlist("social_account_ids")
+    permission_keys = request.POST.getlist("permissions")
+    expires_at, exp_err = _parse_expires_at((request.POST.get("expires_at") or "").strip())
+
+    errors: list[str] = []
+    if not account_ids:
+        errors.append("Select at least one connected account.")
+    accounts, acct_err = _resolve_account_allowlist(account_ids, key.workspace)
+    if acct_err:
+        errors.append(acct_err)
+    if exp_err:
+        errors.append(exp_err)
+
+    if errors:
+        for e in errors:
+            messages.error(request, e)
+        return redirect("api_keys:list")
+
+    try:
+        services.update_api_key(
+            key,
+            editor=request.user,
+            permissions=permission_keys,
+            social_accounts=accounts,
+            expires_at=expires_at,
+        )
+    except ValueError as exc:
+        messages.error(request, str(exc))
+        return redirect("api_keys:list")
+
+    messages.success(request, f"Updated “{key.name}”.")
     return redirect("api_keys:list")
