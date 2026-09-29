@@ -304,6 +304,7 @@ class InstagramProvider(SocialProvider):
             raise PublishError(
                 "Instagram requires at least one media item",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         ig_user_id = content.extra.get("ig_user_id") or self._get_ig_user_id(access_token)

@@ -18,6 +18,8 @@ from typing import TYPE_CHECKING, Literal
 from ninja import Field, Schema
 from pydantic import field_serializer
 
+from providers import is_video_only, requires_media
+
 if TYPE_CHECKING:
     from apps.analytics.derive import DerivedMetric
     from apps.composer.models import PlatformPost, Post
@@ -74,6 +76,21 @@ class AccountSummary(Schema):
             "If false, ``first_comment`` is silently dropped at publish time."
         ),
     )
+    requires_video: bool = Field(
+        False,
+        description=(
+            "True when the platform publishes only video (TikTok, YouTube). Scheduling a post "
+            "with no video in ``media_asset_ids`` is rejected with 422."
+        ),
+    )
+    requires_media: bool = Field(
+        False,
+        description=(
+            "True when the platform can't publish text alone (Instagram, Pinterest, and the "
+            "``requires_video`` platforms). Scheduling a post with no ``media_asset_ids`` is "
+            "rejected with 422."
+        ),
+    )
 
     @classmethod
     def from_social_account(cls, sa) -> AccountSummary:
@@ -87,6 +104,8 @@ class AccountSummary(Schema):
             escaped_chars=sa.escaped_chars,
             needs_title=bool(sa.field_config.get("needs_title", False)),
             supports_first_comment=sa.supports_first_comment(),
+            requires_video=is_video_only(sa.platform),
+            requires_media=requires_media(sa.platform),
         )
 
 

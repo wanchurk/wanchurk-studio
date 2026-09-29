@@ -569,7 +569,7 @@ YouTube and Google Business Profile share the same Google Cloud credentials.
    {APP_URL}/social-accounts/callback/pinterest/
    ```
 3. Copy the **App ID** and **App Secret**
-4. Required scopes: `user_accounts:read`, `boards:read`, `pins:read`, `pins:write`
+4. Required scopes: `user_accounts:read`, `boards:read`, `boards:write`, `pins:read`, `pins:write`
 5. Set the environment variables:
    ```
    PLATFORM_PINTEREST_APP_ID=your-app-id

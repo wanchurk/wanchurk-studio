@@ -614,6 +614,10 @@
                                   x-html="platformIconSvg(charLimits[accId]?.platform || '')"></span>
                             <span class="text-xs font-semibold text-stone-600" x-text="charLimits[accId]?.name + ' - Pin Settings'"></span>
                         </div>
+                        <p x-show="!hasMediaAttached" class="px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                            <span class="font-semibold">Pinterest needs an image or a video.</span>
+                            Add one to schedule this post, or deselect the account.
+                        </p>
                         <!-- Select Board -->
                         <div>
                             <label class="block text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1">
@@ -745,6 +749,10 @@
                                   x-html="platformIconSvg(charLimits[accId]?.platform || '')"></span>
                             <span class="text-xs font-semibold text-stone-600" x-text="charLimits[accId]?.name + ' - Video Settings'"></span>
                         </div>
+                        <p x-show="!hasVideoAttached" class="px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                            <span class="font-semibold">YouTube only publishes videos.</span>
+                            Add a video to schedule this post, or deselect the account.
+                        </p>
                         <!-- Thumbnail -->
                         <div>
                             <label class="block text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1.5">Custom Thumbnail</label>
@@ -911,6 +919,10 @@
                             <span class="text-xs font-semibold text-stone-600" x-text="charLimits[accId]?.name + ' - Post Settings'"></span>
                             <span class="ml-auto text-[11px] text-stone-400" x-show="tt?.creator_nickname" x-text="'Posting to @' + (tt?.creator_nickname || '')"></span>
                         </div>
+                        <p x-show="!hasVideoAttached" class="px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                            <span class="font-semibold">TikTok only publishes videos.</span>
+                            Add a video to schedule this post, or deselect the account.
+                        </p>
                         <!-- Privacy: TikTok requires an explicit choice from the creator's allowed options -->
                         <div>
                             <label class="block text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1">
@@ -2067,6 +2079,7 @@ function composerApp() {
         get unsplashSelectedCount() { return Object.keys(this.unsplashSelected).length; },
 
         // Frame picker (YouTube thumbnail upload / TikTok cover timestamp)
+        hasMediaAttached: false,
         hasVideoAttached: false,
         hasSingleVideoAttached: false,
         showFramePicker: false,
@@ -2236,6 +2249,7 @@ function composerApp() {
             const syncVideoAttached = () => {
                 const thumbs = Array.from(document.querySelectorAll('#media-list .media-thumb'));
                 const videoCount = thumbs.filter(thumb => thumb.querySelector('video')).length;
+                this.hasMediaAttached = thumbs.length > 0;
                 this.hasVideoAttached = videoCount > 0;
                 this.hasSingleVideoAttached = thumbs.length === 1 && videoCount === 1;
             };

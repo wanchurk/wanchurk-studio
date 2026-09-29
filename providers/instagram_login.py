@@ -306,6 +306,7 @@ class InstagramLoginProvider(SocialProvider):
             raise PublishError(
                 "Instagram requires at least one media item",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         if content.post_type == PostType.CAROUSEL and len(content.media_urls) > 1:

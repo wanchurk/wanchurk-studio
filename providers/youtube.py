@@ -295,6 +295,7 @@ class YouTubeProvider(SocialProvider):
             raise PublishError(
                 "YouTube only supports VIDEO and SHORT post types",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         title = content.title or content.text or ""
@@ -391,6 +392,7 @@ class YouTubeProvider(SocialProvider):
         raise PublishError(
             "No video file provided (media_files required)",
             platform=self.platform_name,
+            retryable=False,
         )
 
     # ------------------------------------------------------------------

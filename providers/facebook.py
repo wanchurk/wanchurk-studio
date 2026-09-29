@@ -301,6 +301,7 @@ class FacebookProvider(SocialProvider):
             raise PublishError(
                 "page_id is required in content.extra for Facebook publishing",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         if content.post_type == PostType.IMAGE and content.media_urls:
@@ -360,11 +361,13 @@ class FacebookProvider(SocialProvider):
             raise PublishError(
                 f"Facebook multi-photo posts support at most {FACEBOOK_MAX_ATTACHED_MEDIA} photos (got {len(urls)})",
                 platform=self.platform_name,
+                retryable=False,
             )
         if any(content.is_video(index) for index in range(len(urls))):
             raise PublishError(
                 "Facebook multi-photo posts support images only; post videos separately",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         photo_ids: list[str] = []
@@ -473,6 +476,7 @@ class FacebookProvider(SocialProvider):
             raise PublishError(
                 "Facebook Reels require exactly one hosted video",
                 platform=self.platform_name,
+                retryable=False,
             )
         # Fails open on an unknown duration, like TikTok's max-duration check.
         # MediaAsset.duration comes from a best-effort background ffprobe that
@@ -485,6 +489,7 @@ class FacebookProvider(SocialProvider):
             raise PublishError(
                 "Facebook Reels must be between 3 and 90 seconds",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         start_data = self._request(
