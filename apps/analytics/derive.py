@@ -49,7 +49,7 @@ def calculate_engagement_rate(engagements: float, views: float | None = None, re
     return round((float(engagements) / denominator) * 100, 2)
 
 
-def _split(values: list[float], days: int) -> tuple[list[float], list[float]]:
+def _split[T](values: list[T], days: int) -> tuple[list[T], list[T]]:
     """Return (current, previous) windows of ``days`` length, latest-last."""
     if not values:
         return [], []
@@ -171,7 +171,7 @@ def engagement_rate(
         denom_cur_window = denom_series_per_day[-days:]
         # Right-align with the parts window; a shorter series has no early days.
         denom_cur_window = [0.0] * (len(parts_cur_window) - len(denom_cur_window)) + denom_cur_window
-        denominator = denom_key
+        denominator: str | None = denom_key
     else:
         denom_cur_total = float(fallback_followers)
         denom_prev_total = float(fallback_followers)

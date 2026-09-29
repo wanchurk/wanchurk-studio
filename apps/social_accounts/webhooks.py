@@ -251,9 +251,12 @@ def record_missing_scopes(account) -> list[str]:
     """Note which requested scopes the grant came back without.
 
     Runs on the same post-connect task as the webhook subscription so the
-    OAuth redirect stays free of blocking round trips. Best-effort: a platform
-    that cannot answer leaves the field untouched rather than claiming nothing
-    was granted.
+    OAuth redirect stays free of blocking round trips, which means it always
+    follows a fresh grant. Best-effort: a readback that fails leaves the field
+    untouched, so a transient error can't erase a real warning. A platform
+    that has no way to answer (``None``) is different — nothing can be known
+    missing from the new grant, so any earlier verdict about the old one, such
+    as the flag migration 0021 put on every Pinterest account, is cleared.
     """
     try:
         provider = _get_provider_for_platform(account.platform, account.workspace.organization_id)
@@ -268,6 +271,7 @@ def record_missing_scopes(account) -> list[str]:
         return []
 
     if granted is None:
+        SocialAccount.objects.filter(pk=account.pk).update(missing_scopes=[])
         return []
 
     missing = sorted(set(provider.required_scopes) - granted)

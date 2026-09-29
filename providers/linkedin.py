@@ -484,6 +484,7 @@ class LinkedInProvider(SocialProvider):
             raise PublishError(
                 "poll_options required in content.extra for LinkedIn poll posts",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         body = self._build_post_body(author, content.text)
@@ -844,6 +845,7 @@ class LinkedInProvider(SocialProvider):
             raise PublishError(
                 "No video source provided",
                 platform=self.platform_name,
+                retryable=False,
             )
 
         url = content.media_urls[0]
