@@ -643,6 +643,8 @@ Issue an API key from **Organization → API Keys**. Keys are workspace-scoped, 
 Authorization: Bearer bb_studio_...
 ```
 
+Also send a `User-Agent` header naming your client (e.g. `User-Agent: my-agent/1.0`). Cloudflare's Browser Integrity Check, which is on by default and fronts the hosted `studio.brightbean.xyz`, rejects Python's standard-library default (`Python-urllib/3.x`) with `403` and a plain-text `error code: 1010` body before the request reaches Studio. Any value of your own gets through; `requests`, `httpx`, curl, and Node clients already send one that does.
+
 Permission keys: `create_posts`, `publish_directly`, `upload_media`, `view_analytics`, `use_inbox`, `reply_from_inbox`. Each endpoint requires the relevant permission; missing permissions return `403`.
 
 ### Rate Limits
