@@ -175,3 +175,30 @@ class FormValuesAreDataNotCopy:
 
         values = re.findall(r'value="([^"]*)"', out)
         self.assertTrue(all(not re.search(r"[\u4e00-\u9fff]", v) for v in values), values)
+
+
+def test_identifier_option_is_never_translated():
+    """A timezone option's label and value must survive byte-for-byte."""
+    from apps.ui_zh.middleware import translate_html
+
+    html = '<select><option value="America/New_York">America/New_York</option></select>'
+    out = translate_html(html)
+    assert '<option value="America/New_York">America/New_York</option>' in out, out
+
+
+def test_copy_option_is_translated():
+    """Sort dropdowns hold copy, not identifiers, so they still translate."""
+    from apps.ui_zh.middleware import translate_html
+
+    html = '<select><option value="newest">Newest first</option></select>'
+    out = translate_html(html)
+    assert "最新优先" in out, out
+
+
+def test_surrounding_text_still_translated_next_to_an_option():
+    from apps.ui_zh.middleware import translate_html
+
+    html = '<button>New</button><select><option value="Europe/Amsterdam">Europe/Amsterdam</option></select>'
+    out = translate_html(html)
+    assert ">新建</button>" in out, out
+    assert 'value="Europe/Amsterdam">Europe/Amsterdam<' in out, out

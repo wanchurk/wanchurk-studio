@@ -40,6 +40,9 @@ TEXT_ATTRS = ("placeholder", "title", "aria-label", "alt")
 ATTR_RE = re.compile(r"\b(" + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
 
 TAG_SPLIT = re.compile(r"(<[^>]+>)")
+
+# <option> inner text is data (IANA names, codes), never copy.
+OPTION_BLOCK = re.compile(r"(<option\b[^>]*>)(.*?)(</option>)", re.I | re.S)
 HAS_LATIN = re.compile(r"[A-Za-z]")
 WS = re.compile(r"\s+")
 
@@ -182,12 +185,33 @@ def translate_html(html: str, translate: bool = True) -> str:
 
     html = SKIP_BLOCKS.sub(stash, html)
 
+    # Option labels are mixed: sort dropdowns hold copy ("Newest first") while
+    # timezone selects hold data (America/New_York). Data must survive verbatim —
+    # a translated value is rejected by the server on save. Treat an option as
+    # data when its label looks like an identifier (slash, underscore, code-like)
+    # or is identical to its value; everything else is ordinary copy.
+    kept_opts: list[str] = []
+
+    def stash_option(match: re.Match[str]) -> str:
+        tag, inner = match.group(1), match.group(2)
+        label = inner.strip()
+        m = re.search(r'value="([^"]*)"', tag, re.I)
+        value = m.group(1) if m else ""
+        is_data = "/" in label or (label == value and re.fullmatch(r"[A-Za-z0-9_+\-:/]+", label or ""))
+        if not is_data:
+            return match.group(0)
+        kept_opts.append(inner)
+        return f"{tag}\x00o{len(kept_opts) - 1}\x00{match.group(3)}"
+
+    html = OPTION_BLOCK.sub(stash_option, html)
+
     parts = TAG_SPLIT.split(html)
     for i, part in enumerate(parts):
-        if not part or part.startswith("<"):
+        if not part or part.startswith("<") or re.fullmatch(r"\x00o\d+\x00", part):
             continue
         parts[i] = convert(part)
     html = "".join(parts)
+    html = re.sub(r"\x00o(\d+)\x00", lambda m: kept_opts[int(m.group(1))], html)
 
     def attr(match: re.Match[str]) -> str:
         name, value = match.group(1), match.group(2)
