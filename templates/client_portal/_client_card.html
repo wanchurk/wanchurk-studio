@@ -3,7 +3,7 @@ Client approval card (design "ClientCard"). Context: post (+ post.visible_commen
 = external/team comments), workspace. Pending posts get approve/request-changes/reject;
 already-approved posts get "Put on hold"; held posts show their state.
 {% endcomment %}
-{% load tz approval_extras %}
+{% load tz approval_extras i18n %}
 <div class="rounded-2xl border border-stone-200 bg-white overflow-hidden transition-shadow hover:shadow-md"
      x-data="{ open: false, panel: null, comment: '' }">
     <div class="p-5 cursor-pointer" @click="open = !open">
@@ -48,7 +48,7 @@ already-approved posts get "Put on hold"; held posts show their state.
     <div x-show="open" x-cloak class="anim-collapse">
         {% if post.visible_comments %}
         <div class="px-5 pb-2 border-t border-stone-100 pt-3">
-            <p class="text-[0.6875rem] font-semibold text-stone-400 uppercase tracking-wide mb-2">From the team</p>
+            <p class="text-[0.6875rem] font-semibold text-stone-400 uppercase tracking-wide mb-2">{% trans "From the team" %}</p>
             {% for c in post.visible_comments %}
             <div class="flex gap-2 mb-2">
                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0" style="background: var(--primary);">{{ c.author.display_name|default:"?"|make_list|first|upper }}</span>
@@ -61,25 +61,25 @@ already-approved posts get "Put on hold"; held posts show their state.
         <div class="px-5 py-4 border-t border-stone-100 flex flex-wrap items-center gap-2 bg-stone-50">
             {% if post.client_pending %}
             <button hx-post="{% url 'client_portal:approve' post_id=post.id %}" hx-swap="none"
-                    class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white transition-all hover:-translate-y-px" style="background:#22C55E;">Approve</button>
+                    class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white transition-all hover:-translate-y-px" style="background:#22C55E;">{% trans "Approve" %}</button>
             <button @click="panel = panel === 'changes' ? null : 'changes'"
-                    class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full" style="background:#FEFCE8;color:#A16207;border:1px solid rgba(234,179,8,0.25);">Request changes</button>
+                    class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full" style="background:#FEFCE8;color:#A16207;border:1px solid rgba(234,179,8,0.25);">{% trans "Request changes" %}</button>
             <button @click="panel = panel === 'reject' ? null : 'reject'"
-                    class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full" style="background:#FEF2F2;color:#B91C1C;border:1px solid rgba(239,68,68,0.18);">Reject</button>
+                    class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full" style="background:#FEF2F2;color:#B91C1C;border:1px solid rgba(239,68,68,0.18);">{% trans "Reject" %}</button>
             {% elif post.client_on_hold %}
             <span class="text-[0.8125rem] text-stone-500 inline-flex items-center gap-1.5">
                 <svg class="w-[15px] h-[15px]" style="color:#7C3AED;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-                On hold — the team has been notified.
+                {% trans "On hold — the team has been notified." %}
             </span>
             {% elif post.client_approved %}
             <span class="text-[0.8125rem] text-stone-500 inline-flex items-center gap-1.5 mr-1">
                 <svg class="w-[15px] h-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-                You approved this. Scheduled to publish
+                {% trans "You approved this. Scheduled to publish" %}
             </span>
             <button @click="panel = panel === 'hold' ? null : 'hold'"
                     class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full inline-flex items-center gap-1.5" style="background:#F5F3FF;color:#6D28D9;border:1px solid rgba(124,58,237,0.2);">
                 <svg class="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-                Put on hold
+                {% trans "Put on hold" %}
             </button>
             {% endif %}
         </div>
@@ -94,14 +94,14 @@ already-approved posts get "Put on hold"; held posts show their state.
             <div class="flex gap-2 mt-3">
                 <button x-show="panel === 'changes'" hx-post="{% url 'client_portal:request_changes' post_id=post.id %}" hx-include="#client-comment-{{ post.id }}" hx-swap="none"
                         :disabled="!comment.trim()" :class="!comment.trim() && 'opacity-50 cursor-not-allowed'"
-                        class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white" style="background:#EAB308;">Submit feedback</button>
+                        class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white" style="background:#EAB308;">{% trans "Submit feedback" %}</button>
                 <button x-show="panel === 'reject'" hx-post="{% url 'client_portal:reject' post_id=post.id %}" hx-include="#client-comment-{{ post.id }}" hx-swap="none"
                         :disabled="!comment.trim()" :class="!comment.trim() && 'opacity-50 cursor-not-allowed'"
-                        class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white" style="background:#EF4444;">Reject post</button>
+                        class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white" style="background:#EF4444;">{% trans "Reject post" %}</button>
                 <button x-show="panel === 'hold'" hx-post="{% url 'client_portal:request_hold' post_id=post.id %}" hx-include="#client-comment-{{ post.id }}" hx-swap="none"
                         :disabled="!comment.trim()" :class="!comment.trim() && 'opacity-50 cursor-not-allowed'"
-                        class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white" style="background:#7C3AED;">Request hold</button>
-                <button @click="panel = null; comment = ''" class="px-4 py-2 text-[0.8125rem] font-medium rounded-full text-stone-500 hover:bg-stone-100">Cancel</button>
+                        class="px-4 py-2 text-[0.8125rem] font-semibold rounded-full text-white" style="background:#7C3AED;">{% trans "Request hold" %}</button>
+                <button @click="panel = null; comment = ''" class="px-4 py-2 text-[0.8125rem] font-medium rounded-full text-stone-500 hover:bg-stone-100">{% trans "Cancel" %}</button>
             </div>
         </div>
         {% endif %}

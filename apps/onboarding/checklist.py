@@ -5,6 +5,7 @@ Used by the workspace dashboard to render the dynamic "Get Started" card.
 """
 
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 def get_checklist_items(workspace):
@@ -25,8 +26,8 @@ def get_checklist_items(workspace):
     items = [
         {
             "key": "connect_accounts",
-            "title": "Connect social accounts",
-            "description": "Link your Instagram, LinkedIn, or other platforms",
+            "title": _("Connect social accounts"),
+            "description": _("Link your Instagram, LinkedIn, or other platforms"),
             "completed": SocialAccount.objects.for_workspace(workspace_id).exists(),
             "url": reverse(
                 "social_accounts:connect",
@@ -37,8 +38,8 @@ def get_checklist_items(workspace):
         },
         {
             "key": "create_post",
-            "title": "Create your first post",
-            "description": "Draft and schedule content for your audience",
+            "title": _("Create your first post"),
+            "description": _("Draft and schedule content for your audience"),
             "completed": Post.objects.for_workspace(workspace_id).exists(),
             "url": reverse(
                 "composer:compose",
@@ -49,8 +50,8 @@ def get_checklist_items(workspace):
         },
         {
             "key": "create_idea",
-            "title": "Create your first idea",
-            "description": "Capture content ideas to develop later",
+            "title": _("Create your first idea"),
+            "description": _("Capture content ideas to develop later"),
             "completed": Idea.objects.for_workspace(workspace_id).filter(author__isnull=False).exists(),
             "url": reverse(
                 "composer:create_landing",
@@ -61,8 +62,8 @@ def get_checklist_items(workspace):
         },
         {
             "key": "invite_members",
-            "title": "Invite your team",
-            "description": "Add team members to collaborate on content",
+            "title": _("Invite your team"),
+            "description": _("Add team members to collaborate on content"),
             "completed": WorkspaceMembership.objects.filter(
                 workspace_id=workspace_id,
                 workspace_role=WorkspaceMembership.WorkspaceRole.CLIENT,

@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -18,7 +19,7 @@
                     <tr>
                         <td style="padding: 24px 32px 32px 32px;">
                             <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 8px 0;">
-                                Hi there,
+                                {% trans "Hi there," %}
                             </p>
                             <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 24px 0;">
                                 {{ invited_by.display_name }} has invited you to join <strong>{{ org_name }}</strong> as a team member. Click the button below to accept the invitation and get started.
@@ -29,13 +30,13 @@
                                     <td align="center">
                                         <a href="{{ accept_url }}"
                                            style="display: inline-block; padding: 12px 32px; background: #F97316; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 9999px;">
-                                            Accept Invitation
+                                            {% trans "Accept Invitation" %}
                                         </a>
                                     </td>
                                 </tr>
                             </table>
                             <p style="font-size: 13px; color: #A8A29E; line-height: 1.6; margin: 24px 0 0 0;">
-                                This invitation expires in 7 days. If it expires, ask your team admin for a new one.
+                                {% trans "This invitation expires in 7 days. If it expires, ask your team admin for a new one." %}
                             </p>
                         </td>
                     </tr>

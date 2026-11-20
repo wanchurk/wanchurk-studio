@@ -1,15 +1,16 @@
 {% extends "layouts/workspace_settings.html" %}
+{% load i18n %}
 {% block title %}Settings - {{ workspace.name }} - Brightbean{% endblock %}
 {% block content %}
 <div class="max-w-2xl">
-    <h2 class="text-xl font-semibold mb-8" style="color: var(--text-primary);">General</h2>
+    <h2 class="text-xl font-semibold mb-8" style="color: var(--text-primary);">{% trans "General" %}</h2>
 
     <!-- Workspace Name section -->
     <form method="POST" class="mb-10">
         {% csrf_token %}
         <div class="flex items-end gap-4">
             <div class="flex-1">
-                <label for="name" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">Workspace Name</label>
+                <label for="name" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">{% trans "Workspace Name" %}</label>
                 <input type="text" id="name" name="name" value="{{ workspace.name }}" required maxlength="100"{% if not can_edit_settings %} disabled{% endif %}
                        class="input-focus w-full px-3 py-2 text-sm rounded-lg outline-none transition-colors"
                        style="border: 1px solid var(--border); color: var(--text-primary); background: var(--surface-0);">
@@ -18,7 +19,7 @@
             <button type="submit"
                     class="btn-neutral px-5 py-2 text-sm font-medium rounded-full cursor-pointer whitespace-nowrap"
                     style="background: var(--neutral-100); color: var(--text-primary);">
-                Save Changes
+                {% trans "Save Changes" %}
             </button>
             {% endif %}
         </div>
@@ -45,7 +46,7 @@
                                 @click="preview = ''; $refs.fileInput.value = ''; fileName = ''"
                                 class="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center cursor-pointer"
                                 style="background: var(--neutral-200); color: var(--text-secondary);"
-                                title="Remove logo">
+                                title="{% trans 'Remove logo' %}">
                             <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
                         {% endif %}
@@ -58,8 +59,8 @@
                 </template>
 
                 <div>
-                    <p class="text-sm font-semibold" style="color: var(--text-primary);">Logo</p>
-                    <p class="text-xs mt-0.5" style="color: var(--text-tertiary);">JPEG, PNG, WebP, or GIF. Max 2 MB.</p>
+                    <p class="text-sm font-semibold" style="color: var(--text-primary);">{% trans "Logo" %}</p>
+                    <p class="text-xs mt-0.5" style="color: var(--text-tertiary);">{% trans "JPEG, PNG, WebP, or GIF. Max 2 MB." %}</p>
                 </div>
             </div>
 
@@ -67,7 +68,7 @@
             <label class="btn-surface-neutral-50 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full cursor-pointer"
                    style="border: 1px solid var(--border); color: var(--text-primary); background: var(--surface-0);">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                Upload Logo
+                {% trans "Upload Logo" %}
                 <input type="file" name="icon" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" x-ref="fileInput"
                        @change="if ($el.files[0]) { preview = URL.createObjectURL($el.files[0]); fileName = $el.files[0].name; hasExisting = true; $el.closest('form').requestSubmit(); }">
             </label>
@@ -103,14 +104,14 @@
                 <button type="submit"
                         class="btn-neutral px-5 py-2 text-sm font-medium rounded-full cursor-pointer whitespace-nowrap shrink-0"
                         style="background: var(--neutral-100); color: var(--text-primary);">
-                    Restore Workspace
+                    {% trans "Restore Workspace" %}
                 </button>
             </form>
             {% elif can_archive %}
             <button type="button" @click="showArchiveModal = true"
                     class="btn-amber px-5 py-2 text-sm font-medium rounded-full cursor-pointer whitespace-nowrap shrink-0"
                     style="background: #FEF3C7; color: #92400E;">
-                Archive Workspace
+                {% trans "Archive Workspace" %}
             </button>
 
             <!-- Archive confirmation modal -->
@@ -125,21 +126,21 @@
                          class="w-full max-w-md rounded-xl shadow-xl"
                          style="background: var(--surface-0);">
                         <div class="flex items-center justify-between px-6 py-4" style="border-bottom: 1px solid var(--border);">
-                            <h3 class="text-base font-semibold" style="color: var(--text-primary);">Archive this workspace</h3>
+                            <h3 class="text-base font-semibold" style="color: var(--text-primary);">{% trans "Archive this workspace" %}</h3>
                             <button type="button" @click="showArchiveModal = false" class="cursor-pointer" style="color: var(--text-tertiary);">
                                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                             </button>
                         </div>
                         <div class="px-6 py-5">
                             <p class="text-sm" style="color: var(--text-secondary);">
-                                Are you sure you want to archive <strong>{{ workspace.name }}</strong>? The workspace will be hidden from the sidebar and no new posts can be created. All existing data will be preserved.
+                                {% trans "Are you sure you want to archive" %} <strong>{{ workspace.name }}</strong>? The workspace will be hidden from the sidebar and no new posts can be created. All existing data will be preserved.
                             </p>
                         </div>
                         <div class="flex justify-end gap-3 px-6 py-4" style="border-top: 1px solid var(--border);">
                             <button type="button" @click="showArchiveModal = false"
                                     class="btn-neutral px-5 py-2 text-sm font-medium rounded-full cursor-pointer"
                                     style="background: var(--neutral-100); color: var(--text-primary);">
-                                Cancel
+                                {% trans "Cancel" %}
                             </button>
                             <form method="POST">
                                 {% csrf_token %}
@@ -147,7 +148,7 @@
                                 <button type="submit"
                                         class="btn-opacity px-5 py-2 text-sm font-semibold rounded-full cursor-pointer whitespace-nowrap"
                                         style="background: #92400E; color: white;">
-                                    Yes, archive this workspace
+                                    {% trans "Yes, archive this workspace" %}
                                 </button>
                             </form>
                         </div>
@@ -162,7 +163,7 @@
     <div x-data="{ showDeleteModal: false }">
         <div class="flex items-start justify-between gap-4">
             <div>
-                <h3 class="text-base font-semibold mb-1" style="color: var(--text-primary);">Delete this workspace</h3>
+                <h3 class="text-base font-semibold mb-1" style="color: var(--text-primary);">{% trans "Delete this workspace" %}</h3>
                 <p class="text-sm" style="color: var(--text-secondary); max-width: 480px;">
                     {% if can_delete %}
                     Permanently delete this workspace and all of its data. This includes all posts, connected social accounts, media assets, and workspace memberships. This action cannot be undone.
@@ -176,7 +177,7 @@
             <button type="button" @click="showDeleteModal = true"
                     class="btn-danger-soft px-5 py-2 text-sm font-medium rounded-full cursor-pointer whitespace-nowrap shrink-0"
                     style="background: var(--error-soft, #FEE2E2); color: var(--error-500, #EF4444);">
-                Delete Workspace
+                {% trans "Delete Workspace" %}
             </button>
             {% endif %}
         </div>
@@ -194,30 +195,30 @@
                      class="w-full max-w-md rounded-xl shadow-xl"
                      style="background: var(--surface-0);">
                     <div class="flex items-center justify-between px-6 py-4" style="border-bottom: 1px solid var(--border);">
-                        <h3 class="text-base font-semibold" style="color: var(--text-primary);">Delete this workspace</h3>
+                        <h3 class="text-base font-semibold" style="color: var(--text-primary);">{% trans "Delete this workspace" %}</h3>
                         <button type="button" @click="showDeleteModal = false" class="cursor-pointer" style="color: var(--text-tertiary);">
                             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
                     </div>
                     <div class="px-6 py-5">
                         <p class="text-sm mb-3" style="color: var(--text-secondary);">
-                            Are you sure you want to permanently delete <strong>{{ workspace.name }}</strong>? This action cannot be undone.
+                            {% trans "Are you sure you want to permanently delete" %} <strong>{{ workspace.name }}</strong>{% trans "? This action cannot be undone." %}
                         </p>
                         <p class="text-sm" style="color: var(--text-secondary);">
-                            All of the following will be permanently removed:
+                            {% trans "All of the following will be permanently removed:" %}
                         </p>
                         <ul class="text-sm mt-2 ml-4 list-disc space-y-1" style="color: var(--text-secondary);">
-                            <li>All scheduled and published posts</li>
-                            <li>Connected social accounts</li>
-                            <li>Media assets and files</li>
-                            <li>Workspace memberships</li>
+                            <li>{% trans "All scheduled and published posts" %}</li>
+                            <li>{% trans "Connected social accounts" %}</li>
+                            <li>{% trans "Media assets and files" %}</li>
+                            <li>{% trans "Workspace memberships" %}</li>
                         </ul>
                     </div>
                     <div class="flex justify-end gap-3 px-6 py-4" style="border-top: 1px solid var(--border);">
                         <button type="button" @click="showDeleteModal = false"
                                 class="btn-neutral px-5 py-2 text-sm font-medium rounded-full cursor-pointer"
                                 style="background: var(--neutral-100); color: var(--text-primary);">
-                            Cancel
+                            {% trans "Cancel" %}
                         </button>
                         <form method="POST">
                             {% csrf_token %}
@@ -225,7 +226,7 @@
                             <button type="submit"
                                     class="btn-opacity px-5 py-2 text-sm font-semibold rounded-full cursor-pointer whitespace-nowrap"
                                     style="background: var(--error-500, #EF4444); color: white;">
-                                Yes, delete this workspace
+                                {% trans "Yes, delete this workspace" %}
                             </button>
                         </form>
                     </div>

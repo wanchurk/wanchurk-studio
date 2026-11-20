@@ -1,6 +1,6 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,10 +21,10 @@
                 <img src="{% static 'img/brightbean-studio-logo.webp' %}" alt="跨境铺子" class="w-12 h-12 object-contain">
             </div>
             <h1 class="text-2xl font-bold tracking-tight" style="color: var(--text-primary);">
-                Almost there
+                {% trans "Almost there" %}
             </h1>
             <p class="text-sm mt-1" style="color: var(--text-secondary);">
-                Please review and accept our terms to continue
+                {% trans "Please review and accept our terms to continue" %}
             </p>
         </div>
 
@@ -41,7 +41,7 @@
             {% endif %}
 
             <p class="text-sm mb-6" style="color: var(--text-secondary); line-height: 1.6;">
-                One quick step before you get started.
+                {% trans "One quick step before you get started." %}
             </p>
 
             <form method="post">
@@ -54,22 +54,22 @@
                            class="w-4 h-4 rounded mt-0.5 flex-shrink-0 cursor-pointer accent-[var(--primary)]"
                            style="border-color: var(--border);">
                     <span class="text-sm" style="color: var(--text-primary); line-height: 1.5;">
-                        I agree to the
-                        <a href="https://brightbean.xyz/terms-of-service/" target="_blank" rel="noopener" class="font-semibold underline hover:no-underline" style="color: var(--primary);">Terms of Service</a>
+                        {% trans "I agree to the" %}
+                        <a href="https://brightbean.xyz/terms-of-service/" target="_blank" rel="noopener" class="font-semibold underline hover:no-underline" style="color: var(--primary);">{% trans "Terms of Service" %}</a>
                         and
-                        <a href="https://brightbean.xyz/privacy-policy/" target="_blank" rel="noopener" class="font-semibold underline hover:no-underline" style="color: var(--primary);">Privacy Policy</a>
+                        <a href="https://brightbean.xyz/privacy-policy/" target="_blank" rel="noopener" class="font-semibold underline hover:no-underline" style="color: var(--primary);">{% trans "Privacy Policy" %}</a>
                     </span>
                 </label>
 
                 <button type="submit" class="btn-brand">
-                    Continue
+                    {% trans "Continue" %}
                 </button>
             </form>
         </div>
 
         <!-- Sign out link -->
         <p class="text-center text-sm mt-6" style="color: var(--text-secondary);">
-            <a href="{% url 'accounts:logout' %}" class="font-semibold hover:underline" style="color: var(--primary);">Sign out</a>
+            <a href="{% url 'accounts:logout' %}" class="font-semibold hover:underline" style="color: var(--primary);">{% trans "Sign out" %}</a>
         </p>
     </div>
 </main>

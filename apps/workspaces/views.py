@@ -4,6 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext
 from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.media_library.validators import image_upload_name
@@ -81,7 +82,7 @@ def workspace_settings(request, workspace_id):
                     .count()
                 )
                 if active_count <= 1:
-                    messages.error(request, "Cannot archive the last workspace in the organization.")
+                    messages.error(request, gettext("Cannot archive the last workspace in the organization."))
                     return redirect("workspaces:settings", workspace_id=workspace.id)
                 workspace.is_archived = True
                 workspace.save(update_fields=["is_archived"])
@@ -102,7 +103,7 @@ def workspace_settings(request, workspace_id):
                     .count()
                 )
                 if active_count <= 1 and not workspace.is_archived:
-                    messages.error(request, "Cannot delete the last workspace in the organization.")
+                    messages.error(request, gettext("Cannot delete the last workspace in the organization."))
                     return redirect("workspaces:settings", workspace_id=workspace.id)
                 workspace_name = workspace.name
                 workspace.delete()
@@ -131,14 +132,14 @@ def workspace_settings(request, workspace_id):
             # and store it under the extension those bytes justify.
             safe_name = image_upload_name(icon)
             if safe_name is None:
-                messages.error(request, "Logo must be a JPEG, PNG, WebP, or GIF image.")
+                messages.error(request, gettext("Logo must be a JPEG, PNG, WebP, or GIF image."))
                 return redirect("workspaces:settings", workspace_id=workspace.id)
             icon.name = safe_name
 
             # Validate file size (2 MB max)
             max_size = 2 * 1024 * 1024
             if icon.size > max_size:
-                messages.error(request, "Logo must be under 2 MB.")
+                messages.error(request, gettext("Logo must be under 2 MB."))
                 return redirect("workspaces:settings", workspace_id=workspace.id)
 
             # Delete old icon before saving new one
@@ -147,7 +148,7 @@ def workspace_settings(request, workspace_id):
             workspace.icon = icon
 
         workspace.save()
-        messages.success(request, "Workspace settings updated.")
+        messages.success(request, gettext("Workspace settings updated."))
         return redirect("workspaces:settings", workspace_id=workspace.id)
 
     active_count = Workspace.objects.filter(organization=workspace.organization, is_archived=False).count()
@@ -193,12 +194,12 @@ def approvals_settings(request, workspace_id):
         mode = request.POST.get("approval_workflow_mode", "")
         valid_modes = Workspace.ApprovalWorkflowMode.values
         if mode not in valid_modes:
-            messages.error(request, "Invalid approval workflow mode.")
+            messages.error(request, gettext("Invalid approval workflow mode."))
             return redirect("workspaces:approvals_settings", workspace_id=workspace.id)
 
         workspace.approval_workflow_mode = mode
         workspace.save(update_fields=["approval_workflow_mode", "updated_at"])
-        messages.success(request, "Approval workflow updated.")
+        messages.success(request, gettext("Approval workflow updated."))
         return redirect("workspaces:approvals_settings", workspace_id=workspace.id)
 
     return render(

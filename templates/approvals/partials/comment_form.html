@@ -1,3 +1,4 @@
+{% load i18n %}
 <form hx-post="{% url 'approvals:add_comment' workspace_id=workspace.id post_id=post.id %}"
       hx-target="#comment-list-{{ post.id }}"
       hx-swap="outerHTML"
@@ -16,12 +17,12 @@
                 <button type="button" @click="visibility = 'external'"
                         :class="visibility === 'external' ? 'bg-stone-900 text-white' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'"
                         class="px-2.5 py-1 text-[0.6875rem] font-semibold rounded-full transition-colors">
-                    Visible to Client
+                    {% trans "Visible to Client" %}
                 </button>
                 <button type="button" @click="visibility = 'internal'"
                         :class="visibility === 'internal' ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'"
                         class="px-2.5 py-1 text-[0.6875rem] font-semibold rounded-full transition-colors">
-                    Internal Only
+                    {% trans "Internal Only" %}
                 </button>
             </div>
             <input type="hidden" name="visibility" :value="visibility">
@@ -36,7 +37,7 @@
         <button type="submit"
                 class="px-3.5 py-1.5 text-[0.8125rem] font-semibold rounded-full text-white transition-colors"
                 style="background: var(--primary);">
-            Comment
+            {% trans "Comment" %}
         </button>
     </div>
 </form>

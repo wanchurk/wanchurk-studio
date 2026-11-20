@@ -1,3 +1,4 @@
+{% load i18n %}
 <!-- HTMX partial returned after creating a connection link -->
 <div style="
     background: var(--success-50);
@@ -8,7 +9,7 @@
 ">
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
         <svg width="16" height="16" fill="none" stroke="var(--success-500)" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span style="font-size: 0.875rem; font-weight: 600; color: var(--success-700);">Connection link created</span>
+        <span style="font-size: 0.875rem; font-weight: 600; color: var(--success-700);">{% trans "Connection link created" %}</span>
     </div>
 
     <!-- Copyable link -->
@@ -40,8 +41,8 @@
                 transition: all 150ms ease;
             "
         >
-            <span x-show="!copied">Copy</span>
-            <span x-show="copied" x-cloak style="color: var(--success-700);">Copied!</span>
+            <span x-show="!copied">{% trans "Copy" %}</span>
+            <span x-show="copied" x-cloak style="color: var(--success-700);">{% trans "Copied!" %}</span>
         </button>
     </div>
 

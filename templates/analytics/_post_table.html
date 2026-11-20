@@ -1,4 +1,4 @@
-{% load analytics_extras %}
+{% load analytics_extras i18n %}
 <div id="analytics-post-table">
     {# Toolbar #}
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--neutral-100);">
@@ -13,7 +13,7 @@
                    hx-get="?range={{ days }}&type=all&table_range={{ table.days_filter|default_if_none:'all' }}&partial=table"
                    hx-target="#analytics-post-table"
                    hx-swap="outerHTML"
-                   class="{% if table.type_filter == 'all' %}active{% endif %}">All</a>
+                   class="{% if table.type_filter == 'all' %}active{% endif %}">{% trans "All" %}</a>
                 {% for k in table.media_kinds %}
                 <a href="?range={{ days }}&type={{ k }}&table_range={{ table.days_filter|default_if_none:'all' }}"
                    hx-get="?range={{ days }}&type={{ k }}&table_range={{ table.days_filter|default_if_none:'all' }}&partial=table"
@@ -35,7 +35,7 @@
                    hx-get="?range={{ days }}&table_range=all&type={{ table.type_filter }}&partial=table"
                    hx-target="#analytics-post-table"
                    hx-swap="outerHTML"
-                   class="{% if table.days_filter is None %}active{% endif %}">All time</a>
+                   class="{% if table.days_filter is None %}active{% endif %}">{% trans "All time" %}</a>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         <table class="a-table">
             <thead>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <th class="first">Post</th>
+                    <th class="first">{% trans "Post" %}</th>
                     {% with toggled_dir=table.toggled_dir %}
                     <th>
                         <a href="?range={{ days }}&sort=date&dir={% if table.sort_key == 'date' %}{{ toggled_dir }}{% else %}desc{% endif %}&type={{ table.type_filter }}&table_range={{ table.days_filter|default_if_none:'all' }}"
@@ -94,7 +94,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="{{ table.metric_labels|length|add:2 }}" style="padding: 28px; text-align: center; color: var(--text-tertiary); font-family: inherit;">No posts match these filters.</td>
+                    <td colspan="{{ table.metric_labels|length|add:2 }}" style="padding: 28px; text-align: center; color: var(--text-tertiary); font-family: inherit;">{% trans "No posts match these filters." %}</td>
                 </tr>
                 {% endfor %}
             </tbody>

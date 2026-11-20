@@ -17,6 +17,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext
 from django.views.decorators.http import require_GET, require_POST
 from django_ratelimit.decorators import ratelimit
 
@@ -224,7 +225,7 @@ def connect_platform(request, workspace_id):
     # POST: initiate OAuth
     platform = request.POST.get("platform", "").strip()
     if platform not in dict(visible_platform_choices):
-        messages.error(request, "This platform is not available.")
+        messages.error(request, gettext("This platform is not available."))
         return redirect("social_accounts:connect", workspace_id=workspace_id)
 
     if platform not in configured_platforms:
@@ -294,25 +295,25 @@ def oauth_callback(request, platform):
     state_str = request.GET.get("state")
 
     if not code or not state_str:
-        messages.error(request, "Missing authorization code or state parameter.")
+        messages.error(request, gettext("Missing authorization code or state parameter."))
         return redirect("dashboard")
 
     # Validate state
     try:
         state_data = _unsign_state(state_str)
     except signing.BadSignature:
-        messages.error(request, "Invalid or expired OAuth state. Please try again.")
+        messages.error(request, gettext("Invalid or expired OAuth state. Please try again."))
         return redirect("dashboard")
 
     # Validate nonce from session
     session_data = request.session.pop(OAUTH_SESSION_KEY, {})
     if not session_data or session_data.get("nonce") != state_data.get("nonce"):
-        messages.error(request, "OAuth session mismatch. Please try again.")
+        messages.error(request, gettext("OAuth session mismatch. Please try again."))
         return redirect("dashboard")
 
     # Validate platform matches
     if state_data.get("platform") != platform:
-        messages.error(request, "Platform mismatch in OAuth callback.")
+        messages.error(request, gettext("Platform mismatch in OAuth callback."))
         return redirect("dashboard")
 
     # Validate user
@@ -441,7 +442,7 @@ def oauth_callback(request, platform):
         logger.exception("OAuth callback failed for %s", platform)
         messages.error(
             request,
-            "Failed to connect account. Please try again.",
+            gettext("Failed to connect account. Please try again."),
         )
 
     return redirect("calendar:calendar", workspace_id=workspace_id)
@@ -457,7 +458,7 @@ def select_account(request):
     """Show page/account selection after multi-page OAuth."""
     page_data = request.session.get("oauth_page_select")
     if not page_data:
-        messages.error(request, "No accounts to select. Please start over.")
+        messages.error(request, gettext("No accounts to select. Please start over."))
         return redirect("dashboard")
 
     workspace_id = page_data["workspace_id"]
@@ -484,7 +485,7 @@ def select_account(request):
     # POST: create accounts for selected pages
     selected_ids = request.POST.getlist("selected_pages")
     if not selected_ids:
-        messages.error(request, "Please select at least one account.")
+        messages.error(request, gettext("Please select at least one account."))
         return _render_picker()
 
     from providers.types import AccountProfile
@@ -567,7 +568,7 @@ def connect_bluesky(request, workspace_id):
     app_password = request.POST.get("app_password", "").strip()
 
     if not handle or not app_password:
-        messages.error(request, "Handle and app password are required.")
+        messages.error(request, gettext("Handle and app password are required."))
         return render(
             request,
             "social_accounts/bluesky_connect.html",
@@ -594,7 +595,7 @@ def connect_bluesky(request, workspace_id):
         logger.exception("Bluesky connection failed")
         messages.error(
             request,
-            "Failed to connect Bluesky account. Check your handle and app password.",
+            gettext("Failed to connect Bluesky account. Check your handle and app password."),
         )
         return render(
             request,
@@ -623,7 +624,7 @@ def connect_devto(request, workspace_id):
 
     api_key = request.POST.get("api_key", "").strip()
     if not api_key:
-        messages.error(request, "A DEV.to API key is required.")
+        messages.error(request, gettext("A DEV.to API key is required."))
         return render(
             request,
             "social_accounts/devto_connect.html",
@@ -642,7 +643,7 @@ def connect_devto(request, workspace_id):
         messages.success(request, f"Connected {profile.name} on DEV.to.")
     except Exception:
         logger.exception("DEV.to connection failed")
-        messages.error(request, "Failed to connect DEV.to account. Check your API key.")
+        messages.error(request, gettext("Failed to connect DEV.to account. Check your API key."))
         return render(request, "social_accounts/devto_connect.html", {"workspace_id": workspace_id})
 
     return redirect("calendar:calendar", workspace_id=workspace_id)
@@ -667,7 +668,7 @@ def connect_mastodon(request, workspace_id):
 
     instance_url = _normalize_mastodon_instance_url(request.POST.get("instance_url", ""))
     if not instance_url:
-        messages.error(request, "Instance URL is required.")
+        messages.error(request, gettext("Instance URL is required."))
         return render(
             request,
             "social_accounts/mastodon_connect.html",
@@ -676,7 +677,7 @@ def connect_mastodon(request, workspace_id):
 
     # Validate against SSRF - reject private/reserved IP ranges
     if not _is_safe_url(instance_url):
-        messages.error(request, "Invalid instance URL. Private or reserved addresses are not allowed.")
+        messages.error(request, gettext("Invalid instance URL. Private or reserved addresses are not allowed."))
         return render(
             request,
             "social_accounts/mastodon_connect.html",

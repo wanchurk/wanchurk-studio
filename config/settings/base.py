@@ -86,6 +86,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # Must sit after Session (reads the session language) and before Common.
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -114,6 +116,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.notifications.context_processors.unread_notification_count",
@@ -202,6 +205,24 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
+
+# --- Django i18n -------------------------------------------------------------
+# Chinese is a real translation catalog now, not a render-time rewrite.
+# "zh" is mapped onto the "zh-hans" catalog by Django's language negotiation,
+# so the existing ui_lang cookie values keep working untouched.
+LANGUAGES = [
+    ("en", "English"),
+    ("zh-hans", "简体中文"),
+]
+LOCALE_PATHS = [BASE_DIR / "locale"]
+# Reuse the cookie the language switcher already sets, so switching writes the
+# one value both the old middleware and Django read.
+LANGUAGE_COOKIE_NAME = "ui_lang"
+LANGUAGE_COOKIE_AGE = 60 * 60 * 24 * 365
+# Whether to store the language in the session. Off: the cookie is the single
+# source of truth, and a session copy would survive a logout on a shared browser.
+LANGUAGE_COOKIE_HTTPONLY = False
+LANGUAGE_COOKIE_SAMESITE = "Lax"
 
 # Static files
 STATIC_URL = "/static/"

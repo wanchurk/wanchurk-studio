@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext
 from django.views.decorators.http import require_http_methods, require_POST
 
 
@@ -90,7 +91,7 @@ def _handle_photo_update(request, user):
         # request, and a full save would write back any column another request
         # changed meanwhile (e.g. review_banner_dismissed_at).
         user.save(update_fields=["avatar", "updated_at"])
-        messages.success(request, "Photo removed.")
+        messages.success(request, gettext("Photo removed."))
         return
 
     # Handle upload
@@ -107,14 +108,14 @@ def _handle_photo_update(request, user):
 
     safe_name = image_upload_name(avatar)
     if safe_name is None:
-        messages.error(request, "Photo must be a JPEG, PNG, WebP, or GIF image.")
+        messages.error(request, gettext("Photo must be a JPEG, PNG, WebP, or GIF image."))
         return
     avatar.name = safe_name
 
     # Validate file size (2 MB max)
     max_size = 2 * 1024 * 1024
     if avatar.size > max_size:
-        messages.error(request, "Photo must be under 2 MB.")
+        messages.error(request, gettext("Photo must be under 2 MB."))
         return
 
     # Validate minimum dimensions (180x180)
@@ -130,10 +131,10 @@ def _handle_photo_update(request, user):
         with Image.open(avatar) as img:
             width, height = img.size
         if width < 180 or height < 180:
-            messages.error(request, "Photo must be at least 180×180 pixels.")
+            messages.error(request, gettext("Photo must be at least 180×180 pixels."))
             return
     except Exception:
-        messages.error(request, "Could not read image file.")
+        messages.error(request, gettext("Could not read image file."))
         return
     finally:
         avatar.seek(0)  # Reset file pointer after reading
@@ -144,19 +145,19 @@ def _handle_photo_update(request, user):
 
     user.avatar = avatar
     user.save(update_fields=["avatar", "updated_at"])
-    messages.success(request, "Photo updated.")
+    messages.success(request, gettext("Photo updated."))
 
 
 def _handle_name_update(request, user):
     """Handle name change."""
     name = request.POST.get("name", "").strip()
     if not name:
-        messages.error(request, "Name cannot be empty.")
+        messages.error(request, gettext("Name cannot be empty."))
         return
 
     user.name = name
     user.save(update_fields=["name"])
-    messages.success(request, "Name updated.")
+    messages.success(request, gettext("Name updated."))
 
 
 def _handle_password_update(request, user):
@@ -166,29 +167,29 @@ def _handle_password_update(request, user):
     password_confirm = request.POST.get("password_confirm", "")
 
     if not current_password:
-        messages.error(request, "Current password is required.")
+        messages.error(request, gettext("Current password is required."))
         return
 
     if not user.check_password(current_password):
-        messages.error(request, "Current password is incorrect.")
+        messages.error(request, gettext("Current password is incorrect."))
         return
 
     if not password:
-        messages.error(request, "New password cannot be empty.")
+        messages.error(request, gettext("New password cannot be empty."))
         return
 
     if len(password) < 8:
-        messages.error(request, "New password must be at least 8 characters.")
+        messages.error(request, gettext("New password must be at least 8 characters."))
         return
 
     if password != password_confirm:
-        messages.error(request, "New passwords do not match.")
+        messages.error(request, gettext("New passwords do not match."))
         return
 
     user.set_password(password)
     user.save(update_fields=["password", "updated_at"])
     update_session_auth_hash(request, user)
-    messages.success(request, "Password changed.")
+    messages.success(request, gettext("Password changed."))
 
 
 def _handle_account_deletion(request, user):
@@ -225,7 +226,7 @@ def _handle_account_deletion(request, user):
     # Safe to delete
     user.delete()
     logout(request)
-    messages.success(request, "Your account has been deleted.")
+    messages.success(request, gettext("Your account has been deleted."))
     return redirect("account_login")
 
 
@@ -241,7 +242,7 @@ def accept_terms(request):
             request.user.tos_accepted_at = timezone.now()
             request.user.save(update_fields=["tos_accepted_at"])
             return redirect("/")
-        messages.error(request, "You must agree to the Terms of Service and Privacy Policy to continue.")
+        messages.error(request, gettext("You must agree to the Terms of Service and Privacy Policy to continue."))
 
     return render(request, "account/accept_terms.html")
 

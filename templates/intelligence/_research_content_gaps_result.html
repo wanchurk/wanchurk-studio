@@ -1,4 +1,4 @@
-{% load intelligence_extras %}
+{% load intelligence_extras i18n %}
 <div>
     {% comment %}
       Header, niche identity + total gap count.
@@ -14,7 +14,7 @@
     </div>
 
     {% if not result.gaps %}
-    <p class="text-sm text-stone-500 py-4 text-center">No gaps found for this niche.</p>
+    <p class="text-sm text-stone-500 py-4 text-center">{% trans "No gaps found for this niche." %}</p>
     {% else %}
 
     {% comment %}
@@ -45,7 +45,7 @@
                 {% endif %}
 
                 <div class="flex items-center gap-2">
-                    <span class="text-[10px] uppercase tracking-wide text-stone-500">Opportunity</span>
+                    <span class="text-[10px] uppercase tracking-wide text-stone-500">{% trans "Opportunity" %}</span>
                     <span class="text-base font-bold tabular-nums px-2 py-0.5 rounded
                                  {% if gap.opportunity_score >= 70 %}bg-green-50 text-green-700
                                  {% elif gap.opportunity_score >= 40 %}bg-amber-50 text-amber-700
@@ -57,14 +57,14 @@
 
             {% comment %} Canonical title, what's currently dominating the niche {% endcomment %}
             <div>
-                <div class="text-[10px] uppercase tracking-wide text-stone-500 mb-1">Current top title</div>
+                <div class="text-[10px] uppercase tracking-wide text-stone-500 mb-1">{% trans "Current top title" %}</div>
                 <div class="text-sm font-medium text-stone-900 leading-snug">{{ gap.canonical_title }}</div>
             </div>
 
             {% comment %} Why the model thinks this is a gap {% endcomment %}
             {% if gap.explanation %}
             <div class="mt-3 pt-3 border-t border-stone-200/70">
-                <div class="text-[10px] uppercase tracking-wide text-stone-500 mb-1">Why it's a gap</div>
+                <div class="text-[10px] uppercase tracking-wide text-stone-500 mb-1">{% trans "Why it's a gap" %}</div>
                 <p class="text-xs text-stone-700 leading-relaxed">{{ gap.explanation }}</p>
             </div>
             {% endif %}
@@ -74,7 +74,7 @@
             <div class="mt-3 pt-3 border-t border-stone-200/70">
                 <div class="flex items-center gap-1.5 mb-2">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                    <div class="text-[10px] uppercase tracking-wide font-semibold" style="color: var(--primary);">Try these angles</div>
+                    <div class="text-[10px] uppercase tracking-wide font-semibold" style="color: var(--primary);">{% trans "Try these angles" %}</div>
                 </div>
                 <ul class="space-y-1.5 text-xs text-stone-800">
                     {% for angle in gap.suggested_angles %}
@@ -97,34 +97,34 @@
             {% if gap.components %}
             <div class="mt-3 pt-3 border-t border-stone-200/70">
                 <div class="flex items-center mb-2">
-                    <div class="text-[10px] uppercase tracking-wide text-stone-500">Signals</div>
+                    <div class="text-[10px] uppercase tracking-wide text-stone-500">{% trans "Signals" %}</div>
                     <span class="intel-tooltip-trigger" tabindex="0">
                         <span class="intel-tooltip-icon" aria-hidden="true">?</span>
                         <span role="tooltip" class="intel-tooltip" data-align="left">
-                            <strong>Demand</strong>: search volume + trends interest. Higher is better.<br>
-                            <strong>Supply</strong>: how saturated the niche is with existing content. <em>Lower</em> is better (less competition).<br>
-                            <strong>Recency</strong>: how fresh the top-ranking videos are. <em>Lower</em> is better (existing content is older, ripe for refresh).
+                            <strong>{% trans "Demand" %}</strong>: search volume + trends interest. Higher is better.<br>
+                            <strong>{% trans "Supply" %}</strong>: how saturated the niche is with existing content. <em>{% trans "Lower" %}</em> {% trans "is better (less competition)." %}<br>
+                            <strong>{% trans "Recency" %}</strong>: how fresh the top-ranking videos are. <em>{% trans "Lower" %}</em> {% trans "is better (existing content is older, ripe for refresh)." %}
                         </span>
                     </span>
                 </div>
                 <div class="space-y-1.5">
                     {% with c=gap.components %}
                     <div class="grid grid-cols-[80px_1fr_50px] items-center gap-2">
-                        <div class="text-[11px] text-stone-600">Demand</div>
+                        <div class="text-[11px] text-stone-600">{% trans "Demand" %}</div>
                         <div class="h-1 rounded-full bg-stone-200 overflow-hidden">
                             <div class="h-full rounded-full" style="width: {% widthratio c.demand 1 100 %}%; background: var(--primary);"></div>
                         </div>
                         <div class="text-[11px] font-mono tabular-nums text-stone-700 text-right">{{ c.demand|pretty_percent:0 }}</div>
                     </div>
                     <div class="grid grid-cols-[80px_1fr_50px] items-center gap-2">
-                        <div class="text-[11px] text-stone-600">Supply</div>
+                        <div class="text-[11px] text-stone-600">{% trans "Supply" %}</div>
                         <div class="h-1 rounded-full bg-stone-200 overflow-hidden">
                             <div class="h-full rounded-full" style="width: {% widthratio c.supply 1 100 %}%; background: var(--primary);"></div>
                         </div>
                         <div class="text-[11px] font-mono tabular-nums text-stone-700 text-right">{{ c.supply|pretty_percent:0 }}</div>
                     </div>
                     <div class="grid grid-cols-[80px_1fr_50px] items-center gap-2">
-                        <div class="text-[11px] text-stone-600">Recency</div>
+                        <div class="text-[11px] text-stone-600">{% trans "Recency" %}</div>
                         <div class="h-1 rounded-full bg-stone-200 overflow-hidden">
                             <div class="h-full rounded-full" style="width: {% widthratio c.recency 1 100 %}%; background: var(--primary);"></div>
                         </div>
@@ -196,7 +196,7 @@
 
             {% if ev.related_queries %}
             <div class="mt-3 pt-3 border-t border-stone-200/70">
-                <div class="text-[10px] uppercase tracking-wide text-stone-500 mb-1.5">Related searches</div>
+                <div class="text-[10px] uppercase tracking-wide text-stone-500 mb-1.5">{% trans "Related searches" %}</div>
                 <div class="flex flex-wrap gap-1">
                     {% for q in ev.related_queries %}
                     <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-stone-100 text-stone-600">{{ q }}</span>
