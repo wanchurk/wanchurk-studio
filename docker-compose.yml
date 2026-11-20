@@ -1,3 +1,8 @@
+# Pinned so the project name (and therefore container, network and volume names)
+# does not follow the directory name. Renaming the checkout must not orphan the
+# database volume.
+name: wanchurk-studio
+
 services:
   migrate:
     build: .
