@@ -81,9 +81,7 @@ def test_switch_rejects_unknown_language(client):
 
 
 def test_switch_blocks_open_redirect(client):
-    resp = client.post(
-        SWITCH_URL, {"lang": "en", "next": "https://evil.example/steal"}
-    )
+    resp = client.post(SWITCH_URL, {"lang": "en", "next": "https://evil.example/steal"})
     assert resp["Location"] == "/"
 
 
@@ -129,9 +127,7 @@ def test_switcher_form_is_available_to_logged_in_users(client):
     )
     org = Organization.objects.create(name="Test Org")
     ws = Workspace.objects.create(organization=org, name="WS")
-    OrgMembership.objects.create(
-        user=user, organization=org, org_role=OrgMembership.OrgRole.OWNER
-    )
+    OrgMembership.objects.create(user=user, organization=org, org_role=OrgMembership.OrgRole.OWNER)
     WorkspaceMembership.objects.create(
         user=user,
         workspace=ws,

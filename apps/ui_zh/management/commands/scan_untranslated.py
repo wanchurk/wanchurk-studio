@@ -34,9 +34,19 @@ WORKSPACE_UUID = "5ec3442e-37dc-4fb4-9ce4-17f8795319df"
 LATIN_LABEL = re.compile(r"^[A-Za-z][A-Za-z0-9 ,.'&/()\-–—:!?+%#]*$")
 # Route patterns that need more than a workspace id to be meaningful.
 SKIP_PATTERNS = (
-    "logout", "password/reset/key", "confirm-email", "reauthenticate",
-    "3rdparty", "social/login", "social/signup", "google/login",
-    "callback", "inactive", "delete", "revoke", "disconnect",
+    "logout",
+    "password/reset/key",
+    "confirm-email",
+    "reauthenticate",
+    "3rdparty",
+    "social/login",
+    "social/signup",
+    "google/login",
+    "callback",
+    "inactive",
+    "delete",
+    "revoke",
+    "disconnect",
 )
 
 

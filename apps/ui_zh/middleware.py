@@ -37,7 +37,7 @@ SKIP_BLOCKS = re.compile(
 )
 
 TEXT_ATTRS = ("placeholder", "title", "aria-label", "alt", "value")
-ATTR_RE = re.compile(r'\b(' + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
+ATTR_RE = re.compile(r"\b(" + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
 
 TAG_SPLIT = re.compile(r"(<[^>]+>)")
 HAS_LATIN = re.compile(r"[A-Za-z]")
@@ -70,6 +70,11 @@ def _pattern_for(key: str) -> re.Pattern[str]:
 
 
 _COMPILED: dict[str, re.Pattern[str]] = {}
+
+# Declared here, not just assigned through `global` below: translate_text() reads
+# it, and relying on the import-time _compile_all() call to have already created
+# the name is fragile.
+_KEYS_BY_LENGTH: list[str] = []
 
 
 def _compile_all() -> None:
