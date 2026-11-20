@@ -202,3 +202,18 @@ def test_surrounding_text_still_translated_next_to_an_option():
     out = translate_html(html)
     assert ">新建</button>" in out, out
     assert 'value="Europe/Amsterdam">Europe/Amsterdam<' in out, out
+
+
+def test_timezone_identifier_is_never_partially_translated():
+    """Dropdown labels outside <option> (the ui_select component) are data too."""
+    from apps.ui_zh.middleware import translate_text
+
+    for tz in ("America/New_York", "Europe/Amsterdam", "Etc/GMT+5", "US/Eastern"):
+        assert translate_text(tz) == tz, tz
+
+
+def test_sentence_with_a_slash_still_translates():
+    """The timezone guard must not swallow ordinary copy."""
+    from apps.ui_zh.middleware import translate_text
+
+    assert translate_text("Save Changes") == "保存修改"

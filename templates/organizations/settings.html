@@ -113,7 +113,7 @@
                     <!-- Body -->
                     <div class="px-6 py-5">
                         <p class="text-sm mb-3" style="color: var(--text-secondary);">
-                            This will permanently delete <strong>{{ organization.name }}</strong> right now, bypassing the 14-day grace period. This action cannot be undone.
+                            {% if ui_is_zh %}此操作会立即永久删除 <strong>{{ organization.name }}</strong>，跳过 14 天宽限期。此操作无法撤销。{% else %}This will permanently delete <strong>{{ organization.name }}</strong> right now, bypassing the 14-day grace period. This action cannot be undone.{% endif %}
                         </p>
                         <p class="text-sm" style="color: var(--text-secondary);">
                             All of the following will be permanently removed:
@@ -155,7 +155,7 @@
             <div>
                 <h3 class="text-base font-semibold mb-1" style="color: var(--text-primary);">Delete this organization</h3>
                 <p class="text-sm" style="color: var(--text-secondary); max-width: 480px;">
-                    Request deletion of this organization and its workspaces, posts, media and team memberships. YouTube connections and API data are removed immediately. Other data has a 14-day grace period. Cancelling requires reconnecting YouTube.
+                    {% if ui_is_zh %}申请删除此组织及其工作区、内容、素材和团队成员关系。YouTube 连接和 API 数据会立即移除，其他数据有 14 天宽限期。取消删除需要重新连接 YouTube。{% else %}Request deletion of this organization and its workspaces, posts, media and team memberships. YouTube connections and API data are removed immediately. Other data has a 14-day grace period. Cancelling requires reconnecting YouTube.{% endif %}
                 </p>
             </div>
 

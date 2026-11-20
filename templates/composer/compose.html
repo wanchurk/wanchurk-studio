@@ -409,7 +409,7 @@
                 <div class="border border-stone-200 bg-stone-50 rounded-xl p-3 flex items-start justify-between gap-3">
                     <div class="flex items-start gap-2">
                         <svg class="w-4 h-4 text-stone-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
-                        <p class="text-xs text-stone-600">This post is <span class="font-semibold">{{ post.get_status_display|default:post.status }}</span> and read-only. Use <span class="font-semibold">Clone</span> to repost an editable copy.</p>
+                        <p class="text-xs text-stone-600">{% if ui_is_zh %}此内容为 <span class="font-semibold">{{ post.get_status_display|default:post.status }}</span>，只能查看。使用 <span class="font-semibold">克隆</span> 可转发一份可编辑的副本。{% else %}This post is <span class="font-semibold">{{ post.get_status_display|default:post.status }}</span> and read-only. Use <span class="font-semibold">Clone</span> to repost an editable copy.{% endif %}</p>
                     </div>
                     <button type="button"
                             class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-stone-800 text-white hover:bg-stone-900 flex-shrink-0 cursor-pointer"
@@ -530,7 +530,7 @@
                                  @drop.prevent="handleFileDrop($event); $el.classList.remove('dragover')"
                                  @click="$refs.fileInput.click()">
                                 <svg class="w-6 h-6 text-stone-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                <span class="text-[11px] text-stone-400 leading-tight">Drag & drop or <span class="text-orange-500 font-medium">select files</span></span>
+                                <span class="text-[11px] text-stone-400 leading-tight">{% if ui_is_zh %}拖放或 <span class="text-orange-500 font-medium">选择文件</span>{% else %}Drag & drop or <span class="text-orange-500 font-medium">select files</span>{% endif %}</span>
                             </div>
                             {% if unsplash_enabled %}
                             <button type="button" class="media-unsplash-btn" title="Search Unsplash"
@@ -1536,7 +1536,7 @@
 
                                 {% if not post_is_scheduled %}
                                 <p class="mt-3 text-xs text-stone-400 leading-relaxed">
-                                    Saving as a draft keeps this as a <span class="font-medium text-stone-500">proposed</span> time. Use <span class="font-medium text-stone-500">Set Schedule</span> to publish at this time.
+                                    {% if ui_is_zh %}存为草稿时，这会保留为 <span class="font-medium text-stone-500">建议</span> 时间。使用 <span class="font-medium text-stone-500">设置排期</span> 即可在该时间发布。{% else %}Saving as a draft keeps this as a <span class="font-medium text-stone-500">proposed</span> time. Use <span class="font-medium text-stone-500">Set Schedule</span> to publish at this time.{% endif %}
                                 </p>
                                 {% endif %}
 

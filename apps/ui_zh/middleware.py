@@ -44,6 +44,11 @@ TAG_SPLIT = re.compile(r"(<[^>]+>)")
 # <option> inner text is data (IANA names, codes), never copy.
 OPTION_BLOCK = re.compile(r"(<option\b[^>]*>)(.*?)(</option>)", re.I | re.S)
 HAS_LATIN = re.compile(r"[A-Za-z]")
+# Region/City or Etc/GMT±N style identifiers. Anchored so ordinary sentences
+# containing a slash ("Read/write access") are not mistaken for one.
+TZ_ID = re.compile(r"^(?:[A-Z][A-Za-z_]+/[A-Za-z_+\-/0-9]+|Etc/[A-Za-z0-9+\-]+|UTC|GMT)$")
+# The ui_select component strips the region prefix, leaving "New_York".
+TZ_CITY = re.compile(r"^[A-Z][A-Za-z]*(?:_[A-Z][A-Za-z]*)+$")
 WS = re.compile(r"\s+")
 
 
@@ -126,6 +131,13 @@ def translate_text(text: str) -> str:
         return text
 
     original = WS.sub(" ", text).strip()
+
+    # IANA timezone identifiers ("America/New_York", "Etc/GMT+5") are data.
+    # A partially translated one is unusable, and they surface as dropdown
+    # labels as well as values — sometimes with the region prefix stripped, so
+    # a bare "New_York" or "Los_Angeles" must be caught too.
+    if TZ_ID.match(original) or TZ_CITY.match(original):
+        return text
 
     # Exact dictionary hit first, on the untouched source text. Brand rewriting
     # must not run before this, or keys containing the upstream name never match.

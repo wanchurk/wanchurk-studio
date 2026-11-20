@@ -35,7 +35,7 @@
 
                 <!-- Info -->
                 <div class="mb-5 px-3 py-2.5 rounded-lg text-xs" style="background: var(--neutral-50); color: var(--text-secondary);">
-                    <p>The client will receive an invitation email to create an account. Once accepted, they will have <strong>Client</strong> access to this workspace, allowing them to review and approve posts via the Client Portal.</p>
+                    <p>{% if ui_is_zh %}客户会收到一封创建账号的邀请邮件。接受后，他们将获得此工作区的 <strong>客户</strong> 权限，可通过客户门户审阅和审批内容。{% else %}The client will receive an invitation email to create an account. Once accepted, they will have <strong>Client</strong> access to this workspace, allowing them to review and approve posts via the Client Portal.{% endif %}</p>
                 </div>
 
                 <!-- Error container -->
