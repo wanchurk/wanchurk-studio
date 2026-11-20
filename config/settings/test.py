@@ -27,6 +27,14 @@ EMAIL_RECIPIENT_DAILY_LIMIT = -1
 # Disable CSP in tests
 CSP_REPORT_ONLY = True
 
+# The upstream test suite asserts on upstream English copy and the upstream brand
+# name. The Chinese UI and the white-label rename are deployment choices layered
+# on top of the project, so tests run against upstream behaviour: language back to
+# English, brand resets to the upstream name. Tests that cover the switcher or the
+# re-branding set what they need explicitly.
+UI_LANGUAGE = "en"
+BRAND_NAME = ""
+
 # Use local storage in tests. STORAGES must be reset too, not just the flag:
 # base.py already picked the backend from the *environment*, so on a machine
 # whose .env sets STORAGE_BACKEND=s3 the suite was quietly running against the

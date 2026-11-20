@@ -413,11 +413,16 @@ def _get_publish_context(workspace, request):
         if tz not in tz_list:
             tz_list.append(tz)
 
-    # Pre-format options for the ui_select component: short label + workspace hint
+    # Pre-format options for the ui_select component: short label + workspace hint.
+    # Django templates can't reach inside this JSON blob, so the label is built
+    # here; it follows the visitor's language like everything else.
+    from apps.ui_zh import language as ui_language
+
+    zh = ui_language.is_chinese(request)
     tz_options = [
         {
             "value": tz,
-            "label": tz.split("/")[-1] + (" (workspace)" if tz == ws_tz else ""),
+            "label": tz.split("/")[-1] + (("（工作区）" if zh else " (workspace)") if tz == ws_tz else ""),
         }
         for tz in tz_list
     ]

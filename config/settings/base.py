@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "apps.ui_zh",
     "apps.common",
     "apps.accounts",
     "apps.organizations",
@@ -97,6 +98,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
     "apps.api.usage.CountUncountedApiCallsMiddleware",
+    # Render-time Chinese UI + white-label branding. Last so it sees the
+    # finished HTML. See apps/ui_zh/middleware.py for why this is not i18n.
+    "apps.ui_zh.middleware.UiZhMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -116,6 +120,7 @@ TEMPLATES = [
                 "apps.common.context_processors.sidebar_context",
                 "apps.onboarding.context_processors.onboarding_checklist",
                 "apps.intelligence.context_processors.intelligence_flag",
+                "apps.ui_zh.context_processors.ui_language",
             ],
         },
     },
@@ -765,3 +770,13 @@ if INTELLIGENCE_ENABLED:
                 f"localhost / 127.0.0.1 dev tunnels) — current value would "
                 f"leak Intelligence API keys in transit."
             )
+
+
+# --- White-label / localisation -------------------------------------------
+# Single source of truth for the product name shown in the UI. Templates keep
+# their upstream strings; the middleware rewrites them at render time.
+BRAND_NAME = env("BRAND_NAME", default="跨境铺子")
+# "zh-hans" turns on the translation middleware; anything else leaves the UI English.
+UI_LANGUAGE = env("UI_LANGUAGE", default="zh-hans")
+# Re-read translations.json on change so dictionary edits need no restart.
+BRAND_I18N_HOT_RELOAD = env.bool("BRAND_I18N_HOT_RELOAD", default=DEBUG)

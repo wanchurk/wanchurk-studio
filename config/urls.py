@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("health/", health_check, name="health_check"),
+    # UI language switcher (per-visitor cookie, no auth required).
+    path("i18n/", include("apps.ui_zh.urls")),
     path("accounts/", include("apps.accounts.urls")),
     path("accounts/", include("allauth.urls")),
     path("organizations/", include("apps.organizations.urls")),

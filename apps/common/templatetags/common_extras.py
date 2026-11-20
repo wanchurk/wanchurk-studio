@@ -4,6 +4,8 @@ from django import template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
+from apps.ui_zh.middleware import lookup
+
 register = template.Library()
 
 
@@ -42,8 +44,9 @@ def json_attr(value):
     return mark_safe(escape(json.dumps(value, ensure_ascii=False, default=str)))
 
 
-@register.inclusion_tag("components/ui_select.html")
+@register.inclusion_tag("components/ui_select.html", takes_context=True)
 def ui_select(
+    context,
     *,
     model,
     options,
@@ -99,6 +102,8 @@ def ui_select(
         "options_js": [{"value": o["value"], "label": str(o["label"])} for o in norm],
         "multiple": bool(multiple),
         "onchange": onchange,
-        "placeholder": placeholder,
+        # The placeholder lands inside an Alpine JS string literal, where the
+        # render-time dictionary cannot reach it, so translate it here.
+        "placeholder": lookup(placeholder) if context.get("ui_is_zh") else placeholder,
         "icon": icon,
     }
