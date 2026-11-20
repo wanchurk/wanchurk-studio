@@ -184,7 +184,7 @@
 
             <!-- Bulk action bar -->
             <div x-show="selectedCount > 0" x-cloak class="bulk-bar">
-                <span x-text="selectedCount + ' selected'"></span>
+                <span x-text="selectedCount + '{% if ui_is_zh %} 项已选{% else %} selected{% endif %}'"></span>
                 <button @click="bulkAction('mark_read')">Mark Read</button>
                 <button @click="bulkAction('resolve')">Resolve</button>
                 <button @click="bulkAction('archive')">Archive</button>
@@ -304,12 +304,22 @@ function inboxController() {
             const diff = deadline - now;
             if (diff < 0) {
                 const mins = Math.floor(Math.abs(diff) / 60000);
+                {% if ui_is_zh %}
+                if (mins < 60) return mins + ' 分钟已超时';
+                return Math.floor(mins / 60) + ' 小时 ' + (mins % 60) + ' 分钟已超时';
+                {% else %}
                 if (mins < 60) return mins + 'm overdue';
                 return Math.floor(mins / 60) + 'h overdue';
+                {% endif %}
             }
             const mins = Math.floor(diff / 60000);
+            {% if ui_is_zh %}
+            if (mins < 60) return '剩余 ' + mins + ' 分钟';
+            return '剩余 ' + Math.floor(mins / 60) + ' 小时 ' + (mins % 60) + ' 分钟';
+            {% else %}
             if (mins < 60) return mins + 'm left';
             return Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm left';
+            {% endif %}
         }
     };
 }
