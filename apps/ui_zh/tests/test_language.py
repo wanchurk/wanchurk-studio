@@ -150,3 +150,28 @@ def test_ui_select_placeholder_follows_language(client):
     assert lookup("Channels") == "渠道"
     # Unknown strings pass straight through.
     assert lookup("Not A Real Key") == "Not A Real Key"
+
+
+class FormValuesAreDataNotCopy:
+    """Regression: a <option value="..."> must never be rewritten.
+
+    Timezone options carry IANA names as their value. Translating the value
+    produced "Europe/阿姆斯特丹", which the server then rejects on save.
+    """
+
+    def test_option_value_is_untouched_but_label_is_translated(self):
+        from apps.ui_zh.middleware import translate_html
+
+        html = '<option value="Europe/Amsterdam">Europe/Amsterdam</option>'
+        out = translate_html(html)
+        assert 'value="Europe/Amsterdam"' in out
+
+    def test_timezone_value_contains_no_cjk(self):
+        from apps.ui_zh.middleware import translate_html
+
+        html = '<select><option value="America/New_York">America/New_York</option></select>'
+        out = translate_html(html)
+        import re
+
+        values = re.findall(r'value="([^"]*)"', out)
+        self.assertTrue(all(not re.search(r"[\u4e00-\u9fff]", v) for v in values), values)

@@ -36,7 +36,7 @@ SKIP_BLOCKS = re.compile(
     re.I | re.S,
 )
 
-TEXT_ATTRS = ("placeholder", "title", "aria-label", "alt", "value")
+TEXT_ATTRS = ("placeholder", "title", "aria-label", "alt")
 ATTR_RE = re.compile(r"\b(" + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
 
 TAG_SPLIT = re.compile(r"(<[^>]+>)")
