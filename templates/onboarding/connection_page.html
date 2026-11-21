@@ -187,7 +187,7 @@
                                 color: var(--text-primary);
                                 outline: none;
                             ">
-                            <p style="font-size: 0.6875rem; color: var(--text-tertiary); margin-top: 4px;">Generate at Settings &rarr; App Passwords on Bluesky</p>
+                            <p style="font-size: 0.6875rem; color: var(--text-tertiary); margin-top: 4px;">{% trans "Generate at Settings &amp;rarr; App Passwords on Bluesky" %}</p>
                         </div>
                         <div style="display: flex; gap: 8px; justify-content: flex-end;">
                             <button type="button" @click="showForm = false" style="
@@ -325,9 +325,9 @@
             cursor: pointer;
             box-shadow: var(--shadow-primary);
             transition: all 200ms ease;
-        ">
-            Done &mdash; Notify {{ org.name }}
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        ">{% blocktrans trimmed with org_name=org.name %}
+            Done &mdash; Notify {{ org_name }}
+            {% endblocktrans %}<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
         </button>
     </form>
 

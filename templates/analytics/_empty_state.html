@@ -7,11 +7,11 @@
             </div>
             <span style="position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 50%; background: var(--success-500); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700;">✓</span>
         </div>{% endif %}
-        <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.01em;">
-            {{ active_account.account_name }} is connected
-        </h2>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.01em;">{% blocktrans trimmed with active_account_account_name=active_account.account_name %}
+            {{ active_account_account_name }} is connected
+        {% endblocktrans %}</h2>
         <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px;">
-            {% if active_account.platform == "youtube" %}YouTube has not returned analytics for this reporting period. Reports refresh daily and may arrive after a delay.{% else %}We started collecting analytics when you connected this account. Metrics for this account usually appear within <strong>{% trans "24–48 hours" %}</strong> of your first published post.{% endif %}
+            {% if active_account.platform == "youtube" %}{% blocktrans trimmed %}YouTube has not returned analytics for this reporting period. Reports refresh daily and may arrive after a delay.{% endblocktrans %}{% else %}We started collecting analytics when you connected this account. Metrics for this account usually appear within <strong>{% trans "24–48 hours" %}</strong> of your first published post.{% endif %}
         </p>
         <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-full); margin-top: 12px;">
             <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--warning-500);"></span>

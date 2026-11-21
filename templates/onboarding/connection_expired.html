@@ -40,7 +40,7 @@
         {% elif org_name %}
             Please contact <strong style="color: var(--text-primary);">{{ org_name }}</strong> to request a new connection link.
         {% else %}
-            Please contact your agency to request a new connection link.
+            {% blocktrans trimmed %}Please contact your agency to request a new connection link.{% endblocktrans %}
         {% endif %}
     </p>
 

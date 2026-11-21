@@ -24,7 +24,7 @@
         </div>
         <div class="p-5">
             <p class="text-xs text-stone-500 mb-5 leading-relaxed">
-                Score a YouTube packaging (title + thumbnail) for click-through potential. Provide one or both, combined is most accurate. Title-only is 1 credit, thumbnail-only is 2, combined is 3
+                {% trans "Score a YouTube packaging (title + thumbnail) for click-through potential. Provide one or both, combined is most accurate. Title-only is 1 credit, thumbnail-only is 2, combined is 3" %}
             </p>
 
             <form class="intel-form space-y-5"
@@ -52,7 +52,7 @@
                             <p class="mt-3 text-sm font-medium text-stone-700">
                                 <span style="color: var(--primary);">{% trans "Click to upload" %}</span> {% trans "or drag and drop" %}
                             </p>
-                            <p class="mt-1 text-xs text-stone-500">JPEG, PNG or WebP · up to 5&nbsp;MB</p>
+                            <p class="mt-1 text-xs text-stone-500">{% trans "JPEG, PNG or WebP · up to 5&amp;nbsp;MB" %}</p>
                         </label>
                         <div id="pkg-thumb-preview" class="hidden items-center gap-3 p-3">
                             <img id="pkg-thumb-img" alt=""
@@ -74,7 +74,7 @@
                                accept="image/jpeg,image/png,image/webp" class="sr-only">
                     </div>
                     <p id="pkg-thumb-error" class="hidden mt-1.5 text-xs text-red-600"></p>
-                    <p id="pkg-thumb-helper" class="intel-helper">Accepts JPEG/PNG/WebP under 5&nbsp;MB.</p>
+                    <p id="pkg-thumb-helper" class="intel-helper">{% trans "Accepts JPEG/PNG/WebP under 5&amp;nbsp;MB." %}</p>
                 </div>
                 <div>
                     <button type="submit" class="intel-submit"{% if is_preview %} disabled aria-disabled="true"{% endif %}>
@@ -85,7 +85,7 @@
                     </button>
                     {% if is_preview %}
                     <p class="intel-activate-note">
-                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to score your own packaging.{% else %}Ask an admin to activate Intelligence to score your own packaging.{% endif %}
+                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to score your own packaging.{% else %}{% blocktrans trimmed %}Ask an admin to activate Intelligence to score your own packaging.{% endblocktrans %}{% endif %}
                     </p>
                     {% endif %}
                 </div>

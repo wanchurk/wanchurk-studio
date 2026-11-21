@@ -54,7 +54,7 @@
      style="color: var(--text-tertiary, #78716C);">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
   </a>
-  <h1 class="text-lg font-semibold" style="color: var(--text-primary, #1C1917);">Edit - {{ asset.original_filename }}</h1>
+  <h1 class="text-lg font-semibold" style="color: var(--text-primary, #1C1917);">{% blocktrans trimmed with asset_original_filename=asset.original_filename %}Edit - {{ asset_original_filename }}{% endblocktrans %}</h1>
   {% if is_shared_library %}
   <span class="text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider"
         style="background: rgba(20,184,166,0.15); color: #0F766E;">{% trans "Shared" %}</span>

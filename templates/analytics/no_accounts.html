@@ -19,7 +19,7 @@
             </div>
             <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">{% trans "Connect an account to see analytics" %}</h2>
             <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">
-                {% if ui_is_zh %}此工作区还没有连接账号。连接一个即可开始跟踪单条内容的表现——如果你之前连接过账号，请查看「渠道」页：需要重新连接的账号不会显示在这里。{% else %}This workspace has no connected accounts. Connect one to start tracking per-post performance — and if you have connected an account before, check the Channels page: one that needs reconnecting doesn't show up here.{% endif %}
+                {% if ui_is_zh %}此工作区还没有连接账号。连接一个即可开始跟踪单条内容的表现——如果你之前连接过账号，请查看「渠道」页：需要重新连接的账号不会显示在这里。{% else %}{% blocktrans trimmed %}This workspace has no connected accounts. Connect one to start tracking per-post performance — and if you have connected an account before, check the Channels page: one that needs reconnecting doesn't show up here.{% endblocktrans %}{% endif %}
             </p>
             <a href="{% url 'social_accounts:connect' workspace_id=workspace.id %}" class="btn-brand" style="width: auto; padding: 9px 20px;">{% trans "Connect a channel" %}</a>
         </div>

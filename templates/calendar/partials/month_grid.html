@@ -81,9 +81,9 @@ Enhanced with: holidays, custom events, category colors, recurring badges.
             {% endfor %}
 
             {% if day.overflow > 0 %}
-            <div class="text-[10px] font-semibold text-stone-400 pl-1 mt-0.5">
-                +{{ day.overflow }} more
-            </div>
+            <div class="text-[10px] font-semibold text-stone-400 pl-1 mt-0.5">{% blocktrans trimmed with day_overflow=day.overflow %}
+                +{{ day_overflow }} more
+            {% endblocktrans %}</div>
             {% endif %}
         </div>
         {% endfor %}

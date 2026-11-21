@@ -27,7 +27,7 @@
 
         {% if decided_posts %}
         <div>
-            <h2 class="text-[0.75rem] font-bold uppercase tracking-wider mb-3" style="color: var(--text-tertiary);">Approved &amp; scheduled</h2>
+            <h2 class="text-[0.75rem] font-bold uppercase tracking-wider mb-3" style="color: var(--text-tertiary);">{% trans "Approved &amp; scheduled" %}</h2>
             <div class="space-y-4">
                 {% for post in decided_posts %}{% include "client_portal/_client_card.html" %}{% endfor %}
             </div>
@@ -45,6 +45,6 @@
         {% endif %}
     </div>
 
-    <p class="text-center text-[0.6875rem] mt-10 w-full" style="color: var(--text-tertiary);">Powered by BrightBean · Secure approval link</p>
+    <p class="text-center text-[0.6875rem] mt-10 w-full" style="color: var(--text-tertiary);">{% trans "Powered by BrightBean · Secure approval link" %}</p>
 </div>
 {% endblock %}

@@ -15,7 +15,7 @@
             </div>
             <h2 class="text-xl font-semibold text-stone-900">{% trans "Connect DEV.to" %}</h2>
         </div>
-        <p class="text-sm text-stone-500">DEV.to authenticates with a personal API key. Generate one under Settings &rarr; Extensions &rarr; DEV Community API Keys.</p>
+        <p class="text-sm text-stone-500">{% trans "DEV.to authenticates with a personal API key. Generate one under Settings &amp;rarr; Extensions &amp;rarr; DEV Community API Keys." %}</p>
     </div>
 
     <form method="post" action="{% url 'social_accounts:connect_devto' workspace_id=workspace_id %}" class="space-y-5">

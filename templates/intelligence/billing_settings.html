@@ -7,9 +7,9 @@
 <div class="flex items-center justify-between mb-4 lg:mb-[25px]">
     <div>
         <h1 class="text-xl sm:text-2xl font-semibold" style="color: var(--text-primary); letter-spacing: -0.01em;">{% trans "Billing" %}</h1>
-        <p class="text-sm mt-1" style="color: var(--text-secondary);">
-            Intelligence subscription for {{ organization.name }}.
-        </p>
+        <p class="text-sm mt-1" style="color: var(--text-secondary);">{% blocktrans trimmed with organization_name=organization.name %}
+            Intelligence subscription for {{ organization_name }}.
+        {% endblocktrans %}</p>
     </div>
 
     <a href="{% url 'intelligence:playground' org_id=organization.id %}"
@@ -48,7 +48,7 @@
                 {% if cancel_at and subscription.status == 'active' %}
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium rounded-full bg-amber-50 text-amber-700">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                    Active · canceling
+                    {% trans "Active · canceling" %}
                 </span>
                 {% else %}
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium rounded-full

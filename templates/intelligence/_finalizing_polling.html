@@ -3,6 +3,6 @@
      hx-get="{% url 'intelligence_global:finalizing-status' %}"
      hx-trigger="load delay:2s"
      hx-swap="outerHTML"
-     class="text-xs text-stone-400">
-  Status: {{ pending.get_status_display }} (attempt {{ pending.attempts }})
-</div>
+     class="text-xs text-stone-400">{% blocktrans trimmed with pending_get_status_display=pending.get_status_display pending_attempts=pending.attempts %}
+  Status: {{ pending_get_status_display }} (attempt {{ pending_attempts }})
+{% endblocktrans %}</div>

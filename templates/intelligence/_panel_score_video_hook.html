@@ -7,7 +7,7 @@
         </div>
         <div class="p-5">
             <p class="text-xs text-stone-500 mb-5 leading-relaxed">
-                Analyze the first ~6 seconds of a YouTube video for hook quality, archetype, and improvement suggestions.
+                {% trans "Analyze the first ~6 seconds of a YouTube video for hook quality, archetype, and improvement suggestions." %}
             </p>
 
             <form class="intel-form space-y-5"
@@ -32,7 +32,7 @@
                     </button>
                     {% if is_preview %}
                     <p class="intel-activate-note">
-                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to analyze your own video hooks.{% else %}Ask an admin to activate Intelligence to analyze your own video hooks.{% endif %}
+                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to analyze your own video hooks.{% else %}{% blocktrans trimmed %}Ask an admin to activate Intelligence to analyze your own video hooks.{% endblocktrans %}{% endif %}
                     </p>
                     {% else %}
                     <p class="mt-2 text-[11px] text-stone-400">{% trans "First call on a video can take 25–29 s. Cache hits return instantly." %}</p>

@@ -13,7 +13,7 @@
         </div>
         <div>
             {% sparkline engagement.rate.series primary_color 180 40 %}
-            <div class="a-calc-note" style="margin-top: 6px;">{% if engagement.formula %}{{ engagement.formula }}. Not reported by {{ platform_name }}.{% else %}Not enough data to calculate yet.{% endif %}</div>
+            <div class="a-calc-note" style="margin-top: 6px;">{% if engagement.formula %}{{ engagement.formula }}. Not reported by {{ platform_name }}.{% else %}{% blocktrans trimmed %}Not enough data to calculate yet.{% endblocktrans %}{% endif %}</div>
         </div>
     </div>
 

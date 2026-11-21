@@ -80,9 +80,9 @@
                             <div>
                                 <h3 class="text-lg font-semibold" style="color: var(--text-primary);">{% trans "Edit API key" %}</h3>
                                 <p class="text-xs mt-1" style="color: var(--text-tertiary);">
-                                    <strong style="color: var(--text-primary);">{{ row.name }}</strong>
-                                    · {{ row.workspace_name }} · changes apply on the next API request.
-                                </p>
+                                    <strong style="color: var(--text-primary);">{{ row.name }}</strong>{% blocktrans trimmed with row_workspace_name=row.workspace_name %}
+                                    · {{ row_workspace_name }} · changes apply on the next API request.
+                                {% endblocktrans %}</p>
                             </div>
                             <button type="button" @click="showEditModal = false"
                                     class="text-xl leading-none px-2 cursor-pointer"

@@ -116,7 +116,7 @@
             {% else %}
             <span style="width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-md); border: 1px solid var(--border); background: #fff; opacity: 0.4; color: var(--text-secondary);">‹</span>
             {% endif %}
-            <span class="a-mono" style="font-size: 0.75rem; color: var(--text-secondary); min-width: 84px; text-align: center;">Page {{ table.page }} of {{ table.total_pages }}</span>
+            <span class="a-mono" style="font-size: 0.75rem; color: var(--text-secondary); min-width: 84px; text-align: center;">{% blocktrans trimmed with table_page=table.page table_total_pages=table.total_pages %}Page {{ table_page }} of {{ table_total_pages }}{% endblocktrans %}</span>
             {% if table.page < table.total_pages %}
             <a href="?range={{ days }}&sort={{ table.sort_key }}&dir={{ table.sort_dir }}&type={{ table.type_filter }}&table_range={{ table.days_filter|default_if_none:'all' }}&page={{ table.page|add:1 }}"
                hx-get="?range={{ days }}&sort={{ table.sort_key }}&dir={{ table.sort_dir }}&type={{ table.type_filter }}&table_range={{ table.days_filter|default_if_none:'all' }}&page={{ table.page|add:1 }}&partial=table"

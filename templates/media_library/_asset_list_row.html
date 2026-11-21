@@ -48,7 +48,7 @@
   <div class="col-span-2 text-xs" style="color: var(--text-secondary);">
     {{ asset.human_file_size }}
     {% if asset.width and asset.height %}
-    <br><span style="color: var(--text-ghost);">{{ asset.width }}&times;{{ asset.height }}</span>
+    <br><span style="color: var(--text-ghost);">{% blocktrans trimmed with asset_width=asset.width asset_height=asset.height %}{{ asset_width }}&times;{{ asset_height }}{% endblocktrans %}</span>
     {% endif %}
   </div>
 

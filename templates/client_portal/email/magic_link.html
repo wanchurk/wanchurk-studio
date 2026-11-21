@@ -21,9 +21,9 @@
                             <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 8px 0;">
                                 Hi {{ client_user.display_name }},
                             </p>
-                            <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 24px 0;">
-                                {{ created_by.display_name }} has shared content for your review. Click below to access your portal and approve or provide feedback on scheduled posts.
-                            </p>
+                            <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 24px 0;">{% blocktrans trimmed with created_by_display_name=created_by.display_name %}
+                                {{ created_by_display_name }} has shared content for your review. Click below to access your portal and approve or provide feedback on scheduled posts.
+                            {% endblocktrans %}</p>
                             <!-- CTA Button -->
                             <table cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
@@ -43,9 +43,9 @@
                     <!-- Footer -->
                     <tr>
                         <td style="padding: 16px 32px; border-top: 1px solid #E7E5E4;">
-                            <p style="font-size: 12px; color: #A8A29E; margin: 0;">
-                                You're receiving this because you're a client of {{ workspace.name }}.
-                            </p>
+                            <p style="font-size: 12px; color: #A8A29E; margin: 0;">{% blocktrans trimmed with workspace_name=workspace.name %}
+                                You're receiving this because you're a client of {{ workspace_name }}.
+                            {% endblocktrans %}</p>
                         </td>
                     </tr>
                 </table>

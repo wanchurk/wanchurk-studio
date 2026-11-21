@@ -7,7 +7,7 @@
         </div>
         <div class="p-5">
             <p class="text-xs text-stone-500 mb-5 leading-relaxed">
-                Score a single video against its niche. Returns engagement percentiles, title pattern fit, and a CTR-prediction residual (actual vs predicted velocity).
+                {% trans "Score a single video against its niche. Returns engagement percentiles, title pattern fit, and a CTR-prediction residual (actual vs predicted velocity)." %}
             </p>
 
             <form class="intel-form space-y-5"
@@ -32,7 +32,7 @@
                     </button>
                     {% if is_preview %}
                     <p class="intel-activate-note">
-                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to benchmark your own videos.{% else %}Ask an admin to activate Intelligence to benchmark your own videos.{% endif %}
+                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to benchmark your own videos.{% else %}{% blocktrans trimmed %}Ask an admin to activate Intelligence to benchmark your own videos.{% endblocktrans %}{% endif %}
                     </p>
                     {% endif %}
                 </div>

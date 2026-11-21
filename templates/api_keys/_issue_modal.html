@@ -46,7 +46,7 @@ reveal modal on top of the freshly-rendered list page.
                                 hx-include="this"
                                 class="input-focus w-full pl-3 pr-10 py-2 text-sm rounded-lg outline-none transition-colors"
                                 style="border: 1px solid var(--border); color: var(--text-primary); background: var(--surface-0);">
-                            <option value="">Pick a workspace…</option>
+                            <option value="">{% trans "Pick a workspace…" %}</option>
                             {% for ws in issuance.workspaces %}
                             <option value="{{ ws.id }}">{{ ws.name }}</option>
                             {% endfor %}

@@ -12,7 +12,7 @@
     </div>
     <p class="text-[13px] text-stone-700 leading-relaxed whitespace-pre-wrap">{{ draft.body }}</p>
     {% if draft.status == 'failed' and draft.send_error %}
-    <p class="text-[11px] text-red-700 mt-1">Last attempt failed: {{ draft.send_error }}</p>
+    <p class="text-[11px] text-red-700 mt-1">{% blocktrans trimmed with draft_send_error=draft.send_error %}Last attempt failed: {{ draft_send_error }}{% endblocktrans %}</p>
     {% endif %}
     <div class="flex items-center gap-2 mt-2">
         <button hx-post="{% url 'inbox:send_reply_draft' workspace_id=workspace.id reply_id=draft.id %}"

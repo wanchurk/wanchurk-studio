@@ -84,7 +84,7 @@
           <svg class="w-5 h-5" style="color: var(--error-500, #EF4444);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         </div>
         <h3 class="text-base font-semibold text-center mb-1" style="color: var(--text-primary, #1C1917);">{% trans "Delete asset?" %}</h3>
-        <p class="text-sm text-center mb-5" style="color: var(--text-secondary, #57534E);">{% if is_shared_library %}This shared asset will be removed for all workspaces. This cannot be undone.{% else %}This cannot be undone. The file will be permanently removed.{% endif %}</p>
+        <p class="text-sm text-center mb-5" style="color: var(--text-secondary, #57534E);">{% if is_shared_library %}{% blocktrans trimmed %}This shared asset will be removed for all workspaces. This cannot be undone.{% endblocktrans %}{% else %}{% blocktrans trimmed %}This cannot be undone. The file will be permanently removed.{% endblocktrans %}{% endif %}</p>
         <div class="flex gap-2">
           <button type="button" @click="showDeleteConfirm = false"
                   class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer btn-surface-2"
@@ -131,7 +131,7 @@
         {% if asset.width and asset.height %}
         <div class="flex justify-between">
           <dt class="text-xs" style="color: var(--text-tertiary);">{% trans "Dimensions" %}</dt>
-          <dd class="text-xs font-medium" style="color: var(--text-primary);">{{ asset.width }} &times; {{ asset.height }}px</dd>
+          <dd class="text-xs font-medium" style="color: var(--text-primary);">{% blocktrans trimmed with asset_width=asset.width asset_height=asset.height %}{{ asset_width }} &times; {{ asset_height }}px{% endblocktrans %}</dd>
         </div>
         {% endif %}
         {% if asset.duration_seconds %}

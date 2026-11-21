@@ -87,7 +87,7 @@
                 {% elif attachment.type == 'audio' %}
                 <audio controls preload="none" src="{{ attachment.url }}">{% trans "Audio attachment unavailable." %}</audio>
                 {% else %}
-                <a href="{{ attachment.url }}" target="_blank" rel="noopener noreferrer" class="text-sm underline">Open {{ attachment.type }} attachment</a>
+                <a href="{{ attachment.url }}" target="_blank" rel="noopener noreferrer" class="text-sm underline">{% blocktrans trimmed with attachment_type=attachment.type %}Open {{ attachment_type }} attachment{% endblocktrans %}</a>
                 {% endif %}
                 {% if attachment.url %}<p class="text-xs text-stone-500 mt-1">{% trans "If the attachment is unavailable, open the conversation in Instagram." %}</p>{% endif %}
             </div>

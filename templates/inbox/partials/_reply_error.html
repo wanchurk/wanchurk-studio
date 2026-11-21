@@ -9,9 +9,9 @@
                 <span class="text-[12px] font-semibold text-red-800">{% trans "Reply not sent" %}</span>
                 <span class="text-[11px] text-red-400 ml-auto">{% trans "just now" %}</span>
             </div>
-            <p class="text-[13px] text-red-700 leading-relaxed">
+            <p class="text-[13px] text-red-700 leading-relaxed">{% blocktrans trimmed %}
                 Nothing was sent to {{ platform_label }} — {{ reason }} Your text is still in the box.
-            </p>
+            {% endblocktrans %}</p>
         </div>
     </div>
 </div>

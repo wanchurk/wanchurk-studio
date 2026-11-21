@@ -39,9 +39,9 @@
     </div>
 
     <div class="flex items-center justify-between mb-3">
-        <div class="text-sm text-stone-500">
+        <div class="text-sm text-stone-500">{% blocktrans trimmed %}
             {{ total_event_count }} recent events
-        </div>
+        {% endblocktrans %}</div>
         <div class="text-xs text-stone-400">
             {% if last_refreshed_at %}Last refreshed {{ last_refreshed_at|timesince }} ago{% endif %}
         </div>

@@ -9,9 +9,9 @@
         <h1 class="text-2xl font-bold tracking-tight" style="color: var(--text-primary); font-family: var(--font-display);">
             {% trans "Welcome back" %}
         </h1>
-        <p class="text-[0.9375rem] mt-1" style="color: var(--text-secondary);">
-            Here's what's happening with {{ workspace.name }}
-        </p>
+        <p class="text-[0.9375rem] mt-1" style="color: var(--text-secondary);">{% blocktrans trimmed with workspace_name=workspace.name %}
+            Here's what's happening with {{ workspace_name }}
+        {% endblocktrans %}</p>
     </div>
 
     <!-- Summary cards -->

@@ -6,9 +6,9 @@
                 {% include "partials/_platform_icon.html" with platform=active_account.platform size="lg" %}
             </div>
         </div>
-        <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.01em;">
-            Analytics aren't available for {{ active_account.get_platform_display }}
-        </h2>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.01em;">{% blocktrans trimmed with active_account_get_platform_display=active_account.get_platform_display %}
+            Analytics aren't available for {{ active_account_get_platform_display }}
+        {% endblocktrans %}</h2>
         <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
             {{ analytics_unavailable_notice }}
         </p>

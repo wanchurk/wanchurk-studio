@@ -2,5 +2,5 @@
 <div class="mt-3 p-3 rounded border border-red-200 bg-red-50 text-xs text-red-800">
   <div class="font-semibold mb-1">{% trans "Couldn't complete the request" %}</div>
   <div>{{ message|default:"Please try again." }}</div>
-  {% if code %}<div class="mt-1 text-red-600 font-mono">code: {{ code }}</div>{% endif %}
+  {% if code %}<div class="mt-1 text-red-600 font-mono">{% blocktrans trimmed %}code: {{ code }}{% endblocktrans %}</div>{% endif %}
 </div>

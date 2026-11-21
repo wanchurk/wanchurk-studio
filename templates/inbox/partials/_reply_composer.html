@@ -51,7 +51,7 @@
     <!-- Reply form -->
     <div x-show="mode === 'reply'" x-transition>
         {% if not reply_eligibility.can_send %}
-        <p class="mb-2 text-xs text-amber-800">{{ reply_eligibility.reason }} You can still save a draft.</p>
+        <p class="mb-2 text-xs text-amber-800">{% blocktrans trimmed with reply_eligibility_reason=reply_eligibility.reason %}{{ reply_eligibility_reason }} You can still save a draft.{% endblocktrans %}</p>
         {% elif reply_eligibility.human_agent %}
         <p class="mb-2 text-xs text-amber-800">{% trans "Human support reply: review the message before sending. This reply uses your app's approved seven-day Human Agent access." %}</p>
         {% endif %}

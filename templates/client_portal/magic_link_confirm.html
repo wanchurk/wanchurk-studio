@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in to {{ workspace.name }}</title>
+    <title>{% blocktrans trimmed with workspace_name=workspace.name %}Sign in to {{ workspace_name }}{% endblocktrans %}</title>
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}" sizes="any">
     <link rel="icon" type="image/svg+xml" href="{% static 'favicon/favicon.svg' %}">
     <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon/favicon-96x96.png' %}">
@@ -20,12 +20,12 @@
                 <svg class="w-7 h-7" style="color: var(--brand-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3 3m0 0l-3 3m3-3H2.25"/></svg>
             </div>
 
-            <h1 class="text-lg font-bold tracking-tight mb-2" style="color: var(--text-primary); font-family: var(--font-display);">
-                Sign in to {{ workspace.name }}
-            </h1>
-            <p class="text-sm leading-relaxed mb-6" style="color: var(--text-secondary);">
-                Continue to review and approve scheduled posts for {{ workspace.name }}.
-            </p>
+            <h1 class="text-lg font-bold tracking-tight mb-2" style="color: var(--text-primary); font-family: var(--font-display);">{% blocktrans trimmed with workspace_name=workspace.name %}
+                Sign in to {{ workspace_name }}
+            {% endblocktrans %}</h1>
+            <p class="text-sm leading-relaxed mb-6" style="color: var(--text-secondary);">{% blocktrans trimmed with workspace_name=workspace.name %}
+                Continue to review and approve scheduled posts for {{ workspace_name }}.
+            {% endblocktrans %}</p>
 
             <form method="post" action="{% url 'client_portal:magic_link_entry' token=token %}">
                 {% csrf_token %}

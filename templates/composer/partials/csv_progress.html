@@ -39,9 +39,9 @@
 
     <p class="text-sm text-stone-500 mb-6">
         {% if created_count > 0 %}
-        Your imported posts are now on the calendar.
+        {% blocktrans trimmed %}Your imported posts are now on the calendar.{% endblocktrans %}
         {% else %}
-        No posts were imported. Check your CSV and try again.
+        {% blocktrans trimmed %}No posts were imported. Check your CSV and try again.{% endblocktrans %}
         {% endif %}
     </p>
 

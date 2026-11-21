@@ -296,7 +296,7 @@
                     {% endfor %}
 
                     {% if day.overflow > 0 %}
-                    <span class="text-[10px] text-stone-400 font-medium pl-1">+{{ day.overflow }} more</span>
+                    <span class="text-[10px] text-stone-400 font-medium pl-1">{% blocktrans trimmed with day_overflow=day.overflow %}+{{ day_overflow }} more{% endblocktrans %}</span>
                     {% endif %}
                 </div>
                 {% endfor %}

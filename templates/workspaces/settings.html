@@ -88,11 +88,11 @@
                 </h3>
                 <p class="text-sm" style="color: var(--text-secondary); max-width: 480px;">
                     {% if workspace.is_archived %}
-                    This workspace is currently archived. Restoring it will make it visible in the sidebar and accessible to all members again.
+                    {% blocktrans trimmed %}This workspace is currently archived. Restoring it will make it visible in the sidebar and accessible to all members again.{% endblocktrans %}
                     {% elif can_archive %}
-                    Archiving hides this workspace from the sidebar and prevents new posts. All existing data is preserved and the workspace can be restored at any time.
+                    {% blocktrans trimmed %}Archiving hides this workspace from the sidebar and prevents new posts. All existing data is preserved and the workspace can be restored at any time.{% endblocktrans %}
                     {% else %}
-                    You cannot archive the last active workspace in the organization. Create another workspace first.
+                    {% blocktrans trimmed %}You cannot archive the last active workspace in the organization. Create another workspace first.{% endblocktrans %}
                     {% endif %}
                 </p>
             </div>
@@ -166,9 +166,9 @@
                 <h3 class="text-base font-semibold mb-1" style="color: var(--text-primary);">{% trans "Delete this workspace" %}</h3>
                 <p class="text-sm" style="color: var(--text-secondary); max-width: 480px;">
                     {% if can_delete %}
-                    Permanently delete this workspace and all of its data. This includes all posts, connected social accounts, media assets, and workspace memberships. This action cannot be undone.
+                    {% blocktrans trimmed %}Permanently delete this workspace and all of its data. This includes all posts, connected social accounts, media assets, and workspace memberships. This action cannot be undone.{% endblocktrans %}
                     {% else %}
-                    You cannot delete the last active workspace in the organization. Create another workspace first.
+                    {% blocktrans trimmed %}You cannot delete the last active workspace in the organization. Create another workspace first.{% endblocktrans %}
                     {% endif %}
                 </p>
             </div>

@@ -36,13 +36,13 @@
                     </div>
                     <div class="text-xs" style="color: var(--text-secondary);">
                         {% if value == 'none' %}
-                            Anyone with publishing rights can schedule or publish directly.
+                            {% blocktrans trimmed %}Anyone with publishing rights can schedule or publish directly.{% endblocktrans %}
                         {% elif value == 'optional' %}
-                            Creators can choose to submit a post for review, but it's not required.
+                            {% blocktrans trimmed %}Creators can choose to submit a post for review, but it's not required.{% endblocktrans %}
                         {% elif value == 'required_internal' %}
-                            Every post must be approved by a team member with review rights before it can go out.
+                            {% blocktrans trimmed %}Every post must be approved by a team member with review rights before it can go out.{% endblocktrans %}
                         {% elif value == 'required_internal_and_client' %}
-                            Posts go through internal review, then are sent to the client portal for final sign-off.
+                            {% blocktrans trimmed %}Posts go through internal review, then are sent to the client portal for final sign-off.{% endblocktrans %}
                         {% endif %}
                     </div>
                 </div>

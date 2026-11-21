@@ -24,7 +24,7 @@
 
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2">
-        <span class="text-xs font-bold" style="color: var(--text-primary, #1C1917);">Version {{ version.version_number }}</span>
+        <span class="text-xs font-bold" style="color: var(--text-primary, #1C1917);">{% blocktrans trimmed with version_version_number=version.version_number %}Version {{ version_version_number }}{% endblocktrans %}</span>
         {% if asset.current_version_id == version.id %}
         <span class="text-xs px-1.5 py-0.5 rounded-full font-semibold"
               style="background: var(--success-50, #F0FDF4); color: var(--success-700, #15803D);">{% trans "Current" %}</span>

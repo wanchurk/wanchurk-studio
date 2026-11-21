@@ -156,7 +156,7 @@
             <div>
                 <h3 class="text-base font-semibold mb-1" style="color: var(--text-primary);">{% trans "Delete this organization" %}</h3>
                 <p class="text-sm" style="color: var(--text-secondary); max-width: 480px;">
-                    {% if ui_is_zh %}申请删除此组织及其工作区、内容、素材和团队成员关系。YouTube 连接和 API 数据会立即移除，其他数据有 14 天宽限期。取消删除需要重新连接 YouTube。{% else %}Request deletion of this organization and its workspaces, posts, media and team memberships. YouTube connections and API data are removed immediately. Other data has a 14-day grace period. Cancelling requires reconnecting YouTube.{% endif %}
+                    {% if ui_is_zh %}申请删除此组织及其工作区、内容、素材和团队成员关系。YouTube 连接和 API 数据会立即移除，其他数据有 14 天宽限期。取消删除需要重新连接 YouTube。{% else %}{% blocktrans trimmed %}Request deletion of this organization and its workspaces, posts, media and team memberships. YouTube connections and API data are removed immediately. Other data has a 14-day grace period. Cancelling requires reconnecting YouTube.{% endblocktrans %}{% endif %}
                 </p>
             </div>
 

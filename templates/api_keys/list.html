@@ -7,8 +7,8 @@
         <div>
             <h2 class="text-xl font-semibold" style="color: var(--text-primary);">{% trans "API Keys" %}</h2>
             <p class="text-sm mt-1 max-w-xl" style="color: var(--text-tertiary);">
-                Used by AI agents and external scripts to act in your workspaces.
-                Each key can be scoped to one workspace and an explicit list of social accounts.
+                {% trans "Used by AI agents and external scripts to act in your workspaces.
+                Each key can be scoped to one workspace and an explicit list of social accounts." %}
             </p>
         </div>
         <button type="button"
@@ -38,7 +38,7 @@
         {% if show_all %}
         <a href="{% url 'api_keys:list' %}" style="color: var(--text-tertiary);">{% trans "Hide revoked keys" %}</a>
         {% else %}
-        <a href="?show=all" style="color: var(--text-tertiary);">Show {{ revoked_count }} revoked</a>
+        <a href="?show=all" style="color: var(--text-tertiary);">{% blocktrans trimmed %}Show {{ revoked_count }} revoked{% endblocktrans %}</a>
         {% endif %}
     </div>
     {% endif %}
@@ -56,7 +56,7 @@
         {% if revoked_count and not show_all %}
         <p class="text-sm" style="color: var(--text-tertiary);">{% trans "No active API keys." %}</p>
         <p class="text-xs mt-2" style="color: var(--text-tertiary);">
-            <a href="?show=all" style="color: var(--text-secondary); text-decoration: underline;">Show {{ revoked_count }} revoked</a>
+            <a href="?show=all" style="color: var(--text-secondary); text-decoration: underline;">{% blocktrans trimmed %}Show {{ revoked_count }} revoked{% endblocktrans %}</a>
             {% trans "or click" %} <strong>{% trans "Issue new key" %}</strong> {% trans "to mint a new one." %}
         </p>
         {% else %}

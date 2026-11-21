@@ -7,7 +7,7 @@
         </div>
         <div class="p-5">
             <p class="text-xs text-stone-500 mb-5 leading-relaxed">
-                Compare a YouTube channel against its niche. Pulls the last ~10 videos, classifies the niche from titles, and percentile-ranks engagement + title patterns.
+                {% trans "Compare a YouTube channel against its niche. Pulls the last ~10 videos, classifies the niche from titles, and percentile-ranks engagement + title patterns." %}
             </p>
 
             <form class="intel-form space-y-5"
@@ -16,7 +16,7 @@
                   hx-swap="innerHTML">
                 {% csrf_token %}
                 <div>
-                    <label for="bc-url" class="intel-label">Channel URL or @handle</label>
+                    <label for="bc-url" class="intel-label">{% trans "Channel URL or @handle" %}</label>
                     <input type="text" name="url" id="bc-url" required maxlength="1024"
                            placeholder="https://youtube.com/@theo-t3-gg"
                            value="{% if is_preview %}{{ preview_inputs.benchmark_channel.url }}{% endif %}"
@@ -32,7 +32,7 @@
                     </button>
                     {% if is_preview %}
                     <p class="intel-activate-note">
-                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to benchmark your own channel.{% else %}Ask an admin to activate Intelligence to benchmark your own channel.{% endif %}
+                        {% if can_manage_billing %}<a href="{% url 'intelligence:subscribe' org_id=organization.id %}">{% trans "Activate Intelligence" %}</a> to benchmark your own channel.{% else %}{% blocktrans trimmed %}Ask an admin to activate Intelligence to benchmark your own channel.{% endblocktrans %}{% endif %}
                     </p>
                     {% endif %}
                 </div>

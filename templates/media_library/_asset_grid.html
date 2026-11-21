@@ -42,9 +42,9 @@
   </a>
   {% endif %}
 
-  <span class="text-xs px-3" style="color: var(--text-tertiary, #78716C);">
-    Page {{ page.number }} of {{ page.paginator.num_pages }}
-  </span>
+  <span class="text-xs px-3" style="color: var(--text-tertiary, #78716C);">{% blocktrans trimmed with page_number=page.number page_paginator_num_pages=page.paginator.num_pages %}
+    Page {{ page_number }} of {{ page_paginator_num_pages }}
+  {% endblocktrans %}</span>
 
   {% if page.has_next %}
   <a href="?page={{ page.next_page_number }}&q={{ query|urlencode }}&sort={{ current_sort|urlencode }}"

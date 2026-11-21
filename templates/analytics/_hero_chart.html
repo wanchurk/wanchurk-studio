@@ -3,7 +3,7 @@
     <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px;">
         <div style="flex-shrink: 0;">
             <div style="display: flex; align-items: center; gap: 8px; color: var(--text-secondary); margin-bottom: 6px; white-space: nowrap;">
-                <span style="font-size: 0.8125rem; font-weight: 600;">{{ chart.label }} · last {{ days }} days</span>
+                <span style="font-size: 0.8125rem; font-weight: 600;">{% blocktrans trimmed with chart_label=chart.label %}{{ chart_label }} · last {{ days }} days{% endblocktrans %}</span>
                 {% if chart.derived.estimated %}<span class="a-calc-tag" title="Estimated by BrightBean from per-{{ content_noun }} counts">{% trans "Estimated by BrightBean" %}</span>{% endif %}
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">

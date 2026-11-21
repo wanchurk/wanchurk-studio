@@ -52,7 +52,7 @@
         </table>
         {% endfor %}
         {% if overflow %}
-        <p style="margin:4px 0 0;font-size:13px;color:#78716C;">&hellip;and {{ overflow }} more.</p>
+        <p style="margin:4px 0 0;font-size:13px;color:#78716C;">{% blocktrans trimmed %}&hellip;and {{ overflow }} more.{% endblocktrans %}</p>
         {% endif %}
       </td>
     </tr>
