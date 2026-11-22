@@ -42,7 +42,7 @@ class Command(BaseCommand):
             safe_source(
                 str(getattr(settings, "GOOGLE_AUTH_CLIENT_ID", "") or ""),
                 "GOOGLE_AUTH_CLIENT_ID",
-                "BrightBean Google sign-in; not used by the YouTube provider",
+                "wanchurk-studio Google sign-in; not used by the YouTube provider",
             ),
         ]
         for org in Organization.objects.all():

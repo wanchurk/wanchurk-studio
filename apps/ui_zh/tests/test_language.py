@@ -100,7 +100,8 @@ def test_login_page_renders_english_with_cookie(client):
     assert "欢迎回来" not in body
     # White-label still applies in English.
     assert "Crossborder Shop" in body
-    assert "BrightBean Studio" not in body
+    assert "BrightBean" not in body
+    assert "wanchurk-studio" in body
 
 
 @override_settings(UI_LANGUAGE="zh-hans", BRAND_NAME="Crossborder Shop")
@@ -109,6 +110,7 @@ def test_brand_applies_in_both_languages(client):
         client.cookies[language.LANGUAGE_COOKIE] = lang
         body = client.get("/accounts/login/").content.decode()
         assert "BrightBean" not in body, f"upstream brand leaked in {lang}"
+        assert "wanchurk-studio" in body, f"brand missing in {lang}"
 
 
 @override_settings(UI_LANGUAGE="zh-hans", BRAND_NAME="Crossborder Shop")

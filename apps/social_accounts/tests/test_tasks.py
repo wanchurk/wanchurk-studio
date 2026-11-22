@@ -71,14 +71,14 @@ class TestCheckSocialAccountHealth:
             workspace=workspace,
             platform="instagram",
             account_platform_id="17841400000000000",
-            account_name="Brightbean",
+            account_name="wanchurk-studio",
             oauth_access_token="page-token",
             connection_status=SocialAccount.ConnectionStatus.CONNECTED,
         )
         mock_provider = MagicMock()
         mock_provider.get_profile.return_value = _profile(
             platform_id="17841400000000000",
-            name="Brightbean",
+            name="wanchurk-studio",
             handle="brightbean",
         )
         mock_get_provider.return_value = mock_provider

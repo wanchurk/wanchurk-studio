@@ -1,33 +1,17 @@
 <p align="center">
-  <a href="https://github.com/brightbeanxyz/brightbean-studio">
-    <img src=".github/assets/brightbean-studio-logo.webp" alt="BrightBean Studio" width="280">
-  </a>
+  <img src="static/img/wanchurk-studio-logo.png" alt="wanchurk-studio" width="200">
 </p>
 
 <p align="center">
   <strong>Open-source social media management for creators, agencies, and SMBs.</strong>
 </p>
 
-<p align="center">
-  <a href="https://github.com/brightbeanxyz/brightbean-studio/actions/workflows/ci.yml"><img src="https://github.com/brightbeanxyz/brightbean-studio/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0"></a>
-  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.12%2B-blue.svg" alt="Python 3.12+"></a>
-  <a href="https://www.djangoproject.com/"><img src="https://img.shields.io/badge/Django-5.x-green.svg" alt="Django 5.x"></a>
-</p>
-
-<p align="center">
-  <a href="https://brightbean.xyz/studio/"><img src="https://img.shields.io/badge/Free%20hosted%20version-brightbean.xyz%2Fstudio-FFB300?style=for-the-badge" alt="Free hosted version at brightbean.xyz/studio"></a>
-</p>
-
 ---
 
-## About BrightBean Studio
+## About wanchurk-studio
 
-BrightBean Studio is an open-source, self-hostable social media management platform built for creators, agencies and SMBs. It does what Sendible, SocialPilot, or ContentStudio do, but free and without per-seat, per-channel, or per-workspace limits. Plan, compose, schedule, approve, publish, and monitor content across Facebook, Instagram, LinkedIn, TikTok, YouTube, Pinterest, Threads, Bluesky, Google Business Profile, Mastodon, and DEV.to from a single multi-workspace dashboard.
+<!-- TODO: 项目简介，由作者补充 -->
 
-It's for people managing many client accounts under one roof who'd rather own their social stack than pay $100–300/month to a SaaS vendor. Every feature is available to every user. No paid tier, no feature gate, no upsell.
-
-A free hosted version is available at [brightbean.xyz/studio](https://brightbean.xyz/studio/). You can also deploy it yourself with a one-click button on Heroku, Render, or Railway, run it on your own VPS via Docker, or run it locally. All platform integrations talk directly to the official first-party APIs using your own developer credentials, so there's no aggregator middleman, no vendor lock-in, and no third party sitting between you and your data.
 
 ## Features
 
@@ -48,19 +32,6 @@ A free hosted version is available at [brightbean.xyz/studio](https://brightbean
 
 ### A quick look
 
-<table>
-  <tr>
-    <td colspan="2"><img src=".github/assets/BrightBean%20Studio%20Calendar.webp" alt="Calendar view"><br><sub><b>Visual calendar</b> - drag-and-drop scheduling with recurring slots and queues.</sub></td>
-  </tr>
-  <tr>
-    <td width="50%"><img src=".github/assets/BrightBean%20Studio%20Post%20Editor.webp" alt="Post editor"><br><sub><b>Post editor</b> - composer with per-platform overrides and previews.</sub></td>
-    <td width="50%"><img src=".github/assets/BrightBean%20Studio%20Idea%20Kanban%20Board.webp" alt="Idea kanban board"><br><sub><b>Idea board</b> - Kanban workflow to keep track of all your post ideas.</sub></td>
-  </tr>
-  <tr>
-    <td width="50%"><img src=".github/assets/BrightBean%20Social%20Media%20Platforms.webp" alt="Connected platforms"><br><sub><b>Connect anything</b> - 10+ first-party integrations, no aggregator.</sub></td>
-    <td width="50%"><img src=".github/assets/BrightBean%20Studio%20Analytics.webp" alt="Analytics dashboard"><br><sub><b>Performance analytics</b> - per-post and channel-level metrics with KPI cards and trend charts.</sub></td>
-  </tr>
-</table>
 
 ## Supported Platforms
 
@@ -84,7 +55,7 @@ A free hosted version is available at [brightbean.xyz/studio](https://brightbean
 
 ### Hosted Version
 
-A free hosted version of Brightbean Studio is available at [brightbean.xyz/studio](https://brightbean.xyz/studio/). It runs the same codebase as this repository, with no setup or maintenance required.
+ as this repository, with no setup or maintenance required.
 
 If you'd rather self-host, choose one of the options below.
 
@@ -92,7 +63,6 @@ If you'd rather self-host, choose one of the options below.
 
 | Heroku | Render | Railway |
 |:------:|:------:|:-------:|
-| [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/brightbeanxyz/brightbean-studio) | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/brightbeanxyz/brightbean-studio) | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/brightbean-studio?referralCode=brightbean) |
 
 After deploying, set these environment variables in your platform's dashboard:
 
@@ -125,8 +95,8 @@ For social media API keys, see [Platform Credentials](#platform-credentials). Fu
 ## Quick Start (Docker)
 
 ```bash
-git clone https://github.com/brightbeanxyz/brightbean-studio.git
-cd brightbean-studio
+git clone <your-repo-url> wanchurk-studio
+cd wanchurk-studio
 cp .env.example .env
 ```
 
@@ -167,8 +137,8 @@ Run everything natively - no Docker, no PostgreSQL install. Uses SQLite for the 
 **1. Clone and configure**
 
 ```bash
-git clone https://github.com/brightbeanxyz/brightbean-studio.git
-cd brightbean-studio
+git clone <your-repo-url> wanchurk-studio
+cd wanchurk-studio
 cp .env.example .env
 ```
 
@@ -275,8 +245,8 @@ ruff format .
 
 ```bash
 # On your server:
-git clone https://github.com/brightbeanxyz/brightbean-studio.git
-cd brightbean-studio
+git clone <your-repo-url> wanchurk-studio
+cd wanchurk-studio
 cp .env.example .env
 # Edit .env:
 #   SECRET_KEY=<generate a random 50+ char string>

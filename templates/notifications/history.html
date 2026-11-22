@@ -10,7 +10,7 @@
     <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
             <h2 class="text-xl font-semibold text-stone-900 tracking-tight">{% trans "Notifications" %}</h2>
-            <p class="text-sm text-stone-500 mt-1">{{ total }} notification{{ total|pluralize }} total</p>
+            <p class="text-sm text-stone-500 mt-1">{% blocktrans count counter=total %}{{ counter }} notification total{% plural %}{{ counter }} notifications total{% endblocktrans %}</p>
         </div>
         <div class="flex items-center gap-2">
             <a

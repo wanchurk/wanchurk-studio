@@ -221,3 +221,4 @@ theme/static/css/dist/
 
 # Local deployment notes (contain credentials context) — never commit
 .local-notes.txt
+.rebrand_backup/

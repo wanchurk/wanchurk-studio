@@ -518,7 +518,7 @@ class TestOAuthCallbackView:
         mock_provider.get_user_pages.return_value = [
             {
                 "id": "17841400000000000",
-                "name": "Brightbean",
+                "name": "wanchurk-studio",
                 "handle": "brightbean",
                 "access_token": "page-token",
             }
@@ -755,7 +755,7 @@ class TestSelectAccountView:
             "pages": [
                 {
                     "id": "17841400000000000",
-                    "name": "Brightbean",
+                    "name": "wanchurk-studio",
                     "handle": "brightbean",
                     "access_token": "",
                 }
@@ -787,7 +787,7 @@ class TestSelectAccountView:
             "pages": [
                 {
                     "id": "page-1",
-                    "name": "Brightbean Page",
+                    "name": "wanchurk-studio Page",
                     "access_token": "",
                 }
             ],
@@ -1160,26 +1160,26 @@ class TestDisconnectConfirmation:
         text = self._card_text(authenticated_client, workspace, "youtube")
 
         assert "Disconnect <strong>Test Channel</strong>?" in text
-        assert "This revokes BrightBean's access to the account." in text
+        assert "This revokes wanchurk-studio's access to the account." in text
         assert "YouTube data, analytics and copied comments are deleted immediately" in text
         assert "original uploads and posts shared with other channels stay" in text
         assert "Historical data will be preserved" not in text
-        assert "removes the account from BrightBean only" not in text
+        assert "removes the account from wanchurk-studio only" not in text
 
     def test_facebook_says_the_grant_is_kept(self, authenticated_client, workspace):
         text = self._card_text(authenticated_client, workspace, "facebook")
 
-        assert "This removes the account from BrightBean only." in text
+        assert "This removes the account from wanchurk-studio only." in text
         assert "Facebook &rsaquo; Settings &rsaquo; Apps and Websites" in text
-        assert "deleted from BrightBean" in text
-        assert "revokes BrightBean's access" not in text
+        assert "deleted from wanchurk-studio" in text
+        assert "revokes wanchurk-studio's access" not in text
 
     def test_a_platform_without_revocation_does_not_claim_it(self, authenticated_client, workspace):
         text = self._card_text(authenticated_client, workspace, "pinterest")
 
-        assert "remove BrightBean in your Pinterest settings" in text
-        assert "deleted from BrightBean" in text
-        assert "revokes BrightBean's access" not in text
+        assert "remove wanchurk-studio in your Pinterest settings" in text
+        assert "deleted from wanchurk-studio" in text
+        assert "revokes wanchurk-studio's access" not in text
 
 
 @pytest.mark.django_db

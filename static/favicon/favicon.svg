@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="跨境铺子">
-  <rect width="32" height="32" rx="6.4" fill="#8B3A1C"/>
-  <path d="M11 8 L21 16 L11 24" fill="none" stroke="#F8EFE9" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#8B3A1C"/><path d="M118 176 L186 336 L256 196 L326 336 L394 176" fill="none" stroke="#F5EDE4" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/><circle cx="394" cy="112" r="34" fill="#F2B94B"/></svg>

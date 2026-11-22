@@ -271,7 +271,7 @@
                   </div>
                 </div>
                 <span x-show="file.status === 'complete'" class="text-xs font-semibold" style="color: var(--success-500, #22C55E);">{% trans "Done" %}</span>
-                <span x-show="file.status === 'error'" class="text-xs font-semibold" style="color: var(--error-500, #EF4444);" x-text="file.error || 'Failed'"></span>
+                <span x-show="file.status === 'error'" class="text-xs font-semibold" style="color: var(--error-500, #EF4444);" x-text="file.error || gettext('Failed')"></span>
               </div>
             </template>
           </div>
@@ -387,7 +387,7 @@ function mediaLibrary() {
             this.uploadQueue[index].progress = 100;
           } else {
             this.uploadQueue[index].status = 'error';
-            this.uploadQueue[index].error = 'Upload failed';
+            this.uploadQueue[index].error = gettext('Upload failed');
           }
           if (completed === total) {
             setTimeout(() => {
@@ -401,7 +401,7 @@ function mediaLibrary() {
         xhr.addEventListener('error', () => {
           completed++;
           this.uploadQueue[index].status = 'error';
-          this.uploadQueue[index].error = 'Network error';
+          this.uploadQueue[index].error = gettext('Network error');
           if (completed === total) {
             setTimeout(() => {
               this.uploading = false;

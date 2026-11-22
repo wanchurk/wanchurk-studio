@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load humanize i18n %}
 {# HTMX partial - notification history list items, swapped on filter/page change #}
 
@@ -83,7 +84,7 @@
 {# Pagination #}
 {% if has_prev or has_next %}
 <div class="flex items-center justify-between px-5 py-4 border-t border-stone-100 bg-stone-50/50">
-    <span class="text-xs text-stone-500 font-medium tabular-nums">{{ total }} notification{{ total|pluralize }}</span>
+    <span class="text-xs text-stone-500 font-medium tabular-nums">{% blocktrans count counter=total %}{{ counter }} notification{% plural %}{{ counter }} notifications{% endblocktrans %}</span>
     <div class="flex items-center gap-2">
         {% if has_prev %}
         <a

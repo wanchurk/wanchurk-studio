@@ -56,7 +56,7 @@ Expects context: workspace, csrf_token.
                             "
                             :class="deleting && 'opacity-50 cursor-not-allowed'"
                             class="flex-1 px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-full hover:bg-red-600 transition-colors cursor-pointer">
-                        <span x-text="deleting ? 'Deleting...' : 'Delete'"></span>
+                        <span x-text="deleting ? gettext('Deleting...') : gettext('Delete')"></span>
                     </button>
                 </div>
             </div>

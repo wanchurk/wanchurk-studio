@@ -1,0 +1,293 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wanchurk-studio\n"
+"Report-Msgid-Bugs-To: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_Hans\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "%(count)s selected"
+msgstr "已选择 %(count)s 项"
+
+msgid "%(label)s override"
+msgstr "%(label)s 覆盖设置"
+
+msgid "Add %(count)s images"
+msgstr "添加 %(count)s 张图片"
+
+msgid "Add a note…"
+msgstr "添加备注…"
+
+msgid "Add images"
+msgstr "添加图片"
+
+msgid "Adding…"
+msgstr "正在添加…"
+
+msgid "Attach a video first"
+msgstr "请先附加视频"
+
+msgid "Cannot capture frames from this video (cross-origin storage). Upload a thumbnail instead."
+msgstr "无法从此视频截取帧（跨域存储）。请改为上传缩略图。"
+
+msgid "Caption"
+msgstr "文案"
+
+msgid "Caption / Description"
+msgstr "文案 / 描述"
+
+msgid "Change"
+msgstr "更改"
+
+msgid "Could not capture this frame."
+msgstr "无法截取该帧。"
+
+msgid "Could not complete that action."
+msgstr "无法完成该操作。"
+
+msgid "Could not create a post from this idea."
+msgstr "无法从该想法创建内容。"
+
+msgid "Could not create a post from this idea. Please try again."
+msgstr "无法从该想法创建内容，请重试。"
+
+msgid "Could not create column. Please try again."
+msgstr "无法创建分组，请重试。"
+
+msgid "Could not delete column. Please try again."
+msgstr "无法删除分组，请重试。"
+
+msgid "Could not delete the idea. Please try again."
+msgstr "无法删除该想法，请重试。"
+
+msgid "Could not load video frames."
+msgstr "无法加载视频帧。"
+
+msgid "Could not open the composer for this idea."
+msgstr "无法为此想法打开创作面板。"
+
+msgid "Could not refresh board."
+msgstr "无法刷新看板。"
+
+msgid "Could not reschedule that post."
+msgstr "无法重新安排该内容。"
+
+msgid "Could not save the idea before creating a post."
+msgstr "创建内容前无法保存该想法。"
+
+msgid "Could not save the idea. Please try again."
+msgstr "无法保存想法，请重试。"
+
+msgid "Cover at %(timecode)s"
+msgstr "封面位于 %(timecode)s"
+
+msgid "Custom %(label)s for this platform…"
+msgstr "此平台的自定义%(label)s…"
+
+msgid "Custom %(label)s…"
+msgstr "自定义%(label)s…"
+
+msgid "Customize %(platform)s"
+msgstr "自定义 %(platform)s"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Delete posts?"
+msgstr "删除内容？"
+
+msgid "Deleting..."
+msgstr "正在删除…"
+
+msgid "Details"
+msgstr "详情"
+
+msgid "Disconnect"
+msgstr "断开连接"
+
+msgid "Disconnecting…"
+msgstr "正在断开…"
+
+msgid "Drag & drop a thumbnail"
+msgstr "拖放缩略图"
+
+msgid "Duration: %(seconds)ss"
+msgstr "时长：%(seconds)s 秒"
+
+msgid "Enter a title…"
+msgstr "输入标题…"
+
+msgid "Failed"
+msgstr "失败"
+
+msgid "Frame at %(timecode)s"
+msgstr "位于 %(timecode)s 的帧"
+
+msgid "Frame previews unavailable for this video — use the scrubber instead."
+msgstr "此视频无法生成帧预览——请改用进度条拖动选择。"
+
+msgid "Idea form action is missing."
+msgstr "想法表单缺少提交地址。"
+
+msgid "Idea form is missing."
+msgstr "找不到想法表单。"
+
+msgid "Idea is missing."
+msgstr "找不到该想法。"
+
+msgid "Import failed. Try again."
+msgstr "导入失败，请重试。"
+
+msgid "Network error"
+msgstr "网络错误"
+
+msgid "Not saved yet"
+msgstr "尚未保存"
+
+msgid "One of the files failed to upload. Please try again."
+msgstr "有一个文件上传失败，请重试。"
+
+msgid "Only one video file can be uploaded at a time."
+msgstr "一次只能上传一个视频文件。"
+
+msgid "Permanently delete %(count)s selected post. This can't be undone."
+msgstr "永久删除所选的 %(count)s 条内容。此操作无法撤销。"
+
+msgid "Pick a frame from your video"
+msgstr "从视频中选择一帧"
+
+msgid "Pick from Library"
+msgstr "从素材库选择"
+
+msgid "Please select both a date and time."
+msgstr "请同时选择日期和时间。"
+
+msgid "Posting to @%(handle)s"
+msgstr "正在发布到 @%(handle)s"
+
+msgid "Publish"
+msgstr "发布"
+
+msgid "Publish %(count)s selected post now — they go out on their platforms shortly."
+msgstr "立即发布所选的 %(count)s 条内容，它们将很快发布到各平台。"
+
+msgid "Publish now?"
+msgstr "立即发布？"
+
+msgid "Reason for rejection (required), shared with the creator…"
+msgstr "拒绝原因（必填），将与创作者共享…"
+
+msgid "Request failed."
+msgstr "请求失败。"
+
+msgid "Request validation failed."
+msgstr "请求校验失败。"
+
+msgid "Saved %(time)s"
+msgstr "已保存于 %(time)s"
+
+msgid "Saving…"
+msgstr "正在保存…"
+
+msgid "Schedule Post"
+msgstr "排期发布"
+
+msgid "Scheduled time must be in the future."
+msgstr "计划时间必须在未来。"
+
+msgid "Security token missing. Please reload the page."
+msgstr "安全令牌缺失，请重新加载页面。"
+
+msgid "Select date…"
+msgstr "选择日期…"
+
+msgid "Select photos to add"
+msgstr "选择要添加的照片"
+
+msgid "Select time…"
+msgstr "选择时间…"
+
+msgid "Select who can view this post"
+msgstr "选择谁可以查看此内容"
+
+msgid "Set date and time"
+msgstr "设置日期和时间"
+
+msgid "Something went wrong. Please try again."
+msgstr "出错了，请重试。"
+
+msgid "Thumbnail must be an image (JPG or PNG)."
+msgstr "缩略图必须是图片（JPG 或 PNG）。"
+
+msgid "Thumbnail upload failed."
+msgstr "缩略图上传失败。"
+
+msgid "Title"
+msgstr "标题"
+
+msgid "Try again"
+msgstr "重试"
+
+msgid "Trying…"
+msgstr "正在尝试…"
+
+msgid "Unassigned"
+msgstr "未分配"
+
+msgid "Unsplash search failed."
+msgstr "Unsplash 搜索失败。"
+
+msgid "Unsplash search failed. Try again."
+msgstr "Unsplash 搜索失败，请重试。"
+
+msgid "Upload"
+msgstr "上传"
+
+msgid "Upload failed"
+msgstr "上传失败"
+
+msgid "Uploading…"
+msgstr "正在上传…"
+
+msgid "Use this frame"
+msgstr "使用此帧"
+
+msgid "Video is still loading — try again in a moment."
+msgstr "视频仍在加载——请稍后再试。"
+
+msgid "What changes would you like?"
+msgstr "你希望做出哪些修改？"
+
+msgid "What needs to change? (required)…"
+msgstr "需要修改哪些内容？（必填）…"
+
+msgid "Why are you rejecting this?"
+msgstr "你为什么拒绝此内容？"
+
+msgid "You cannot mix images and video in one post."
+msgstr "同一条内容中不能同时包含图片和视频。"
+
+msgid "You cannot mix images and video. Please upload either images or a single video."
+msgstr "不能混用图片和视频。请上传图片或单个视频。"
+
+msgid "YouTube"
+msgstr "YouTube"
+
+msgid "caption"
+msgstr "文案"
+
+msgid "e.g. Legal wants to double-check the figures…"
+msgstr "例如法务想再核对一下数字…"
+
+msgid "title"
+msgstr "标题"
+
+msgid "%(count)s photo selected"
+msgid_plural "%(count)s photos selected"
+msgstr[0] "已选择 %(count)s 张照片"
+
+msgid "Reject %(count)s post"
+msgid_plural "Reject %(count)s posts"
+msgstr[0] "拒绝 %(count)s 条内容"

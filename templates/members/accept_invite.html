@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% blocktrans trimmed with invitation_organization_name=invitation.organization.name %}Join {{ invitation_organization_name }} - Brightbean{% endblocktrans %}</title>
+    <title>{% blocktrans trimmed with invitation_organization_name=invitation.organization.name %}Join {{ invitation_organization_name }} - wanchurk-studio{% endblocktrans %}</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -80,11 +80,11 @@
 </head>
 <body>
     <div class="card">
-        <div class="logo">Brightbean</div>
+        <div class="logo">wanchurk-studio</div>
 
         <h1>{% blocktrans trimmed with invitation_organization_name=invitation.organization.name %}Join {{ invitation_organization_name }}{% endblocktrans %}</h1>
         <p class="subtitle">{% blocktrans trimmed with invitation_invited_by_display_name=invitation.invited_by.display_name %}
-            {{ invitation_invited_by_display_name }} invited you to join their team on Brightbean.
+            {{ invitation_invited_by_display_name }} invited you to join their team on wanchurk-studio.
         {% endblocktrans %}</p>
 
         {% if error %}

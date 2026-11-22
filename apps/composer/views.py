@@ -35,6 +35,7 @@ from apps.media_library.validators import ALLOWED_MIME_TYPES, get_accepted_file_
 from apps.members.decorators import membership_permissions, require_permission, require_post_edit
 from apps.members.models import WorkspaceMembership
 from apps.social_accounts.models import SocialAccount
+from apps.ui_zh.middleware import lookup
 from apps.workspaces.models import Workspace
 from providers import is_video_only, requires_media
 from providers.tiktok import VALID_PRIVACY_LEVELS as TIKTOK_PRIVACY_LEVELS
@@ -712,6 +713,11 @@ def compose(request, workspace_id, post_id=None):
     for acc in social_accounts:
         cfg = dict(acc.field_config)
         cfg["supports_first_comment"] = acc.supports_first_comment()
+        # The label reaches Alpine as data and never becomes a text node, so the
+        # render-time pass can't see it. Translate here, at the boundary.
+        for label_key in ("title_label", "caption_label"):
+            if label_key in cfg:
+                cfg[label_key] = lookup(str(cfg[label_key]))
         char_limits[str(acc.id)] = {
             "platform": acc.platform,
             "limit": acc.char_limit,
@@ -4218,7 +4224,7 @@ def _fetch_feed_events_for_workspace(feeds):
 
     headers = {
         "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9, */*;q=0.1",
-        "User-Agent": "Brightbean RSS Reader/1.0",
+        "User-Agent": "wanchurk-studio RSS Reader/1.0",
     }
     all_events = []
     for feed in feeds:
@@ -4322,7 +4328,7 @@ def _validate_rss_url(rss_url):
     """Validate that a URL points to a reachable RSS/Atom XML feed."""
     headers = {
         "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9, */*;q=0.1",
-        "User-Agent": "Brightbean RSS Validator/1.0",
+        "User-Agent": "wanchurk-studio RSS Validator/1.0",
     }
     response, _final_url = _safe_fetch_feed(rss_url, headers)
     if response is None:

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
-{% block title %}Create - {{ workspace.name }} - Brightbean{% endblock %}
+{% block title %}Create - {{ workspace.name }} - wanchurk-studio{% endblock %}
 
 {% comment %}Header is rendered inside the content block to avoid overlap with the -m-6 layout{% endcomment %}
 
@@ -1069,7 +1069,7 @@
             <!-- Footer with attribution & tags -->
             <div class="px-6 pb-5 flex items-center gap-3">
                 <span class="text-xs font-medium text-stone-400">By</span>
-                <span class="text-xs font-semibold text-stone-600 underline decoration-stone-300 underline-offset-2">Brightbean</span>
+                <span class="text-xs font-semibold text-stone-600 underline decoration-stone-300 underline-offset-2">wanchurk-studio</span>
                 <template x-if="viewingTemplate?.tags?.length > 0">
                     <span class="text-stone-300 mx-1">&bull;</span>
                 </template>
@@ -1210,11 +1210,11 @@ function kanbanBoard() {
         },
 
         createGroupLabel() {
-            return this._columnMap[this.createSelectedGroup] || 'Unassigned';
+            return this._columnMap[this.createSelectedGroup] || gettext('Unassigned');
         },
 
         editGroupLabel() {
-            return this._columnMap[this.editSelectedGroup] || 'Unassigned';
+            return this._columnMap[this.editSelectedGroup] || gettext('Unassigned');
         },
 
         toggleEditTag(tag) {
@@ -1463,13 +1463,13 @@ function kanbanBoard() {
             if (data && typeof data.error === 'string' && data.error.trim()) return data.error;
             if (data && typeof data.detail === 'string' && data.detail.trim()) return data.detail;
             if (typeof fallback === 'string' && fallback.trim()) return fallback;
-            if (response && response.status === 400) return 'Request validation failed.';
-            return 'Request failed.';
+            if (response && response.status === 400) return gettext('Request validation failed.');
+            return gettext('Request failed.');
         },
 
         _requestKanbanMutation(url, options) {
             var csrfToken = this._getCsrfToken();
-            if (!csrfToken) return Promise.reject(new Error('Security token missing. Please reload the page.'));
+            if (!csrfToken) return Promise.reject(new Error(gettext('Security token missing. Please reload the page.')));
             var opts = options || {};
             var headers = Object.assign(
                 {
@@ -1499,9 +1499,9 @@ function kanbanBoard() {
         },
 
         _submitIdeaMutation(formEl) {
-            if (!formEl) return Promise.reject(new Error('Idea form is missing.'));
+            if (!formEl) return Promise.reject(new Error(gettext('Idea form is missing.')));
             var url = formEl.getAttribute('action') || formEl.getAttribute('hx-post');
-            if (!url) return Promise.reject(new Error('Idea form action is missing.'));
+            if (!url) return Promise.reject(new Error(gettext('Idea form action is missing.')));
             return this._requestKanbanMutation(url, { body: new FormData(formEl) });
         },
 
@@ -1586,7 +1586,7 @@ function kanbanBoard() {
                     var groupId = column.dataset.groupId || '';
                     if (!groupId) return;
                     var label = column.querySelector('.group-label');
-                    map[groupId] = label ? label.textContent.trim() : 'Unassigned';
+                    map[groupId] = label ? label.textContent.trim() : gettext('Unassigned');
                 });
             }
             this._columnMap = map;
@@ -1608,7 +1608,7 @@ function kanbanBoard() {
             }
             return fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(function(response) {
-                    if (!response.ok) throw new Error('Could not refresh board.');
+                    if (!response.ok) throw new Error(gettext('Could not refresh board.'));
                     return response.text();
                 })
                 .then((html) => {
@@ -1637,7 +1637,7 @@ function kanbanBoard() {
                     this.closeCreateModal();
                 })
                 .catch((error) => {
-                    window.alert(error && error.message ? error.message : 'Could not save the idea. Please try again.');
+                    window.alert(error && error.message ? error.message : gettext('Could not save the idea. Please try again.'));
                     this.refreshBoardHard().catch(function() {});
                 })
                 .finally(() => {
@@ -1660,7 +1660,7 @@ function kanbanBoard() {
                     this.editingIdea = null;
                 })
                 .catch((error) => {
-                    window.alert(error && error.message ? error.message : 'Could not save the idea. Please try again.');
+                    window.alert(error && error.message ? error.message : gettext('Could not save the idea. Please try again.'));
                     this.refreshBoardHard().catch(function() {});
                 })
                 .finally(() => {
@@ -1685,7 +1685,7 @@ function kanbanBoard() {
                 .then((payload) => {
                     ideaPayload = payload || {};
                     if (!ideaPayload.idea_id) {
-                        throw new Error('Could not save the idea before creating a post.');
+                        throw new Error(gettext('Could not save the idea before creating a post.'));
                     }
                     if (!this._upsertIdeaCard(ideaPayload, { prepend: true })) {
                         return this.refreshBoardHard();
@@ -1697,7 +1697,7 @@ function kanbanBoard() {
                 })
                 .then((payload) => {
                     if (!payload || !payload.compose_url) {
-                        throw new Error('Could not open the composer for this idea.');
+                        throw new Error(gettext('Could not open the composer for this idea.'));
                     }
                     if (isEdit) {
                         this.editingIdea = null;
@@ -1708,7 +1708,7 @@ function kanbanBoard() {
                     window.location.href = payload.compose_url;
                 })
                 .catch((error) => {
-                    window.alert(error && error.message ? error.message : 'Could not create a post from this idea. Please try again.');
+                    window.alert(error && error.message ? error.message : gettext('Could not create a post from this idea. Please try again.'));
                     this.refreshBoardHard().catch(function() {});
                 })
                 .finally(() => {
@@ -1718,11 +1718,11 @@ function kanbanBoard() {
         },
 
         _createPostFromIdea(ideaId) {
-            if (!ideaId) return Promise.reject(new Error('Idea is missing.'));
+            if (!ideaId) return Promise.reject(new Error(gettext('Idea is missing.')));
             return this._requestKanbanMutation('/workspace/{{ workspace.id }}/ideas/' + ideaId + '/create-post/', {})
                 .then((payload) => {
                     if (!payload || !payload.ok || !payload.post_id || !payload.compose_url) {
-                        throw new Error('Could not create a post from this idea.');
+                        throw new Error(gettext('Could not create a post from this idea.'));
                     }
                     return payload;
                 });
@@ -1751,7 +1751,7 @@ function kanbanBoard() {
                     this._refreshColumnMeta();
                 })
                 .catch((error) => {
-                    window.alert(error && error.message ? error.message : 'Could not delete the idea. Please try again.');
+                    window.alert(error && error.message ? error.message : gettext('Could not delete the idea. Please try again.'));
                     this.refreshBoardHard().catch(function() {});
                 });
         },
@@ -1766,7 +1766,7 @@ function kanbanBoard() {
                     }
                 })
                 .catch((error) => {
-                    window.alert(error && error.message ? error.message : 'Could not create column. Please try again.');
+                    window.alert(error && error.message ? error.message : gettext('Could not create column. Please try again.'));
                     this.refreshBoardHard().catch(function() {});
                 });
         },
@@ -1780,7 +1780,7 @@ function kanbanBoard() {
                     }
                 })
                 .catch((error) => {
-                    window.alert(error && error.message ? error.message : 'Could not delete column. Please try again.');
+                    window.alert(error && error.message ? error.message : gettext('Could not delete column. Please try again.'));
                     this.refreshBoardHard().catch(function() {});
                 });
         },
@@ -1798,7 +1798,7 @@ function kanbanBoard() {
                     }
                 )
                 .catch(() => {
-                    window.alert('One of the files failed to upload. Please try again.');
+                    window.alert(gettext('One of the files failed to upload. Please try again.'));
                 })
                 .finally(() => {
                     if (target === 'edit') this.editMediaUploadCount = Math.max(0, this.editMediaUploadCount - 1);

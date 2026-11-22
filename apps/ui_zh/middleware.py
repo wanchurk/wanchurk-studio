@@ -32,9 +32,15 @@ TRANSLATIONS_PATH = Path(__file__).with_name("translations.json")
 
 # Never rewrite inside these elements: markup, scripts, or code samples.
 SKIP_BLOCKS = re.compile(
-    r"(<(script|style|pre|code|textarea)\b[^>]*>)(.*?)(</\2>)",
+    r"(<(script|style|pre|code)\b[^>]*>)(.*?)(</\2>)",
     re.I | re.S,
 )
+
+# A textarea's *content* is user input and must survive verbatim, but its opening
+# tag carries UI copy (placeholder, aria-label) that has to be translated.
+# Stashing the whole element swallowed those attributes, so only the inner text
+# is sheltered and the tag stays in the flow.
+TEXTAREA_INNER = re.compile(r"(<textarea\b[^>]*>)(.*?)(</textarea>)", re.I | re.S)
 
 TEXT_ATTRS = ("placeholder", "title", "aria-label", "alt")
 ATTR_RE = re.compile(r"\b(" + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
@@ -71,10 +77,12 @@ _WORD_RE = re.compile(r"^[A-Za-z][A-Za-z'-]*$")
 
 def _pattern_for(key: str) -> re.Pattern[str]:
     escaped = re.escape(key)
-    if _WORD_RE.match(key):
-        # \b is wrong at a leading/trailing non-word edge, so anchor on letters.
-        return re.compile(rf"(?<![A-Za-z]){escaped}(?![A-Za-z])")
-    return re.compile(escaped)
+    # Anchor on letters, never \b: a key may start or end with punctuation
+    # ("Save & close", "Really?"), where \b would not fire. Without the guard a
+    # key like "RSS URL" also matches inside "RSS URLs", yielding "RSS 地址s".
+    left = r"(?<![A-Za-z])" if key[:1].isalpha() else ""
+    right = r"(?![A-Za-z])" if key[-1:].isalpha() else ""
+    return re.compile(rf"{left}{escaped}{right}")
 
 
 _COMPILED: dict[str, re.Pattern[str]] = {}
@@ -87,7 +95,14 @@ _KEYS_BY_LENGTH: list[str] = []
 
 def _compile_all() -> None:
     global _KEYS_BY_LENGTH, _COMPILED
-    _KEYS_BY_LENGTH = sorted(_TRANSLATIONS, key=len, reverse=True)
+    # Only multi-word (punctuated / spaced) keys may rewrite substrings. A bare
+    # word ("No", "New", "you") inside a longer sentence is data or copy that
+    # the dictionary does not cover — rewriting it corrupts the text, and the
+    # exact-dict-hit path above still translates the word when a node is
+    # exactly that word.
+    _KEYS_BY_LENGTH = sorted(
+        (k for k in _TRANSLATIONS if not _WORD_RE.match(k)), key=len, reverse=True
+    )
     _COMPILED = {key: _pattern_for(key) for key in _KEYS_BY_LENGTH}
 
 
@@ -118,10 +133,10 @@ def _brand_map() -> list[tuple[str, str]]:
         return []
     # Upstream spells it several ways; collapse them all to the operator's brand.
     return [
-        ("BrightBean Studio", brand),
-        ("Brightbean Studio", brand),
-        ("BrightBean", brand),
-        ("Brightbean", brand),
+        ("wanchurk-studio", brand),
+        ("wanchurk-studio", brand),
+        ("wanchurk-studio", brand),
+        ("wanchurk-studio", brand),
     ]
 
 
@@ -196,6 +211,14 @@ def translate_html(html: str, translate: bool = True) -> str:
         return f"\x00{len(protected) - 1}\x00"
 
     html = SKIP_BLOCKS.sub(stash, html)
+
+    # Shelter textarea contents only; the opening tag keeps flowing so its
+    # placeholder/aria-label get translated by ATTR_RE further down.
+    def stash_inner(match: re.Match[str]) -> str:
+        protected.append(match.group(2))
+        return f"{match.group(1)}\x00{len(protected) - 1}\x00{match.group(3)}"
+
+    html = TEXTAREA_INNER.sub(stash_inner, html)
 
     # Option labels are mixed: sort dropdowns hold copy ("Newest first") while
     # timezone selects hold data (America/New_York). Data must survive verbatim —

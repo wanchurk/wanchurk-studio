@@ -3,6 +3,11 @@
 from django.db.models import Count, Q
 
 
+# The four columns apps/composer creates for a new workspace. Their names are
+# UI copy, so they translate; a user-created column is data and stays verbatim.
+SEEDED_IDEA_COLUMNS = frozenset({"Unassigned", "To Do", "In Progress", "Done"})
+
+
 def sidebar_context(request):
     """Inject sidebar data into every template context.
 
@@ -104,9 +109,20 @@ def sidebar_context(request):
     sidebar_idea_tags = []
     if workspace:
         from apps.composer.models import IdeaGroup, Tag
+        from apps.ui_zh.middleware import lookup
 
         groups = IdeaGroup.objects.for_workspace(workspace.id).order_by("position", "created_at")
-        sidebar_idea_columns = [{"id": str(g.id), "label": g.name} for g in groups] if groups.exists() else []
+        # Only the four seeded columns are UI copy; anything else is a column the
+        # user named, so a name that happens to match a dictionary key ("Title")
+        # must stay verbatim.
+        sidebar_idea_columns = (
+            [
+                {"id": str(g.id), "label": lookup(g.name) if g.name in SEEDED_IDEA_COLUMNS else g.name}
+                for g in groups
+            ]
+            if groups.exists()
+            else []
+        )
         sidebar_idea_tags = list(Tag.objects.for_workspace(workspace.id).values_list("name", flat=True))
 
     # Workspace creation permission (org owners and admins only)
@@ -115,20 +131,8 @@ def sidebar_context(request):
     if org_membership and org_membership.org_role in ("owner", "admin"):
         can_create_workspace = True
 
-    # Trustpilot review ask: only for users with at least one connected channel,
-    # in any of their workspaces, so pages without a workspace (settings,
-    # members) don't make it flicker in and out. Closing it lasts until the
-    # next login.
+    # Trustpilot review ask removed: it pointed at the upstream product.
     show_review_banner = False
-    dismissed_at = request.user.review_banner_dismissed_at
-    last_login = request.user.last_login
-    if dismissed_at is None or (last_login is not None and last_login > dismissed_at):
-        show_review_banner = bool(sidebar_channels) or (
-            SocialAccount.objects.filter(
-                workspace_id__in=[ws.id for ws in sidebar_workspaces],
-                connection_status=SocialAccount.ConnectionStatus.CONNECTED,
-            ).exists()
-        )
 
     return {
         "sidebar_workspaces": sidebar_workspaces,
