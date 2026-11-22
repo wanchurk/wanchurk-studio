@@ -1261,5 +1261,19 @@
   "vlog, travel, daily": "vlog, 旅行, 日常",
   "you.bsky.social": "you.bsky.social",
   "your DEV.to API key": "你的 DEV.to API 密钥",
-  "yourname.bsky.social": "yourname.bsky.social"
+  "yourname.bsky.social": "yourname.bsky.social",
+  "Comment/mention notifications failed. Reconnect Instagram to restore comment permissions.": "评论/提及通知失败。请重新连接 Instagram 以恢复评论权限。",
+  "Comment/mention notifications failed. Try again.": "评论/提及通知失败。请重试。",
+  "Comment/mention notifications were not enabled.": "未能启用评论/提及通知。",
+  "DM notifications require Page metadata permissions. Reconnect Instagram.": "私信通知需要主页元数据权限。请重新连接 Instagram。",
+  "DM notifications require messaging permissions and Page messaging access. Reconnect Instagram.": "私信通知需要消息权限和主页消息访问权限。请重新连接 Instagram。",
+  "DM notifications failed. Check messaging permissions and reconnect Instagram.": "私信通知失败。请检查消息权限并重新连接 Instagram。",
+  "DM notifications failed. Try again.": "私信通知失败。请重试。",
+  "DM notifications could not be confirmed on the linked Page.": "无法在关联主页上确认私信通知。",
+  "Comment notifications are connected. Reconnect Instagram to enable DM notifications on its linked Page.": "评论通知已连接。请重新连接 Instagram，以在其关联主页上启用私信通知。",
+  "The account's permissions no longer cover comment delivery.": "账号的权限已无法覆盖评论推送。",
+  "The platform was temporarily unavailable when we asked it to push updates.": "请求平台推送更新时，平台暂时不可用。",
+  "The platform declined to push updates for this account.": "平台拒绝为该账号推送更新。",
+  "We couldn't set up real-time updates for this account.": "无法为该账号设置实时更新。",
+  "This platform isn't fully configured, so real-time updates couldn't be set up.": "该平台尚未完整配置，因此无法设置实时更新。"
 }
