@@ -1275,5 +1275,7 @@
   "The platform was temporarily unavailable when we asked it to push updates.": "请求平台推送更新时，平台暂时不可用。",
   "The platform declined to push updates for this account.": "平台拒绝为该账号推送更新。",
   "We couldn't set up real-time updates for this account.": "无法为该账号设置实时更新。",
-  "This platform isn't fully configured, so real-time updates couldn't be set up.": "该平台尚未完整配置，因此无法设置实时更新。"
+  "This platform isn't fully configured, so real-time updates couldn't be set up.": "该平台尚未完整配置，因此无法设置实时更新。",
+  "Nothing was sent to": "未发送至",
+  "Your text is still in the box.": "您的文字仍保留在输入框中。"
 }

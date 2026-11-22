@@ -146,7 +146,7 @@ def test_the_error_shown_to_users_carries_no_raw_api_text(client, fb_account, or
         )
 
     body = response.content.decode()
-    assert "Reply not sent" in body
+    assert "回复未发送" in body
     assert "fbtrace_id" not in body
     assert "401" not in body
 
@@ -239,7 +239,7 @@ def test_failed_send_records_no_reply(client, fb_account, org_owner, user):
 
     assert response.status_code == 200
     assert response["HX-Reply-Failed"] == "1"
-    assert b"Reply not sent" in response.content
+    assert "回复未发送".encode() in response.content
     assert InboxReply.objects.get(inbox_message=message).status == InboxReply.Status.FAILED
     # Status is untouched, so the message stays in the queue to be answered.
     message.refresh_from_db()
