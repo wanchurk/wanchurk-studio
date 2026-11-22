@@ -23,6 +23,9 @@ REQUIRED_CREDENTIAL_KEYS = {
     "google_business": (("client_id",), ("client_secret",)),
     "linkedin_personal": (("client_id",), ("client_secret",)),
     "linkedin_company": (("client_id",), ("client_secret",)),
+    # WhatsApp Cloud API: a permanent token, the app secret for webhook HMAC,
+    # and the verify token for the subscription handshake.
+    "whatsapp": (("access_token",), ("app_secret",), ("verify_token",)),
 }
 
 
@@ -53,6 +56,7 @@ class PlatformCredential(models.Model):
         BLUESKY = "bluesky", "Bluesky"
         GOOGLE_BUSINESS = "google_business", "Google Business Profile"
         MASTODON = "mastodon", "Mastodon"
+        WHATSAPP = "whatsapp", "WhatsApp"
         DEVTO = "devto", "DEV.to"
 
     class TestResult(models.TextChoices):

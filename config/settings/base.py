@@ -683,6 +683,7 @@ INBOX_DEEP_SWEEP_SECONDS = env.int("INBOX_DEEP_SWEEP_SECONDS", default=7 * 24 * 
 # Webhook verification
 FACEBOOK_WEBHOOK_VERIFY_TOKEN = env("FACEBOOK_WEBHOOK_VERIFY_TOKEN", default="")
 INSTAGRAM_LOGIN_WEBHOOK_VERIFY_TOKEN = env("INSTAGRAM_LOGIN_WEBHOOK_VERIFY_TOKEN", default="")
+WHATSAPP_WEBHOOK_VERIFY_TOKEN = env("WHATSAPP_WEBHOOK_VERIFY_TOKEN", default="")
 YOUTUBE_WEBHOOK_SECRET = env("YOUTUBE_WEBHOOK_SECRET", default="")
 YOUTUBE_COMPLIANCE_ENFORCEMENT = env.bool("YOUTUBE_COMPLIANCE_ENFORCEMENT", default=False)
 
@@ -796,7 +797,7 @@ if INTELLIGENCE_ENABLED:
 # --- White-label / localisation -------------------------------------------
 # Single source of truth for the product name shown in the UI. Templates keep
 # their upstream strings; the middleware rewrites them at render time.
-BRAND_NAME = env("BRAND_NAME", default="跨境铺子")
+BRAND_NAME = env("BRAND_NAME", default="wanchurk-studio")
 # "zh-hans" turns on the translation middleware; anything else leaves the UI English.
 UI_LANGUAGE = env("UI_LANGUAGE", default="zh-hans")
 # Re-read translations.json on change so dictionary edits need no restart.

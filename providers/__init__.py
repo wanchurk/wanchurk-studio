@@ -23,6 +23,7 @@ from .pinterest import PinterestProvider
 from .threads import ThreadsProvider
 from .tiktok import TikTokProvider
 from .types import PostType
+from .whatsapp import WhatsAppProvider
 from .youtube import YouTubeProvider
 
 if TYPE_CHECKING:
@@ -42,6 +43,7 @@ PROVIDER_REGISTRY: dict[str, type[SocialProvider]] = {
     "google_business": GoogleBusinessProvider,
     "mastodon": MastodonProvider,
     "devto": DevtoProvider,
+    "whatsapp": WhatsAppProvider,
 }
 
 # Characters a platform escapes in the caption it publishes. Each one costs two

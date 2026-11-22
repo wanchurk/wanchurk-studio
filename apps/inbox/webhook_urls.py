@@ -10,4 +10,5 @@ urlpatterns = [
     path("facebook/", webhooks.facebook_webhook, name="webhook_facebook"),
     path("instagram_login/", webhooks.instagram_login_webhook, name="webhook_instagram_login"),
     path("youtube/", webhooks.youtube_webhook, name="webhook_youtube"),
+    path("whatsapp/", webhooks.whatsapp_webhook, name="webhook_whatsapp"),
 ]

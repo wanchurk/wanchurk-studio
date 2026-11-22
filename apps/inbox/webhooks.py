@@ -572,3 +572,88 @@ def _process_youtube_notification(body: bytes):
                 body=title,
                 extra={"video_id": video_id, "entry_id": entry_id},
             )
+
+
+# --- WhatsApp Cloud API ---
+
+
+def _whatsapp_receive(request):
+    """Validate and process a WhatsApp Cloud API webhook delivery.
+
+    Same HMAC check as the Meta endpoints. Events are processed only for
+    accounts whose org's WhatsApp app secret signed the body, so one org's
+    secret cannot write into another org's inbox.
+    """
+    signature = request.headers.get("X-Hub-Signature-256", "")
+    candidate_secrets = resolve_app_secrets("whatsapp")
+    valid_secrets = {s for s in candidate_secrets if _verify_meta_signature(request.body, signature, s)}
+    if not valid_secrets:
+        logger.warning("WhatsApp webhook: signature did not match any configured app secret.")
+        return HttpResponseForbidden("Invalid signature.")
+
+    try:
+        payload = json.loads(request.body)
+    except json.JSONDecodeError:
+        logger.warning("Invalid JSON in WhatsApp webhook payload.")
+        return HttpResponse("Bad request", status=400)
+
+    _process_whatsapp_events(payload, valid_secrets)
+    return HttpResponse("OK", status=200)
+
+
+def _process_whatsapp_events(payload: dict, valid_secrets: set[str]):
+    """Turn inbound WhatsApp text messages into InboxMessages.
+
+    Each change carries ``value.metadata.phone_number_id``, which identifies the
+    connected SocialAccount. Delivery statuses are ignored here.
+    """
+    from providers.whatsapp import parse_inbound_messages
+
+    for entry in payload.get("entry", []):
+        for change in entry.get("changes", []):
+            if change.get("field") != "messages":
+                continue
+            value = change.get("value") or {}
+            phone_number_id = str((value.get("metadata") or {}).get("phone_number_id") or "")
+            if not phone_number_id:
+                continue
+
+            accounts = SocialAccount.objects.filter(
+                account_platform_id=phone_number_id,
+                platform="whatsapp",
+                connection_status=SocialAccount.ConnectionStatus.CONNECTED,
+            ).select_related("workspace__organization")
+
+            for account in accounts:
+                account_secret = resolve_app_secret("whatsapp", account.workspace.organization_id)
+                if not account_secret or account_secret not in valid_secrets:
+                    logger.warning(
+                        "WhatsApp webhook: signature not valid for account %s's org app; skipping.",
+                        account.id,
+                    )
+                    continue
+                for msg in parse_inbound_messages(value):
+                    _create_if_new(
+                        account=account,
+                        platform_message_id=msg.platform_message_id,
+                        message_type=InboxMessage.MessageType.DM,
+                        sender_name=msg.sender_name,
+                        sender_id=msg.sender_id,
+                        body=msg.text,
+                        extra={**msg.extra, "sender_id": msg.sender_id, "platform_timestamp": msg.timestamp.isoformat()},
+                        received_at=msg.timestamp,
+                    )
+
+
+@csrf_exempt
+@ratelimit(key="ip", rate="60/m", block=True)
+@require_http_methods(["GET", "POST"])
+def whatsapp_webhook(request):
+    """WhatsApp Cloud API webhook.
+
+    GET:  Subscription handshake (hub.mode, hub.verify_token, hub.challenge).
+    POST: Inbound events, signed with X-Hub-Signature-256.
+    """
+    if request.method == "GET":
+        return _meta_verify(request, settings.WHATSAPP_WEBHOOK_VERIFY_TOKEN)
+    return _whatsapp_receive(request)

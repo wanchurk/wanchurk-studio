@@ -242,6 +242,8 @@ def connect_platform(request, workspace_id):
         return redirect("social_accounts:connect_mastodon", workspace_id=workspace_id)
     if platform == PlatformCredential.Platform.DEVTO:
         return redirect("social_accounts:connect_devto", workspace_id=workspace_id)
+    if platform == PlatformCredential.Platform.WHATSAPP:
+        return redirect("social_accounts:connect_whatsapp", workspace_id=workspace_id)
 
     # Standard OAuth flow
     provider = _get_provider_for_platform(platform, request.org.id)
@@ -650,6 +652,54 @@ def connect_devto(request, workspace_id):
 
 
 # ------------------------------------------------------------------
+# WhatsApp Connect (Cloud API phone number, org-level system-user token)
+# ------------------------------------------------------------------
+
+
+@csp_update(FORM_ACTION="'self' https:")
+@login_required
+@require_permission("manage_social_accounts")
+def connect_whatsapp(request, workspace_id):
+    """Attach a WhatsApp Business phone number to the workspace.
+
+    The system-user access token is org-level (PlatformCredential). The user
+    supplies only the Phone Number ID; it is verified against Graph before saving.
+    """
+    if request.method == "GET":
+        return render(request, "social_accounts/whatsapp_connect.html", {"workspace_id": workspace_id})
+
+    phone_number_id = request.POST.get("phone_number_id", "").strip()
+    if not phone_number_id or not phone_number_id.isdigit():
+        messages.error(request, gettext("Enter the numeric Phone Number ID from Meta Business Manager."))
+        return render(request, "social_accounts/whatsapp_connect.html", {"workspace_id": workspace_id})
+
+    try:
+        provider = _get_provider_for_platform(PlatformCredential.Platform.WHATSAPP, request.org.id)
+        from apps.credentials.models import resolve_platform_credentials
+
+        token = resolve_platform_credentials(PlatformCredential.Platform.WHATSAPP, request.org.id).get("access_token", "")
+        if not token:
+            raise ValueError("WhatsApp access_token is not configured")
+        profile = provider.get_profile(token, phone_number_id=phone_number_id)
+        _create_or_update_account(
+            workspace_id=workspace_id,
+            platform=PlatformCredential.Platform.WHATSAPP,
+            profile=profile,
+            access_token=token,
+        )
+        messages.success(request, f"Connected {profile.name} on WhatsApp.")
+    except Exception:
+        logger.exception("WhatsApp connection failed")
+        messages.error(
+            request,
+            gettext("Failed to verify this WhatsApp number. Check the Phone Number ID and that the system-user token can access it."),
+        )
+        return render(request, "social_accounts/whatsapp_connect.html", {"workspace_id": workspace_id})
+
+    return redirect("calendar:calendar", workspace_id=workspace_id)
+
+
+# ------------------------------------------------------------------
 # Mastodon Connect (instance-based OAuth)
 # ------------------------------------------------------------------
 
@@ -766,6 +816,8 @@ def reconnect(request, workspace_id, account_id):
         return redirect("social_accounts:connect_mastodon", workspace_id=workspace_id)
     if platform == PlatformCredential.Platform.DEVTO:
         return redirect("social_accounts:connect_devto", workspace_id=workspace_id)
+    if platform == PlatformCredential.Platform.WHATSAPP:
+        return redirect("social_accounts:connect_whatsapp", workspace_id=workspace_id)
 
     # Standard OAuth reconnect
     provider = _get_provider_for_platform(platform, request.org.id)
