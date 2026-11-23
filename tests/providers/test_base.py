@@ -10,6 +10,9 @@ from providers.exceptions import APIError, RateLimitError
 from providers.types import AuthType, PostType
 
 
+# Messaging-only providers are in the registry for the inbox but publish no posts.
+MESSAGING_ONLY_PLATFORMS = {"whatsapp"}
+
 class TestProviderRegistry:
     """Test provider registry completeness and get_provider()."""
 
@@ -28,6 +31,7 @@ class TestProviderRegistry:
             "google_business",
             "mastodon",
             "devto",
+            "whatsapp",
         }
         assert set(PROVIDER_REGISTRY.keys()) == expected
 
@@ -74,6 +78,10 @@ class TestSocialProviderInterface:
         provider = get_provider(platform)
         post_types = provider.supported_post_types
         assert isinstance(post_types, list)
+        if platform in MESSAGING_ONLY_PLATFORMS:
+            # Registered for the unified inbox, not for publishing.
+            assert post_types == []
+            return
         assert len(post_types) > 0
         for pt in post_types:
             assert isinstance(pt, PostType)

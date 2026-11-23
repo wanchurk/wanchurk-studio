@@ -2,6 +2,7 @@
 
 import json
 from datetime import timedelta
+from zoneinfo import ZoneInfo
 from io import StringIO
 from unittest.mock import Mock, patch
 
@@ -235,13 +236,19 @@ def test_a_grant_that_no_longer_reaches_the_channel_stops_the_inbox(channel):
 
 def test_history_keeps_180_days_and_drops_arbitrary_old_response_payloads(channel):
     now = timezone.now()
+    # Snapshot dates are written on YouTube's Pacific day boundary
+    # (apps/analytics/youtube_reports.py), and the cleanup compares against that same
+    # boundary. Building the fixtures from now.date() used the UTC day instead, so the
+    # 181-day row was one day short of the cutoff and this test failed for the first
+    # eight hours of every UTC day.
+    today = now.astimezone(ZoneInfo("America/Los_Angeles")).date()
     old = AccountInsightsSnapshot.objects.create(
-        social_account=channel, metric_key="views", date=now.date() - timedelta(days=181), value=4
+        social_account=channel, metric_key="views", date=today - timedelta(days=181), value=4
     )
     retained = AccountInsightsSnapshot.objects.create(
         social_account=channel,
         metric_key="views",
-        date=now.date() - timedelta(days=179),
+        date=today - timedelta(days=179),
         value=3,
         raw={"source": "youtube_analytics", "copied_profile": "Old"},
     )
