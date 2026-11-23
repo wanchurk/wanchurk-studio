@@ -501,7 +501,7 @@ class DerivedMetricResponse(Schema):
             "hasn't reported yet (for example YouTube Analytics' 2-3 day lag), which is not a zero."
         ),
     )
-    calculated_by_brightbean: bool = Field(
+    calculated_by_wanchurk: bool = Field(
         False,
         description=(
             "``true`` when wanchurk-studio calculated ``value`` rather than the platform reporting it: the "
@@ -533,7 +533,7 @@ class DerivedMetricResponse(Schema):
             value=derived.value,
             delta=derived.delta,
             series=list(derived.series),
-            calculated_by_brightbean=calculated or derived.averaged or derived.estimated,
+            calculated_by_wanchurk=calculated or derived.averaged or derived.estimated,
             averaged=derived.averaged,
             estimated=derived.estimated,
             comparison_available=derived.comparison_available,

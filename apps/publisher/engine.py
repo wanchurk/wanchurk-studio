@@ -885,7 +885,7 @@ class PublishEngine:
                 video_duration_sec=primary_video_duration,
                 # Stable per PlatformPost, so every retry of this row sends the
                 # same key; a clone or a new post is a new row and a new key.
-                idempotency_key=f"brightbean-{platform_post.id}",
+                idempotency_key=f"wanchurk-{platform_post.id}",
                 upload_cache=_provider_upload_cache,
                 should_stop=SHUTDOWN_REQUESTED.is_set,
             )

@@ -70,7 +70,7 @@ def test_period_percentage_and_watch_time_are_not_daily_averages(channel):
     assert cards["avg_view_pct"].value == 103.1
     assert cards["watch_time"].value == 945.0
     assert cards["likes"].value == 0.0
-    assert not any(m.averaged or m.estimated or m.calculated_by_brightbean for m in cards.values())
+    assert not any(m.averaged or m.estimated or m.calculated_by_wanchurk for m in cards.values())
     assert response.engagement is None
     assert set(cards) == {"views", "watch_time", "avg_view_pct", "likes", "comments", "shares"}
 

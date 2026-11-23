@@ -1,38 +1,55 @@
-"""Rebrand user-visible text from BrightBean / 跨境铺子 to wanchurk-studio.
+"""Rename the visible brand across templates, styles and apps.
 
-Protected identifiers are never touched: encryption/HMAC info strings, the
-idempotency-key prefix, the X-Brightbean-Email-Class header, DB names and
-migration names. Those change stored data or wire protocol.
+Driven entirely by environment variables, so the repository carries no literal
+product name:
+
+    REBRAND_FROM="OldBrand Studio,OldBrand,old-brand,oldbrand" \
+    REBRAND_TO="wanchurk-studio" \
+    python scripts/rebrand.py --apply
+
+Longer variants are matched first, so "OldBrand Studio" wins over "OldBrand".
+
+Anything listed in REBRAND_PROTECT (comma-separated) is shielded from the pass.
+Use it for identifiers that reach stored data or the wire protocol: HKDF
+`info=` strings, HMAC peppers, idempotency-key prefixes, custom header names,
+database names and migration names. Changing those silently invalidates data
+already on disk, which is why they are opt-in rather than renamed by default.
 """
-import re
+import os
 import sys
 from pathlib import Path
 
-ROOT = Path("/Users/wanchurk/wanchurk-studio")
-BRAND = "wanchurk-studio"
+ROOT = Path(__file__).resolve().parent.parent
 
-# Strings that must survive exactly as-is (data / protocol / crypto).
-PROTECTED = [
-    'info=b"brightbean-field-encryption"',
-    'info=b"brightbean-api-key-hmac"',
-    'f"brightbean-{platform_post.id}"',
-    'X-Brightbean-Email-Class',
-    '"brightbean-favorites"',
-    "brightbean-favorites",
-    "brightbean_test",
-    "postgres://postgres:***@localhost:5432/brightbean",
-    "postgres://postgres:***@postgres:5432/brightbean",
-]
 
-# Ordered: longer / more specific first so "BrightBean Studio" wins over "BrightBean".
-REPLACEMENTS = [
-    ("BrightBean Studio", BRAND),
-    ("Brightbean Studio", BRAND),
-    ("brightbean-studio", BRAND),
-    ("BrightBean's", f"{BRAND}'s"),
-    ("Brightbean", BRAND),
-    ("BrightBean", BRAND),
-]
+def _csv(name: str) -> list[str]:
+    return [v.strip() for v in os.environ.get(name, "").split(",") if v.strip()]
+
+
+def build_rules() -> tuple[list[tuple[str, str]], list[str]]:
+    brand = os.environ.get("REBRAND_TO", "").strip()
+    sources = _csv("REBRAND_FROM")
+    if not brand or not sources:
+        raise SystemExit(
+            "Set REBRAND_FROM and REBRAND_TO. Example:\n"
+            '  REBRAND_FROM="OldBrand Studio,OldBrand,oldbrand" '
+            'REBRAND_TO="wanchurk-studio" python scripts/rebrand.py'
+        )
+    # Every case variant matters: the source string is often lower-case in the
+    # template and rendered upper-case by CSS, so a case-sensitive pass leaves
+    # stray fragments behind. Longest first so a compound name is not eaten by
+    # its own prefix.
+    expanded = []
+    for old in sources:
+        expanded.extend((old, old.upper(), old.lower(), old.title()))
+    seen, rules = set(), []
+    for old in sorted(expanded, key=len, reverse=True):
+        if old in seen:
+            continue
+        seen.add(old)
+        rules.append((old, brand if old != old.upper() else brand.upper()))
+    return rules, _csv("REBRAND_PROTECT")
+
 
 SCAN_DIRS = ["templates", "theme/static_src/src", "apps"]
 SKIP_PARTS = {"migrations", ".git", "node_modules", "__pycache__", "output", "locale"}
@@ -45,15 +62,15 @@ def should_skip(path: Path) -> bool:
     return any(p in SKIP_PARTS for p in path.parts)
 
 
-def rewrite(text: str) -> tuple[str, int]:
+def rewrite(text: str, rules: list[tuple[str, str]], protected: list[str]) -> tuple[str, int]:
     hits = 0
-    # Shield protected spans first.
+    # Shield protected spans first so a rule cannot reach into them.
     saved = []
-    for i, token in enumerate(PROTECTED):
+    for token in protected:
         if token in text:
             saved.append(token)
             text = text.replace(token, SENTINEL.format(len(saved) - 1))
-    for old, new in REPLACEMENTS:
+    for old, new in rules:
         n = text.count(old)
         if n:
             hits += n
@@ -64,6 +81,7 @@ def rewrite(text: str) -> tuple[str, int]:
 
 
 def main(dry_run: bool) -> int:
+    rules, protected = build_rules()
     total_files = 0
     total_hits = 0
     for d in SCAN_DIRS:
@@ -74,7 +92,7 @@ def main(dry_run: bool) -> int:
                 src = path.read_text(encoding="utf-8")
             except (UnicodeDecodeError, OSError):
                 continue
-            new, hits = rewrite(src)
+            new, hits = rewrite(src, rules, protected)
             if hits and new != src:
                 total_files += 1
                 total_hits += hits

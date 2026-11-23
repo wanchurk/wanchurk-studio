@@ -1152,7 +1152,7 @@ register_tool(
             "(views/likes/reach/etc.), an engagement-rate card when the platform supports it, "
             "and follower growth. Each metric is returned as ``{value, delta, series, kind}`` "
             "where ``delta`` is the percent change vs. the prior equal-length window and "
-            "``series`` is the daily sparkline. Metrics with ``calculated_by_brightbean: true`` (the "
+            "``series`` is the daily sparkline. Metrics with ``calculated_by_wanchurk: true`` (the "
             "engagement rate, daily averages, estimates) and every ``delta`` are calculated by wanchurk-studio, "
             "not reported by the platform; say so when showing them to a user. Includes ``captured_at`` and ``next_sync_eta`` "
             "YouTube uses native period reports, separate raw count cards, ``engagement: null``, Pacific reporting-period metadata "

@@ -54,7 +54,7 @@ page loads are not used to fill missing observations.
 
 ### Branding — report pages 2–8, policy III.F.2.a
 
-Source attribution uses the exact trade name “YouTube” in BrightBean's normal
+Source attribution uses the exact trade name “YouTube” in wanchurk-studio's normal
 typeface. The name is not rendered as a recreated wordmark or custom logo tile.
 Navigation shows “YouTube” on the first line and the channel
 name on the second, beside the channel avatar or a neutral initial fallback.
@@ -82,7 +82,7 @@ has not been obtained.
 
 ### Authorization, refresh and deletion — report page 1, policy III.E.4.a–g
 
-New connections and voluntary renewals record the actual authorizing BrightBean
+New connections and voluntary renewals record the actual authorizing wanchurk-studio
 user. Existing ownership stays nullable; workspace ownership is not substituted.
 Successful checks use the existing OAuth grant and record authorization/profile
 retrieval timestamps. Per-video existence checks and per-comment successful
@@ -126,13 +126,13 @@ enforcement until the rollout below has been completed.
 
 | Project number | Environment | Credential source | Purpose | Verification |
 |---|---|---|---|---|
-| 594155589966 | Reviewer-reported quota project | Reviewer PDF, page 1; Cloud Console Project info | YouTube quota request under review | Verified: BrightBean Studio, project ID `social-intelligence-app-490321` |
-| 594155589966 | Primary development checkout | `.env`: `PLATFORM_GOOGLE_CLIENT_ID`; fingerprint `59f108ea63616d04` | YouTube Data/Analytics, upload/comments; shared environment client also supports Google Business Profile | Exact fingerprint match to Cloud client “BrightBean Studio Social Accounts Development” |
-| 594155589966 | Primary development checkout | `.env`: `GOOGLE_AUTH_CLIENT_ID`; fingerprint `70cbb1847d19c5ee` | BrightBean Google sign-in, separate client from YouTube | Exact fingerprint match to Cloud client “BrightBean Development Login” |
-| 594155589966 | Registered production client | Cloud client “BrightBean Studio Social Accounts Production”; fingerprint `ab36d558fda1d92b` | Registered social-account OAuth client | Project membership verified; actual deployed credential resolution unverified |
-| 594155589966 | Registered production login | Cloud client “BrightBean Production Login”; fingerprint `8b2cd24607c857bc` | Registered Google sign-in client | Project membership verified; deployed configuration unverified |
-| 594155589966 | Registered staging client | Cloud client “BrightBean Studio Social Accounts Staging”; fingerprint `556ea3d3aed9f9fd` | Registered social-account OAuth client | Project membership verified; deployed configuration unverified |
-| 594155589966 | Registered staging login | Cloud client “BrightBean Studio Staging Login”; fingerprint `d8158e9c335550f0` | Registered Google sign-in client | Project membership verified; deployed configuration unverified |
+| 594155589966 | Reviewer-reported quota project | Reviewer PDF, page 1; Cloud Console Project info | YouTube quota request under review | Verified: wanchurk-studio, project ID `social-intelligence-app-490321` |
+| 594155589966 | Primary development checkout | `.env`: `PLATFORM_GOOGLE_CLIENT_ID`; fingerprint `59f108ea63616d04` | YouTube Data/Analytics, upload/comments; shared environment client also supports Google Business Profile | Exact fingerprint match to Cloud client “wanchurk-studio Social Accounts Development” |
+| 594155589966 | Primary development checkout | `.env`: `GOOGLE_AUTH_CLIENT_ID`; fingerprint `70cbb1847d19c5ee` | wanchurk-studio Google sign-in, separate client from YouTube | Exact fingerprint match to Cloud client “wanchurk-studio Development Login” |
+| 594155589966 | Registered production client | Cloud client “wanchurk-studio Social Accounts Production”; fingerprint `ab36d558fda1d92b` | Registered social-account OAuth client | Project membership verified; actual deployed credential resolution unverified |
+| 594155589966 | Registered production login | Cloud client “wanchurk-studio Production Login”; fingerprint `8b2cd24607c857bc` | Registered Google sign-in client | Project membership verified; deployed configuration unverified |
+| 594155589966 | Registered staging client | Cloud client “wanchurk-studio Social Accounts Staging”; fingerprint `556ea3d3aed9f9fd` | Registered social-account OAuth client | Project membership verified; deployed configuration unverified |
+| 594155589966 | Registered staging login | Cloud client “wanchurk-studio Staging Login”; fingerprint `d8158e9c335550f0` | Registered Google sign-in client | Project membership verified; deployed configuration unverified |
 | None observed | Primary development database | Read-only `PlatformCredential` query: zero YouTube override rows | Potential per-organization fallback credentials | Development store inspected; no production-store inference |
 | Unverified | Production | Environment / deployed secret configuration | Production YouTube requests | Configuration not accessed |
 | Unverified | Production organization overrides | Deployed credential store | Organization-specific YouTube requests if complete environment credentials are absent | Store not accessed |
@@ -151,7 +151,7 @@ until separately verified. The current findings and sanitized Cloud verification
 are in `output/youtube-review/project-inventory.json` and
 `output/youtube-review/cloud-project-verification.json`. The Cloud list also contains
 a named “YouTube API Key - Public Pages”; its value was not accessed and its Studio
-runtime use is unverified. Other registered BrightBean Platform clients are listed
+runtime use is unverified. Other registered wanchurk-studio Platform clients are listed
 as metadata in the verification file, without claims about their functionality.
 
 ## Screenshot evidence

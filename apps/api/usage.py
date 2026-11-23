@@ -6,7 +6,7 @@ caller, UTC hour, action and status. The rows serve two readers:
 * the hourly and daily caps in ``apps.api.limits.enforce_usage_caps``, which
   need a count that survives deploys (the cache is per-process LocMem unless
   ``REDIS_URL`` is set, and is emptied by every restart);
-* anyone asking "who is calling how much", including brightbean-analytics,
+* anyone asking "who is calling how much", including wanchurk-analytics,
   which reads a few thousand of these rows a night instead of one audit row
   per call.
 

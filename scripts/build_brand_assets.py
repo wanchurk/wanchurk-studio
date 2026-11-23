@@ -52,7 +52,7 @@ def main() -> None:
     # ICO with multiple embedded sizes
     base = render(256)
     base.save(fav / "favicon.ico", format="ICO", sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (256, 256)])
-    # Image used by auth pages (was brightbean-studio-logo.webp)
+    # Image used by auth pages (was wanchurk-studio-logo.webp)
     render(256).save(img / "wanchurk-studio-logo.png", "PNG", optimize=True)
     # Dark-mode-neutral SVG favicon, same geometry
     (fav / "favicon.svg").write_text(

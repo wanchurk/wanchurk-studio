@@ -260,19 +260,19 @@ class TestAccountAnalytics:
         assert body["follower_growth"] is not None
         assert body["follower_growth"]["key"] == "followers"
 
-    def test_marks_what_brightbean_calculated(self, client_with_token, instagram_account):
+    def test_marks_what_wanchurk_calculated(self, client_with_token, instagram_account):
         """Agents can identify permitted calculations on supported platforms."""
         _seed_account_snapshots(instagram_account, days=30)
         body = client_with_token.get(f"/api/v1/analytics/accounts/{instagram_account.id}?days=30").json()
 
         rate = body["engagement"]["rate"]
-        assert rate["calculated_by_brightbean"] is True
+        assert rate["calculated_by_wanchurk"] is True
         assert body["engagement"]["formula"] == "(Likes + Comments + Saves + Shares) ÷ Views"
         # Account-level counts are the platform's own figures.
-        assert all(m["calculated_by_brightbean"] is False for m in body["hero_metrics"])
+        assert all(m["calculated_by_wanchurk"] is False for m in body["hero_metrics"])
         # Growth from follower totals is our difference, not a reported metric.
         assert body["follower_growth"]["estimated"] is True
-        assert body["follower_growth"]["calculated_by_brightbean"] is True
+        assert body["follower_growth"]["calculated_by_wanchurk"] is True
 
         # Freshness fields populated for an account with snapshots.
         assert body["captured_at"] is not None

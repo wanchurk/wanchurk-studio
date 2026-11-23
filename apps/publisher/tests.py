@@ -185,7 +185,7 @@ class DispatchExtraInjectionTest(SimpleTestCase):
         contents = [call.args[1] for call in mock_provider.publish_post.call_args_list]
         # Every retry of the row must send the same key, or the platform cannot
         # recognise a repeat of a post it already created.
-        self.assertEqual([c.idempotency_key for c in contents], ["brightbean-4f1c", "brightbean-4f1c"])
+        self.assertEqual([c.idempotency_key for c in contents], ["wanchurk-4f1c", "wanchurk-4f1c"])
         # A typed field, not a key smuggled into the authored extras.
         self.assertNotIn("idempotency_key", contents[0].extra)
         self.assertIs(contents[0].upload_cache, _provider_upload_cache)

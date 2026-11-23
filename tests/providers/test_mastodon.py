@@ -92,7 +92,7 @@ def _calls(mock_request, method: str, path: str) -> list:
     return [c for c in mock_request.call_args_list if c.args[0] == method and c.args[1] == f"{INSTANCE}{path}"]
 
 
-PUBLISH_KEY = "brightbean-42"
+PUBLISH_KEY = "wanchurk-42"
 
 
 def _cache_key(video: str, publish_key: str = PUBLISH_KEY, position: int = 0) -> str | None:
@@ -347,14 +347,14 @@ def test_remembered_upload_that_is_gone_is_replaced(mock_request, clock, video):
 def test_same_file_in_another_post_gets_its_own_upload(mock_request, clock, video):
     # Post A's upload is still unattached. Post B carries the same file and may
     # publish concurrently; an attachment belongs to one status only.
-    cache = DictCache({_cache_key(video, "brightbean-A"): "m-a"})
+    cache = DictCache({_cache_key(video, "wanchurk-A"): "m-a"})
     mock_request.side_effect = [_response(200, {"id": "m-b"}), _response(200, {"id": "s-b"})]
 
-    _provider().publish_post("tok", _content(video, upload_cache=cache, idempotency_key="brightbean-B"))
+    _provider().publish_post("tok", _content(video, upload_cache=cache, idempotency_key="wanchurk-B"))
 
     assert _calls(mock_request, "GET", "/api/v1/media/m-a") == []
     assert _calls(mock_request, "POST", "/api/v1/statuses")[0].kwargs["data"]["media_ids[]"] == ["m-b"]
-    assert cache.entries[_cache_key(video, "brightbean-B")] == "m-b"
+    assert cache.entries[_cache_key(video, "wanchurk-B")] == "m-b"
 
 
 @patch.object(MastodonProvider, "_request")
@@ -394,12 +394,12 @@ def test_same_content_sends_the_same_key_even_with_fresh_media_ids(mock_request,
     keys = []
     for media_id in ("m1", "m2"):
         mock_request.side_effect = [_response(200, {"id": media_id}), _response(200, {"id": "s1"})]
-        _provider().publish_post("tok", _content(video, idempotency_key="brightbean-42"))
+        _provider().publish_post("tok", _content(video, idempotency_key="wanchurk-42"))
         keys.append(_sent_key(mock_request))
 
     # A retry re-sends the same request as far as Mastodon is concerned.
     assert keys[0] == keys[1]
-    assert keys[0].startswith("brightbean-42-")
+    assert keys[0].startswith("wanchurk-42-")
 
 
 @patch.object(MastodonProvider, "_request")
@@ -411,7 +411,7 @@ def test_edited_content_gets_a_new_key(mock_request, clock, tmp_path):
 
     def send(path, text):
         mock_request.side_effect = [_response(200, {"id": "m"}), _response(200, {"id": "s"})]
-        _provider().publish_post("tok", _content(str(path), text=text, idempotency_key="brightbean-42"))
+        _provider().publish_post("tok", _content(str(path), text=text, idempotency_key="wanchurk-42"))
         return _sent_key(mock_request)
 
     original = send(first, "hello")

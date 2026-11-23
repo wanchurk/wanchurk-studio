@@ -79,7 +79,7 @@ class TestCheckSocialAccountHealth:
         mock_provider.get_profile.return_value = _profile(
             platform_id="17841400000000000",
             name="wanchurk-studio",
-            handle="brightbean",
+            handle="wanchurk",
         )
         mock_get_provider.return_value = mock_provider
 

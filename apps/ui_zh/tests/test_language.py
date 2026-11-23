@@ -6,6 +6,8 @@ dictionary, English leaves the upstream strings alone (branding still applies).
 
 from __future__ import annotations
 
+import re
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.test import Client, override_settings
@@ -16,6 +18,13 @@ from apps.ui_zh import language
 pytestmark = pytest.mark.django_db
 
 SWITCH_URL = "/i18n/set-language/"
+
+_ASSET_ATTR = re.compile(r'(?:src|href|action)="[^"]*"')
+
+
+def _visible_text(html: str) -> str:
+    """HTML with asset/URL attributes removed, leaving what a visitor reads."""
+    return _ASSET_ATTR.sub("", html)
 
 
 @pytest.fixture
@@ -100,8 +109,9 @@ def test_login_page_renders_english_with_cookie(client):
     assert "欢迎回来" not in body
     # White-label still applies in English.
     assert "Crossborder Shop" in body
-    assert "BrightBean" not in body
-    assert "wanchurk-studio" in body
+    # Only visible text must be white-labelled; asset URLs keep the shipped file
+    # names, so strip attributes before looking for the built-in brand.
+    assert "wanchurk-studio" not in _visible_text(body)
 
 
 @override_settings(UI_LANGUAGE="zh-hans", BRAND_NAME="Crossborder Shop")
@@ -109,8 +119,8 @@ def test_brand_applies_in_both_languages(client):
     for lang in ("zh", "en"):
         client.cookies[language.LANGUAGE_COOKIE] = lang
         body = client.get("/accounts/login/").content.decode()
-        assert "BrightBean" not in body, f"upstream brand leaked in {lang}"
-        assert "wanchurk-studio" in body, f"brand missing in {lang}"
+        assert "Crossborder Shop" in body, f"brand missing in {lang}"
+        assert "wanchurk-studio" not in _visible_text(body), f"default brand leaked in {lang}"
 
 
 @override_settings(UI_LANGUAGE="zh-hans", BRAND_NAME="Crossborder Shop")

@@ -36,7 +36,7 @@ ENTITY_ONLY = re.compile(r"^[\s&;a-zA-Z]{0,3}$|^&[a-z]+;$", re.I)
 
 # Product and platform names stay in English in every locale.
 BRANDS = {
-    "brightbean", "brightbean studio", "wanchurk", "instagram", "linkedin",
+    "wanchurk-studio", "wanchurk", "instagram", "linkedin",
     "tiktok", "facebook", "youtube", "pinterest", "threads", "bluesky",
     "mastodon", "google", "dev.to", "stripe", "trustpilot", "reels", "pin",
     "youtube preview", "api", "url", "ai", "id", "ok", "csv", "pdf",

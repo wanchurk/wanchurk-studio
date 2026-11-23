@@ -527,7 +527,7 @@ class TestOAuthCallbackView:
             {
                 "id": "17841400000000000",
                 "name": "wanchurk-studio",
-                "handle": "brightbean",
+                "handle": "wanchurk",
                 "access_token": "page-token",
             }
         ]
@@ -764,7 +764,7 @@ class TestSelectAccountView:
                 {
                     "id": "17841400000000000",
                     "name": "wanchurk-studio",
-                    "handle": "brightbean",
+                    "handle": "wanchurk",
                     "access_token": "",
                 }
             ],

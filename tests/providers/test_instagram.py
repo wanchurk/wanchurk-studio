@@ -31,8 +31,8 @@ def test_get_user_pages_returns_linked_instagram_business_accounts():
                             "picture": {"data": {"url": "https://example.com/page.jpg"}},
                             "instagram_business_account": {
                                 "id": "17841400000000000",
-                                "username": "brightbean",
-                                "name": "Brightbean",
+                                "username": "wanchurk",
+                                "name": "wanchurk-studio",
                                 "profile_picture_url": "https://example.com/ig.jpg",
                                 "followers_count": 42,
                             },
@@ -53,8 +53,8 @@ def test_get_user_pages_returns_linked_instagram_business_accounts():
     assert accounts == [
         {
             "id": "17841400000000000",
-            "name": "Brightbean",
-            "handle": "brightbean",
+            "name": "wanchurk-studio",
+            "handle": "wanchurk",
             "access_token": "page-token",
             "category": "Creator",
             "picture": "https://example.com/ig.jpg",
@@ -93,8 +93,8 @@ def test_get_user_pages_omits_blank_page_access_token():
                             "access_token": "",
                             "instagram_business_account": {
                                 "id": "17841400000000000",
-                                "username": "brightbean",
-                                "name": "Brightbean",
+                                "username": "wanchurk",
+                                "name": "wanchurk-studio",
                             },
                         },
                     ]
@@ -162,7 +162,7 @@ def test_get_user_pages_treats_explicit_empty_tasks_as_non_publishable():
                         "tasks": [],
                         "instagram_business_account": {
                             "id": "ig-1",
-                            "username": "brightbean",
+                            "username": "wanchurk",
                         },
                     }
                 ]

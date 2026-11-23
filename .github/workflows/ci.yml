@@ -76,7 +76,7 @@ jobs:
     env:
       DJANGO_SETTINGS_MODULE: config.settings.test
       SECRET_KEY: test-secret-key-not-for-production
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/brightbean_test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/wanchurk_test
       DB_HOST: localhost
       DB_USER: postgres
       DB_PASSWORD: postgres
@@ -111,7 +111,7 @@ jobs:
             exit 1
           fi
           sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
-          sudo -u postgres createdb brightbean_test
+          sudo -u postgres createdb wanchurk_test
 
       # Catches a model change whose migration was never generated. The
       # companion hazard — a migration that is fine against an empty table but
@@ -142,7 +142,7 @@ jobs:
         with:
           context: .
           push: false
-          tags: brightbean:latest
+          tags: wanchurk:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
