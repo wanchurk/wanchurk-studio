@@ -1,0 +1,263 @@
+{% extends "legal/base.html" %}
+
+{% block title %}Terms of Service{% endblock %}
+{% block heading %}Terms of Service{% endblock %}
+
+{% block content %}
+
+<div class="callout">
+    <strong>Template notice.</strong> This document is a starting point, not legal advice. Replace every
+    bracketed placeholder with the operating entity's real details and have a qualified lawyer review it
+    for your jurisdiction before you rely on it.
+</div>
+
+<h2>1. Agreement to These Terms</h2>
+<p>
+    These Terms of Service ("Terms") form a binding agreement between you ("you", "your") and
+    {{ legal_entity }} ("we", "us", "our") governing your access to and use of {{ brand_name }}
+    (the "Service"). By creating an account, signing in, or using the Service, you confirm that you
+    have read, understood, and agree to be bound by these Terms and by our
+    <a href="{% url 'legal:privacy' %}">Privacy Policy</a>,
+    <a href="{% url 'legal:acceptable_use' %}">Acceptable Use Policy</a>, and
+    <a href="{% url 'legal:cookies' %}">Cookie Policy</a>, each incorporated by reference.
+</p>
+<p>
+    If you are entering into these Terms on behalf of an organisation, you represent that you have
+    authority to bind that organisation, and "you" refers to that organisation.
+</p>
+<p>
+    If you do not agree to these Terms, do not use the Service.
+</p>
+
+<h2>2. Who We Are</h2>
+<p>
+    The Service is operated by {{ legal_entity }}{% if legal_address %}, {{ legal_address }}{% endif %}.
+    You can contact us at {{ legal_contact_email }}.
+</p>
+
+<h2>3. Eligibility and Accounts</h2>
+<p>
+    You must be at least 18 years old, or the age of legal majority in your jurisdiction, to use the
+    Service. By using the Service you represent that you meet this requirement and that you are not
+    barred from using the Service under any applicable law.
+</p>
+<p>You agree to:</p>
+<ul>
+    <li>provide accurate and complete registration information and keep it current;</li>
+    <li>keep your credentials confidential and not share your account with anyone outside your organisation;</li>
+    <li>notify us promptly at {{ legal_contact_email }} if you suspect unauthorised access to your account; and</li>
+    <li>accept responsibility for all activity that occurs under your account and the accounts of members you invite.</li>
+</ul>
+
+<h2>4. The Service</h2>
+<p>
+    {{ brand_name }} is a self-hosted social media operations platform. Depending on the features
+    enabled on your deployment and the accounts you connect, the Service may allow you to:
+</p>
+<ul>
+    <li>compose, schedule, and publish content to connected social media platforms;</li>
+    <li>read and respond to comments, mentions, direct messages, and reviews through a unified inbox;</li>
+    <li>view performance analytics reported by the connected platforms;</li>
+    <li>store and organise media assets;</li>
+    <li>configure approval workflows and invite team members or external clients; and</li>
+    <li>access the same capabilities programmatically through our REST API and MCP server.</li>
+</ul>
+<p>
+    The Service is a tool. It does not guarantee that any post will be published, delivered, or seen.
+    Publication depends on third-party platforms whose availability, policies, rate limits, and content
+    moderation are outside our control.
+</p>
+
+<h2>5. Connected Third-Party Platforms</h2>
+<p>
+    The Service connects to third-party platforms such as Facebook, Instagram, LinkedIn, TikTok,
+    YouTube, Pinterest, Threads, Bluesky, Mastodon, Google Business Profile, and DEV.to (each a
+    "Connected Platform"). To do so you authorise us to access those accounts through the platform's
+    own authorisation mechanism, and we store the resulting access credentials so we can act on your
+    behalf.
+</p>
+<p>
+    <strong>Your relationship with each Connected Platform is governed by that platform's own terms.</strong>
+    By connecting an account you confirm that you have the right to do so and that your use complies
+    with that platform's terms, developer policies, and community guidelines. You are solely responsible
+    for any breach of those terms. We are not a party to your agreements with those platforms, and we
+    have no ability to appeal, reinstate, or override a decision those platforms make about your account.
+</p>
+<p>
+    You may revoke our access at any time by disconnecting the account in the Service or by removing
+    the app from the platform's own settings. Revocation stops future actions; it does not delete content
+    already published.
+</p>
+
+<h2>6. Customer Content</h2>
+<p>
+    "Customer Content" means everything you or your team submits to the Service: text, images, video,
+    documents, captions, scheduled posts, replies, and any data imported from a Connected Platform.
+</p>
+<p>
+    <strong>You retain all rights to your Customer Content.</strong> We do not claim ownership of it.
+    You grant us a limited, non-exclusive, worldwide, royalty-free licence to host, store, copy,
+    transmit, and display Customer Content solely as necessary to operate the Service for you — for
+    example, to deliver a post to a Connected Platform or to render it in your inbox.
+</p>
+<p>
+    You represent and warrant that you own or have all necessary rights, licences, and consents to the
+    Customer Content you submit, and that publishing it does not infringe any third party's rights or
+    violate any law or Connected Platform policy.
+</p>
+<p>
+    You are responsible for maintaining your own copies of anything you cannot afford to lose. The
+    Service is not a backup or archival service.
+</p>
+
+<h2>7. Acceptable Use</h2>
+<p>
+    Your use of the Service must comply with our <a href="{% url 'legal:acceptable_use' %}">Acceptable
+    Use Policy</a>, which prohibits, among other things, bulk unsolicited messaging, platform rule
+    circumvention, impersonation, and unlawful or infringing content. We may suspend or terminate access
+    for material breaches.
+</p>
+
+<h2>8. Our Intellectual Property</h2>
+<p>
+    The Service — including its software, interface, design, documentation, and trademarks — is owned by
+    us or our licensors and is protected by intellectual property law. These Terms grant you a limited,
+    revocable, non-exclusive, non-transferable right to use the Service during the term of your
+    agreement. You may not copy, modify, distribute, sell, sublicense, reverse engineer, or attempt to
+    extract the source code of any part of the Service except as expressly permitted by applicable law
+    or by the licence that governs the underlying software distribution.
+</p>
+<p>
+    Feedback you send us is voluntary, and we may use it without obligation or compensation.
+</p>
+
+<h2>9. Client Portal Access</h2>
+<p>
+    The Service can issue passwordless, time-limited links that give external clients read and approval
+    access to selected content without creating an account. You are responsible for choosing which
+    clients receive such links. Anyone holding a valid link can act within the scope it grants, so treat
+    these links as credentials and revoke them when a client relationship ends.
+</p>
+
+<h2>10. Availability, Changes, and Beta Features</h2>
+<p>
+    We aim to keep the Service available, but we do not promise uninterrupted or error-free operation.
+    The Service may be unavailable during maintenance, upgrades, or events affecting our infrastructure
+    or a Connected Platform. Features may be added, changed, deprecated or withdrawn. Where a change
+    materially reduces functionality you rely on, we will make reasonable efforts to give advance notice.
+</p>
+<p>
+    Features labelled beta, preview, or experimental are provided as-is, may change without notice, and
+    may be withdrawn at any time.
+</p>
+
+<h2>11. Fees</h2>
+<p>
+    The Service is currently provided free of charge on your deployment. If we introduce paid plans in
+    future, we will publish the pricing and terms before they take effect, and you will not be charged
+    for any period without your prior agreement.
+</p>
+
+<h2>12. Third-Party Services</h2>
+<p>
+    The Service relies on third-party providers for functions such as hosting, email delivery, error
+    monitoring, and stock imagery. These are described in our
+    <a href="{% url 'legal:privacy' %}">Privacy Policy</a>. We are not responsible for the acts,
+    omissions, availability, or data practices of third-party providers, or of any Connected Platform.
+</p>
+
+<h2>13. Disclaimers</h2>
+<p>
+    To the maximum extent permitted by law, the Service is provided <strong>"as is" and "as
+    available"</strong>. We disclaim all warranties, whether express, implied, or statutory, including
+    implied warranties of merchantability, fitness for a particular purpose, title, and
+    non-infringement. We do not warrant that the Service will meet your requirements, that publication
+    to any Connected Platform will succeed or remain available, that analytics are accurate or complete,
+    or that defects will be corrected.
+</p>
+<p>
+    Nothing in these Terms excludes or limits any warranty or liability that cannot lawfully be excluded
+    or limited, including liability for death or personal injury caused by negligence, or for fraud.
+</p>
+
+<h2>14. Limitation of Liability</h2>
+<p>
+    To the maximum extent permitted by law, neither party will be liable for indirect, incidental,
+    special, consequential, or punitive damages, or for loss of profits, revenue, data, goodwill, or
+    business opportunity, however caused and regardless of the theory of liability, even if advised of
+    the possibility of such damages.
+</p>
+<p>
+    Our total aggregate liability arising out of or relating to these Terms or the Service will not
+    exceed the greater of (a) the amounts you paid us for the Service in the twelve months before the
+    event giving rise to the claim, or (b) one hundred US dollars (US$100).
+</p>
+<p>
+    These limits apply notwithstanding any failure of essential purpose of any limited remedy.
+</p>
+
+<h2>15. Indemnity</h2>
+<p>
+    You will defend and indemnify us against any claim, loss, liability, or expense (including reasonable
+    legal fees) arising from (a) your Customer Content, (b) your use of the Service in breach of these
+    Terms or of any Connected Platform's terms, or (c) your violation of any law or third-party right.
+</p>
+
+<h2>16. Suspension and Termination</h2>
+<p>
+    You may stop using the Service at any time and may delete your organisation from within the Service.
+    Deletion is subject to a grace period, after which data is removed as described in our
+    <a href="{% url 'legal:privacy' %}">Privacy Policy</a>.
+</p>
+<p>
+    We may suspend or terminate your access immediately if you materially breach these Terms or the
+    Acceptable Use Policy, if we are required to do so by law, or if your use poses a security or legal
+    risk to us or to others. Where practical, we will give you notice and an opportunity to cure.
+</p>
+<p>
+    On termination, your right to use the Service ends. Sections that by their nature should survive —
+    including intellectual property, disclaimers, limitation of liability, indemnity, and governing law —
+    survive termination.
+</p>
+
+<h2>17. Data Protection</h2>
+<p>
+    Our handling of personal data is described in the <a href="{% url 'legal:privacy' %}">Privacy
+    Policy</a>. Where you submit personal data about your own clients or contacts, you are the controller
+    of that data and we act as your processor, processing it only on your instructions and for the
+    purposes described in these Terms.
+</p>
+
+<h2>18. Changes to These Terms</h2>
+<p>
+    We may update these Terms from time to time. When we do, we will revise the effective date at the
+    top of this page. If a change is material, we will give reasonable advance notice — by email or in
+    the Service — before it takes effect. Continued use of the Service after a change takes effect
+    constitutes acceptance of the updated Terms.
+</p>
+
+<h2>19. Governing Law and Dispute Resolution</h2>
+<p>
+    These Terms are governed by the laws of {{ legal_jurisdiction }}, without regard to its conflict of
+    law rules. The parties will first attempt to resolve any dispute through good-faith negotiation.
+    If negotiation fails, the dispute will be subject to the exclusive jurisdiction of the courts of
+    {{ legal_jurisdiction }}, unless mandatory local law gives you the right to bring proceedings
+    elsewhere.
+</p>
+
+<h2>20. General</h2>
+<ul>
+    <li><strong>Entire agreement.</strong> These Terms, together with the policies incorporated by reference, are the entire agreement between us on their subject matter.</li>
+    <li><strong>Severability.</strong> If a provision is found unenforceable, the remaining provisions stay in force and the unenforceable one is limited to the minimum extent necessary.</li>
+    <li><strong>No waiver.</strong> Failure to enforce a provision is not a waiver of the right to do so later.</li>
+    <li><strong>Assignment.</strong> You may not assign these Terms without our written consent. We may assign them to a successor in connection with a merger, acquisition, or transfer of assets.</li>
+    <li><strong>Force majeure.</strong> Neither party is liable for delay or failure caused by events beyond its reasonable control.</li>
+    <li><strong>Notices.</strong> Notices to you may be given by email to the address on your account or within the Service. Notices to us must be sent to {{ legal_contact_email }}.</li>
+</ul>
+
+<h2>21. Contact</h2>
+<p>
+    Questions about these Terms: {{ legal_contact_email }}
+</p>
+
+{% endblock %}

@@ -301,7 +301,10 @@ class UiZhMiddleware:
             return response
 
         # Branding applies in both languages; the dictionary only in Chinese.
-        translated = translate_html(html, translate=(wanted == "zh"))
+        # Legal pages stay in English: binding contract text must not be rewritten
+        # by a UI translator, which would also invalidate a quoted clause.
+        translate_dictionary = wanted == "zh" and not request.path.startswith("/legal/")
+        translated = translate_html(html, translate=translate_dictionary)
         if translated != html:
             response.content = translated.encode(response.charset or "utf-8")
             if response.has_header("Content-Length"):

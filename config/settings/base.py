@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "apps.ui_zh",
+    "apps.legal",
     "apps.common",
     "apps.accounts",
     "apps.organizations",
@@ -802,3 +803,13 @@ BRAND_NAME = env("BRAND_NAME", default="wanchurk-studio")
 UI_LANGUAGE = env("UI_LANGUAGE", default="zh-hans")
 # Re-read translations.json on change so dictionary edits need no restart.
 BRAND_I18N_HOT_RELOAD = env.bool("BRAND_I18N_HOT_RELOAD", default=DEBUG)
+
+# --- Legal pages -----------------------------------------------------------
+# Shown on /legal/*. Replace the placeholder defaults with the operating
+# entity's real details before inviting users outside your own organisation:
+# an agreement that names no counterparty is hard to enforce.
+LEGAL_ENTITY_NAME = env("LEGAL_ENTITY_NAME", default="[OPERATING ENTITY — TO BE COMPLETED]")
+LEGAL_CONTACT_EMAIL = env("LEGAL_CONTACT_EMAIL", default="[CONTACT EMAIL — TO BE COMPLETED]")
+LEGAL_JURISDICTION = env("LEGAL_JURISDICTION", default="[GOVERNING LAW / JURISDICTION — TO BE COMPLETED]")
+LEGAL_ADDRESS = env("LEGAL_ADDRESS", default="")
+LEGAL_EFFECTIVE_DATE = env("LEGAL_EFFECTIVE_DATE", default="[EFFECTIVE DATE — TO BE COMPLETED]")

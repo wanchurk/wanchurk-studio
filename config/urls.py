@@ -19,6 +19,7 @@ urlpatterns = [
     # UI language switcher (per-visitor cookie, no auth required).
     path("i18n/", include("apps.ui_zh.urls")),
     path("accounts/", include("apps.accounts.urls")),
+    path("legal/", include("apps.legal.urls")),
     path("accounts/", include("allauth.urls")),
     path("organizations/", include("apps.organizations.urls")),
     # Org-level Agent API key management (Phase 4 UI). Mounted at

@@ -1,0 +1,97 @@
+{% extends "legal/base.html" %}
+
+{% block title %}Cookie Policy{% endblock %}
+{% block heading %}Cookie Policy{% endblock %}
+
+{% block content %}
+
+<div class="callout">
+    <strong>Template notice.</strong> This document is a starting point, not legal advice. Confirm the
+    cookie inventory below matches your actual deployment — in particular any analytics, chat widget, or
+    bot-protection service you add later — and have a qualified lawyer review it.
+</div>
+
+<h2>1. What Cookies Are</h2>
+<p>
+    A cookie is a small text file a website stores in your browser. It lets the site recognise your
+    browser on later requests. Related technologies such as local storage work similarly but keep data in
+    the browser rather than sending it with every request.
+</p>
+
+<h2>2. Cookies We Use</h2>
+<p>
+    {{ brand_name }} uses only the cookies needed to run the Service. We do not use advertising cookies,
+    cross-site tracking cookies, or third-party analytics cookies.
+</p>
+<table>
+    <thead>
+        <tr><th>Name</th><th>Category</th><th>Purpose</th><th>Duration</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>sessionid</code></td>
+            <td>Strictly necessary</td>
+            <td>Keeps you signed in between requests. Marked HttpOnly and SameSite=Lax.</td>
+            <td>Approximately 14 days</td>
+        </tr>
+        <tr>
+            <td><code>csrftoken</code></td>
+            <td>Strictly necessary</td>
+            <td>Protects forms against cross-site request forgery.</td>
+            <td>Session, or up to 1 year with "remember me"</td>
+        </tr>
+        <tr>
+            <td><code>ui_lang</code></td>
+            <td>Functional</td>
+            <td>Remembers whether you chose the Chinese or English interface.</td>
+            <td>1 year</td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    Strictly necessary cookies cannot be switched off without breaking sign-in and form submission. The
+    functional cookie can be cleared at any time; the only effect is that the interface falls back to its
+    default language.
+</p>
+
+<h2>3. Local Storage</h2>
+<p>
+    The Service stores your sidebar collapsed/expanded preference in your browser's local storage under
+    the key <code>sidebarCollapsed</code>. This data stays in your browser, is not transmitted to us, and
+    is cleared when you clear site data.
+</p>
+
+<h2>4. Third-Party Cookies</h2>
+<p>
+    We do not set third-party cookies ourselves. If your deployment enables optional integrations
+    (for example a bot-protection or error-monitoring service), that provider may set its own cookies;
+    in that case they are listed in the table above after review. Content you load from Connected
+    Platforms — embedded posts, for instance — is governed by those platforms' own cookie policies.
+</p>
+
+<h2>5. Do Not Track</h2>
+<p>
+    Because we do not track you across sites for advertising, the Service does not respond differently to
+    browser "Do Not Track" signals. We do not sell or share personal information as defined by the
+    CCPA/CPRA.
+</p>
+
+<h2>6. Managing Cookies</h2>
+<p>
+    You can delete or block cookies in your browser settings. Blocking <code>sessionid</code> or
+    <code>csrftoken</code> will prevent you from signing in and using the Service. Most browsers also
+    offer a private/incognito mode that discards cookies when you close the window.
+</p>
+
+<h2>7. Changes to This Policy</h2>
+<p>
+    If we add or remove cookies, we will update the table above and revise the effective date. Material
+    changes will be announced in the Service or by email.
+</p>
+
+<h2>8. Contact</h2>
+<p>
+    Questions about cookies: {{ legal_contact_email }}
+</p>
+
+{% endblock %}

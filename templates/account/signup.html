@@ -116,9 +116,9 @@
 
         <p class="text-xs text-center mt-5" style="color: var(--text-tertiary); line-height: 1.5;">
             {% trans "By signing up, you agree to our" %}
-            {% trans "Terms of Service" %}
+            <a href="{% url 'legal:terms' %}" target="_blank" rel="noopener" class="hover:underline" style="color: var(--primary);">{% trans "Terms of Service" %}</a>
             and
-            {% trans "Privacy Policy" %}.
+            <a href="{% url 'legal:privacy' %}" target="_blank" rel="noopener" class="hover:underline" style="color: var(--primary);">{% trans "Privacy Policy" %}</a>.
         </p>
     </div>
 

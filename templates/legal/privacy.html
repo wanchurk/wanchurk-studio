@@ -1,0 +1,218 @@
+{% extends "legal/base.html" %}
+
+{% block title %}Privacy Policy{% endblock %}
+{% block heading %}Privacy Policy{% endblock %}
+
+{% block content %}
+
+<div class="callout">
+    <strong>Template notice.</strong> This document is a starting point, not legal advice. Replace every
+    bracketed placeholder with the operating entity's real details, confirm the sub-processors listed in
+    section 6 match your actual deployment, and have a qualified lawyer review it before you rely on it.
+</div>
+
+<h2>1. Scope</h2>
+<p>
+    This Privacy Policy explains how {{ legal_entity }} ("we", "us", "our") collects, uses, shares, and
+    protects personal data when you use {{ brand_name }} (the "Service"), and describes the rights you
+    have over that data. It should be read together with our
+    <a href="{% url 'legal:terms' %}">Terms of Service</a> and
+    <a href="{% url 'legal:cookies' %}">Cookie Policy</a>.
+</p>
+
+<h2>2. Who Is Responsible for Your Data</h2>
+<p>
+    {{ legal_entity }}{% if legal_address %}, {{ legal_address }}{% endif %}, is the controller of the
+    personal data described in this policy. Contact: {{ legal_contact_email }}.
+</p>
+<p>
+    Where you use the Service to manage data about your own customers, followers, or clients, you are the
+    controller of that data and we act as your processor, handling it only on your instructions.
+</p>
+
+<h2>3. Data We Collect</h2>
+
+<h3>3.1 Account and organisation data</h3>
+<p>
+    Name, email address, password hash (or single-sign-on identifier), profile picture if you provide
+    one, organisation and workspace names, membership and role assignments, invitation records, and the
+    timestamps at which you accepted these policies.
+</p>
+
+<h3>3.2 Connected platform data</h3>
+<p>
+    When you connect a social media account, the platform returns an access token and often a refresh
+    token, together with account identifiers, display names, and the permissions (scopes) you granted.
+    <strong>Tokens are stored encrypted.</strong> While a connection is active, we also receive and store
+    the content the platform sends us on your behalf: posts and their metadata, comments, mentions,
+    direct messages, reviews, and performance metrics.
+</p>
+
+<h3>3.3 Content you submit</h3>
+<p>
+    Drafts, captions, media files, approval comments, and any other material you or your team upload or
+    write in the Service.
+</p>
+
+<h3>3.4 Usage and technical data</h3>
+<p>
+    Pages and actions within the Service, API and MCP request logs (including your client identifier and
+    IP address), rate-limit counters, publish audit records, error diagnostics, browser type, and
+    timestamps. We use this to operate the Service securely, diagnose failures, and understand which
+    features are used.
+</p>
+
+<h3>3.5 Data we do not collect</h3>
+<p>
+    We do not collect payment card details, because the Service is currently provided free of charge. We
+    do not buy personal data from data brokers, and we do not use your content to train machine learning
+    models.
+</p>
+
+<h2>4. How We Use Data</h2>
+<ul>
+    <li><strong>Provide the Service</strong> — authenticate you, publish and schedule content, sync
+        comments and messages, display analytics, and operate approval workflows.</li>
+    <li><strong>Secure the Service</strong> — detect abuse, enforce rate limits, investigate incidents,
+        and maintain audit trails.</li>
+    <li><strong>Communicate</strong> — send transactional email such as invitations, password resets,
+        approval requests, and service notices.</li>
+    <li><strong>Support</strong> — diagnose and fix problems you report.</li>
+    <li><strong>Improve</strong> — analyse aggregate usage to decide what to build or retire.</li>
+    <li><strong>Comply</strong> — meet legal, tax, and regulatory obligations and respond to lawful requests.</li>
+</ul>
+
+<h2>5. Legal Bases (EEA, UK, and similar regimes)</h2>
+<p>Where data protection law requires a legal basis, we rely on:</p>
+<ul>
+    <li><strong>Contract</strong> — processing necessary to provide the Service you signed up for.</li>
+    <li><strong>Legitimate interests</strong> — securing the Service, preventing abuse, and improving features, balanced against your rights.</li>
+    <li><strong>Legal obligation</strong> — records we must keep by law.</li>
+    <li><strong>Consent</strong> — where we ask for it specifically; you may withdraw it at any time.</li>
+</ul>
+
+<h2>6. Sharing and Sub-processors</h2>
+<p>
+    We do not sell personal data. We share it only with providers that help us run the Service, under
+    contracts limiting their use of it to our instructions, and with the platforms you choose to connect.
+</p>
+<table>
+    <thead>
+        <tr><th>Recipient</th><th>Purpose</th><th>Data involved</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Hosting and database provider</td>
+            <td>Runs the application and stores its data</td>
+            <td>All data described in section 3</td>
+        </tr>
+        <tr>
+            <td>Error monitoring (e.g. Sentry)</td>
+            <td>Captures exceptions so we can fix defects</td>
+            <td>Technical diagnostics, request context; configured to avoid content payloads</td>
+        </tr>
+        <tr>
+            <td>Transactional email (e.g. Resend)</td>
+            <td>Delivers invitations, resets, and notifications</td>
+            <td>Recipient email address and message content</td>
+        </tr>
+        <tr>
+            <td>Stock imagery (e.g. Unsplash)</td>
+            <td>Searches stock photos inside the composer</td>
+            <td>Your search terms only, and only when you use the feature</td>
+        </tr>
+        <tr>
+            <td>Connected platforms</td>
+            <td>Publishes content and returns comments, messages, and metrics</td>
+            <td>Content you publish and the account identifiers you connect</td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    We may also disclose data where required by law, to enforce our terms, or in connection with a
+    merger, acquisition, or sale of assets, in which case we will notify you and the recipient remains
+    bound by this policy.
+</p>
+
+<h2>7. International Transfers</h2>
+<p>
+    Our providers and the Connected Platforms may process data in countries other than yours, including
+    the United States and the European Union. Where we transfer personal data out of the EEA, the UK, or
+    Switzerland, we rely on appropriate safeguards such as the European Commission's Standard Contractual
+    Clauses, or on an adequacy decision.
+</p>
+
+<h2>8. How Long We Keep Data</h2>
+<ul>
+    <li><strong>Account and workspace data</strong> — for as long as your organisation exists in the Service.</li>
+    <li><strong>After deletion</strong> — organisation deletion runs through a grace period of approximately 14 days, during which you can cancel; after it elapses the data is removed from active systems and from backups on the provider's normal backup-rotation schedule.</li>
+    <li><strong>Publish audit records</strong> — retained for up to 90 days to support troubleshooting and abuse investigation.</li>
+    <li><strong>Session records</strong> — expire after approximately 14 days of inactivity.</li>
+    <li><strong>Client portal links</strong> — expire after approximately 30 days unless revoked sooner.</li>
+    <li><strong>Security and access logs</strong> — retained only as long as needed for security and legal obligations.</li>
+</ul>
+
+<h2>9. Security</h2>
+<p>
+    Access tokens and provider credentials are stored encrypted. Access to production data is limited to
+    people who need it to operate the Service. Traffic is served over TLS. We monitor for errors and
+    abuse, enforce rate limits, and apply security patches.
+</p>
+<p>
+    No system is perfectly secure. If a breach affects your personal data, we will notify you and any
+    competent authority as required by applicable law.
+</p>
+
+<h2>10. Your Rights</h2>
+<p>Depending on where you live, you may have the right to:</p>
+<ul>
+    <li>access a copy of the personal data we hold about you;</li>
+    <li>correct inaccurate data;</li>
+    <li>delete data, subject to legal retention obligations;</li>
+    <li>restrict or object to certain processing;</li>
+    <li>receive your data in a portable format;</li>
+    <li>withdraw consent where processing is based on it; and</li>
+    <li>lodge a complaint with your local supervisory authority.</li>
+</ul>
+<p>
+    To exercise a right, email {{ legal_contact_email }}. We will verify your identity and respond within
+    the period required by law. If your data was submitted to us by a customer of ours, we may redirect
+    your request to that customer, who controls it.
+</p>
+<p>
+    <strong>California residents.</strong> You have the rights described above under the CCPA/CPRA,
+    including the right to know, delete, correct, and opt out of the sale or sharing of personal
+    information. We do not sell or share personal information as those terms are defined by that law.
+</p>
+
+<h2>11. Children</h2>
+<p>
+    The Service is not directed to children. We do not knowingly collect personal data from anyone under
+    18. If you believe a child has provided us with personal data, contact us and we will delete it.
+</p>
+
+<h2>12. Cookies and Similar Technologies</h2>
+<p>
+    We use a small number of cookies to keep you signed in, protect against cross-site request forgery,
+    and remember your language choice. Details are in the
+    <a href="{% url 'legal:cookies' %}">Cookie Policy</a>.
+</p>
+
+<h2>13. Automated Decision-Making</h2>
+<p>
+    We do not make decisions producing legal or similarly significant effects about you through automated
+    processing. Analytics and sentiment features are informational and do not decide anything about you.
+</p>
+
+<h2>14. Changes to This Policy</h2>
+<p>
+    We may update this policy as the Service changes. We will revise the effective date above, and if a
+    change is material we will notify you by email or in the Service before it takes effect.
+</p>
+
+<h2>15. Contact</h2>
+<p>
+    Privacy questions or requests: {{ legal_contact_email }}
+</p>
+
+{% endblock %}

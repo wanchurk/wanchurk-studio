@@ -1,0 +1,102 @@
+{% extends "legal/base.html" %}
+
+{% block title %}Acceptable Use Policy{% endblock %}
+{% block heading %}Acceptable Use Policy{% endblock %}
+
+{% block content %}
+
+<div class="callout">
+    <strong>Template notice.</strong> This document is a starting point, not legal advice. Have a
+    qualified lawyer review it for your jurisdiction before relying on it.
+</div>
+
+<p>
+    This Acceptable Use Policy ("AUP") sets out what you may not do with {{ brand_name }}. It forms part
+    of our <a href="{% url 'legal:terms' %}">Terms of Service</a>. It applies to everyone who accesses the
+    Service, including members you invite and clients you give portal access to.
+</p>
+
+<h2>1. Prohibited Content</h2>
+<p>You may not use the Service to create, upload, publish, or distribute content that:</p>
+<ul>
+    <li>is unlawful, defamatory, fraudulent, or misleading;</li>
+    <li>infringes copyright, trademark, or other intellectual property rights;</li>
+    <li>contains malware, phishing, or deceptive links;</li>
+    <li>sexualises minors, or depicts child sexual abuse material — which we report to the authorities;</li>
+    <li>incites violence, hatred, or discrimination against a protected group;</li>
+    <li>harasses, threatens, or intimidates a person;</li>
+    <li>discloses another person's private information without consent;</li>
+    <li>promotes the sale of illegal goods, prescription drugs without a valid licence, weapons, or
+        counterfeit products; or</li>
+    <li>violates any Connected Platform's content policies.</li>
+</ul>
+
+<h2>2. Prohibited Conduct</h2>
+<ul>
+    <li><strong>Spam and bulk unsolicited messaging.</strong> No mass DMs, comment spam, engagement-bait
+        schemes, or automated outreach to people who did not ask for it.</li>
+    <li><strong>Circumventing platform rules.</strong> No evading rate limits, bans, or moderation by
+        rotating accounts, proxies, or credentials.</li>
+    <li><strong>Fake engagement.</strong> No buying followers, likes, views, or reviews, and no operating
+        engagement pods.</li>
+    <li><strong>Impersonation.</strong> No pretending to be a person, brand, or organisation you do not
+        represent.</li>
+    <li><strong>Unauthorised access.</strong> No accessing accounts, tokens, or data you were not given
+        permission to use, and no probing, scanning, or testing the Service's security without our written
+        consent.</li>
+    <li><strong>Overloading.</strong> No activity that degrades the Service for others, including
+        deliberate high-volume API calls outside documented limits.</li>
+    <li><strong>Resale without permission.</strong> No reselling or white-labelling the Service as your
+        own product without a separate written agreement with us.</li>
+    <li><strong>Misuse of client access.</strong> No sharing portal links beyond their intended recipient.</li>
+</ul>
+
+<h2>3. Platform-Specific Requirements</h2>
+<p>
+    Each Connected Platform imposes its own rules, and connecting an account means you accept them. In
+    particular you must comply with the Meta Platform Terms and Developer Policies, the LinkedIn API
+    Terms, the TikTok Developer Terms, the YouTube API Services Terms, the Pinterest Developer Terms, and
+    the terms of any other platform you connect.
+</p>
+<p>
+    Where a platform restricts how its data may be stored or displayed — for example caching limits or
+    deletion obligations — those restrictions apply to your use of the Service as well, and you agree to
+    respect them.
+</p>
+
+<h2>4. Messaging and Automation</h2>
+<p>
+    Automated replies are permitted only in response to a person who initiated contact, and only where
+    the platform allows it. You must not use automation to send unsolicited commercial messages, to evade
+    a platform's messaging window, or to contact people who opted out.
+</p>
+
+<h2>5. Security</h2>
+<p>You must keep credentials confidential, use a unique password, and not attempt to access another
+    organisation's workspaces. Report suspected vulnerabilities to {{ legal_contact_email }} rather than
+    disclosing them publicly.</p>
+
+<h2>6. Enforcement</h2>
+<p>
+    We investigate suspected breaches. Depending on severity we may remove content, throttle access,
+    suspend the affected connection, or suspend or terminate your account. Where the law requires it, or
+    where content is clearly illegal, we may report it to the relevant authorities without notice to you.
+</p>
+<p>
+    We aim to act proportionately and, where practical, to give notice and a chance to remedy the issue
+    before suspending access.
+</p>
+
+<h2>7. Reporting Abuse</h2>
+<p>
+    To report a breach of this policy, email {{ legal_contact_email }} with the relevant account,
+    workspace, and a description of the conduct.
+</p>
+
+<h2>8. Changes</h2>
+<p>
+    We may update this policy as platforms change their rules. Material changes will be announced in the
+    Service or by email before they take effect.
+</p>
+
+{% endblock %}
