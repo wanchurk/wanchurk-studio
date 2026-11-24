@@ -2,9 +2,9 @@
 
 import json
 from datetime import timedelta
-from zoneinfo import ZoneInfo
 from io import StringIO
 from unittest.mock import Mock, patch
+from zoneinfo import ZoneInfo
 
 import pytest
 from django.core.management import call_command

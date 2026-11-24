@@ -5,6 +5,7 @@ correct for mixed nodes but leaves pure-English branch bodies untouched.
 This lists the branch bodies that are plain prose (no tags, no code) so they
 can be marked explicitly. Run without --apply to review first.
 """
+
 from __future__ import annotations
 
 import argparse

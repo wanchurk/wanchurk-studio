@@ -19,7 +19,16 @@ from datetime import UTC, datetime
 
 from .base import SocialProvider
 from .exceptions import APIError, ProviderError
-from .types import AccountProfile, AuthType, InboxMessage, MediaType, PostType, PublishContent, RateLimitConfig, ReplyResult
+from .types import (
+    AccountProfile,
+    AuthType,
+    InboxMessage,
+    MediaType,
+    PostType,
+    PublishContent,
+    RateLimitConfig,
+    ReplyResult,
+)
 
 logger = logging.getLogger(__name__)
 

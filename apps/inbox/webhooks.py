@@ -640,7 +640,11 @@ def _process_whatsapp_events(payload: dict, valid_secrets: set[str]):
                         sender_name=msg.sender_name,
                         sender_id=msg.sender_id,
                         body=msg.text,
-                        extra={**msg.extra, "sender_id": msg.sender_id, "platform_timestamp": msg.timestamp.isoformat()},
+                        extra={
+                            **msg.extra,
+                            "sender_id": msg.sender_id,
+                            "platform_timestamp": msg.timestamp.isoformat(),
+                        },
                         received_at=msg.timestamp,
                     )
 

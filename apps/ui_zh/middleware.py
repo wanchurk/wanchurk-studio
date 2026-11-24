@@ -100,9 +100,7 @@ def _compile_all() -> None:
     # the dictionary does not cover — rewriting it corrupts the text, and the
     # exact-dict-hit path above still translates the word when a node is
     # exactly that word.
-    _KEYS_BY_LENGTH = sorted(
-        (k for k in _TRANSLATIONS if not _WORD_RE.match(k)), key=len, reverse=True
-    )
+    _KEYS_BY_LENGTH = sorted((k for k in _TRANSLATIONS if not _WORD_RE.match(k)), key=len, reverse=True)
     _COMPILED = {key: _pattern_for(key) for key in _KEYS_BY_LENGTH}
 
 

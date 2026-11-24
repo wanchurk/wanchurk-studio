@@ -13,6 +13,7 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
+from django.test import override_settings
 from django.utils import timezone
 
 from apps.inbox.models import InboxMessage, InboxReply
@@ -127,6 +128,7 @@ def test_a_meta_provider_that_cannot_reply_keeps_a_failed_draft(client, fb_accou
     assert reply.platform_reply_id == ""
 
 
+@override_settings(UI_LANGUAGE="zh-hans")
 def test_the_error_shown_to_users_carries_no_raw_api_text(client, fb_account, org_owner, user):
     """Trace IDs and raw API JSON belong in the log, not on a teammate's screen."""
     from apps.members.models import WorkspaceMembership
@@ -221,6 +223,7 @@ def test_existing_extra_recipient_is_not_overwritten(fb_account):
     assert provider.reply_to_message.call_args.kwargs["extra"]["recipient_id"] == "from-payload"
 
 
+@override_settings(UI_LANGUAGE="zh-hans")
 def test_failed_send_records_no_reply(client, fb_account, org_owner, user):
     """The thread must never show a reply the customer never received."""
     from apps.members.models import WorkspaceMembership

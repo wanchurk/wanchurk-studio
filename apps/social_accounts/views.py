@@ -677,7 +677,9 @@ def connect_whatsapp(request, workspace_id):
         provider = _get_provider_for_platform(PlatformCredential.Platform.WHATSAPP, request.org.id)
         from apps.credentials.models import resolve_platform_credentials
 
-        token = resolve_platform_credentials(PlatformCredential.Platform.WHATSAPP, request.org.id).get("access_token", "")
+        token = resolve_platform_credentials(PlatformCredential.Platform.WHATSAPP, request.org.id).get(
+            "access_token", ""
+        )
         if not token:
             raise ValueError("WhatsApp access_token is not configured")
         profile = provider.get_profile(token, phone_number_id=phone_number_id)
@@ -692,7 +694,9 @@ def connect_whatsapp(request, workspace_id):
         logger.exception("WhatsApp connection failed")
         messages.error(
             request,
-            gettext("Failed to verify this WhatsApp number. Check the Phone Number ID and that the system-user token can access it."),
+            gettext(
+                "Failed to verify this WhatsApp number. Check the Phone Number ID and that the system-user token can access it."
+            ),
         )
         return render(request, "social_accounts/whatsapp_connect.html", {"workspace_id": workspace_id})
 

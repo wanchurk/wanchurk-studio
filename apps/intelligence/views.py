@@ -1139,7 +1139,9 @@ def update_billing_contact(request, org_id):
             logger.exception("update_billing_contact sync failed")
             messages.error(
                 request,
-                gettext("We couldn't reach the billing service. Your change has NOT been saved, please try again in a moment."),
+                gettext(
+                    "We couldn't reach the billing service. Your change has NOT been saved, please try again in a moment."
+                ),
             )
             if request.headers.get("HX-Request"):
                 return render(

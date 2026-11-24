@@ -185,7 +185,9 @@ class TestParseInboundMessages:
         value = {
             "contacts": [{"wa_id": "86138", "profile": {"name": "Bo"}}],
             "metadata": {"phone_number_id": PHONE_ID},
-            "messages": [{"id": "m1", "from": "86138", "timestamp": "1767225600", "type": "text", "text": {"body": "yo"}}],
+            "messages": [
+                {"id": "m1", "from": "86138", "timestamp": "1767225600", "type": "text", "text": {"body": "yo"}}
+            ],
         }
         (msg,) = parse_inbound_messages(value)
         assert msg.platform_message_id == "m1"

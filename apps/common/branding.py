@@ -6,6 +6,7 @@ paths need it in their context, and it must never be hard-coded in a template
 or string, so every such path calls ``resolve_brand_name()`` instead of the
 literal.
 """
+
 from django.conf import settings
 
 

@@ -27,11 +27,7 @@ def _page_templates() -> list[Path]:
     Email bodies render without a request object and therefore cannot use one.
     """
     root = Path(settings.BASE_DIR) / "templates"
-    return [
-        p
-        for p in sorted(root.rglob("*.html"))
-        if "/email/" not in str(p) and not p.name.startswith("email_")
-    ]
+    return [p for p in sorted(root.rglob("*.html")) if "/email/" not in str(p) and not p.name.startswith("email_")]
 
 
 def test_context_processor_exposes_the_configured_brand(client, db, settings):

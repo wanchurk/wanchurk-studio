@@ -47,9 +47,9 @@ def collapse_ws(s: str) -> str:
     against the catalog would miss every such string.
     """
     return " ".join(s.split())
-ATTR = re.compile(
-    r'(?P<pre>\b(?:placeholder|title|aria-label|alt)=")(?P<text>[^"{}%]+)(?P<post>")'
-)
+
+
+ATTR = re.compile(r'(?P<pre>\b(?:placeholder|title|aria-label|alt)=")(?P<text>[^"{}%]+)(?P<post>")')
 HAS_WORD = re.compile(r"[A-Za-z]{2,}")
 # A {% trans %} already sitting in the node, or a ui_is_zh branch.
 ALREADY = re.compile(r"\{%\s*(?:trans|blocktrans)\b")

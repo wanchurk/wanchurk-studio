@@ -1,7 +1,9 @@
 """Tests for social_accounts views."""
 
+import json as _json
 import re
 from datetime import UTC, datetime, timedelta
+from pathlib import Path as _Path
 from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
@@ -47,13 +49,11 @@ def authenticated_client(client, user, manager_setup):
     return client
 
 
-import json as _json
-from pathlib import Path as _Path
-
 # Single source of truth for display translations: the ui_zh dictionary the middleware applies.
 WEBHOOK_TRANSLATIONS = _json.loads(
     (_Path(__file__).resolve().parents[2] / "ui_zh" / "translations.json").read_text(encoding="utf-8")
 )
+
 
 class TestOAuthState:
     """Test OAuth state parameter signing and validation."""
@@ -88,6 +88,7 @@ class TestAccountListView:
             "Comment notifications are connected. Reconnect Instagram to enable DM notifications on its linked Page.",
         ],
     )
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_saved_dm_warning_tracks_current_scope_flag(self, authenticated_client, workspace, settings, flag, error):
         settings.PLATFORM_INSTAGRAM_FACEBOOK_DM_SCOPES_ENABLED = flag
         account = SocialAccount.objects.create(
@@ -128,6 +129,7 @@ class TestAccountListView:
             ("An unrecognised subscription failure.", ["instagram_manage_messages"], True),
         ],
     )
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_disabling_dm_scopes_preserves_other_webhook_warnings(
         self, authenticated_client, workspace, settings, remaining_error, missing_scopes, needs_reconnect
     ):
@@ -153,6 +155,7 @@ class TestAccountListView:
             assert WEBHOOK_TRANSLATIONS.get(dm_error, dm_error) not in body
         assert account.webhook_warning.needs_reconnect is needs_reconnect
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_saved_dm_warning_does_not_hide_missing_metadata(self, authenticated_client, workspace, settings):
         settings.PLATFORM_INSTAGRAM_FACEBOOK_DM_SCOPES_ENABLED = False
         SocialAccount.objects.create(
@@ -172,6 +175,7 @@ class TestAccountListView:
         assert "重新连接" in body
 
     @pytest.mark.parametrize("flag", [False, True])
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_intentionally_omitted_dm_permission_does_not_prompt_reconnect(
         self, authenticated_client, workspace, settings, flag
     ):
@@ -215,6 +219,7 @@ class TestAccountListView:
         response = authenticated_client.get(url)
         assert b"My Facebook Page" in response.content
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_shows_empty_state(self, authenticated_client, workspace):
         url = reverse("social_accounts:list", kwargs={"workspace_id": workspace.id})
         response = authenticated_client.get(url)
@@ -254,6 +259,7 @@ class TestConnectPlatformView:
             assert ("instagram_manage_messages" in scopes) is flag
             assert {"pages_manage_metadata", "instagram_content_publish", "instagram_manage_comments"} <= set(scopes)
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_get_shows_platform_grid(self, authenticated_client, workspace):
         url = reverse("social_accounts:connect", kwargs={"workspace_id": workspace.id})
         response = authenticated_client.get(url)
@@ -662,6 +668,7 @@ class TestPromoteMetaUserToken:
 
 @pytest.mark.django_db
 class TestSelectAccountView:
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_bulk_selection_marks_accounts_without_publish_access(self, authenticated_client, workspace):
         session = authenticated_client.session
         session["oauth_page_select"] = {
@@ -911,6 +918,7 @@ class TestRetryWebhooksView:
         assert f'id="account-{account.id}"' in body
         assert "Real-time comments are off" not in body
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_a_still_failing_retry_re_renders_the_warning(self, authenticated_client, workspace):
         account = self._account(workspace)
         provider = _StubWebhookProvider(error=RuntimeError("still no"))
@@ -925,6 +933,7 @@ class TestRetryWebhooksView:
         # sending the user to OAuth for a transient failure.
         assert "Try again" in body
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_an_auth_failure_offers_reconnect_instead_of_another_retry(self, authenticated_client, workspace):
         """A grant that cannot satisfy the call must not hand back a retry button."""
         from providers.exceptions import APIError
@@ -949,6 +958,7 @@ class TestRetryWebhooksView:
         assert response.status_code == 302
         build.assert_not_called()
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_an_unhealthy_account_is_never_offered_the_retry_button(self, authenticated_client, workspace):
         """Otherwise the card shows a button the endpoint provably refuses.
 
@@ -965,6 +975,7 @@ class TestRetryWebhooksView:
         assert "Try again" not in body
         assert "重新连接" in body
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_the_stale_card_is_answered_with_the_reconnect_state(self, authenticated_client, workspace):
         """A card rendered while healthy can still POST after the account breaks.
 
@@ -1164,6 +1175,7 @@ class TestDisconnectConfirmation:
         assert response.status_code == 200
         return " ".join(response.content.decode().split())
 
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_youtube_says_access_is_revoked_and_data_deleted(self, authenticated_client, workspace):
         text = self._card_text(authenticated_client, workspace, "youtube")
 
@@ -1192,6 +1204,7 @@ class TestDisconnectConfirmation:
 
 @pytest.mark.django_db
 class TestBlueskyConnectView:
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_get_shows_form(self, authenticated_client, workspace):
         url = reverse(
             "social_accounts:connect_bluesky",
@@ -1212,6 +1225,7 @@ class TestBlueskyConnectView:
 
 @pytest.mark.django_db
 class TestMastodonConnectView:
+    @override_settings(UI_LANGUAGE="zh-hans")
     def test_get_shows_form(self, authenticated_client, workspace):
         url = reverse(
             "social_accounts:connect_mastodon",

@@ -36,10 +36,31 @@ ENTITY_ONLY = re.compile(r"^[\s&;a-zA-Z]{0,3}$|^&[a-z]+;$", re.I)
 
 # Product and platform names stay in English in every locale.
 BRANDS = {
-    "wanchurk-studio", "wanchurk", "instagram", "linkedin",
-    "tiktok", "facebook", "youtube", "pinterest", "threads", "bluesky",
-    "mastodon", "google", "dev.to", "stripe", "trustpilot", "reels", "pin",
-    "youtube preview", "api", "url", "ai", "id", "ok", "csv", "pdf",
+    "wanchurk-studio",
+    "wanchurk",
+    "instagram",
+    "linkedin",
+    "tiktok",
+    "facebook",
+    "youtube",
+    "pinterest",
+    "threads",
+    "bluesky",
+    "mastodon",
+    "google",
+    "dev.to",
+    "stripe",
+    "trustpilot",
+    "reels",
+    "pin",
+    "youtube preview",
+    "api",
+    "url",
+    "ai",
+    "id",
+    "ok",
+    "csv",
+    "pdf",
 }
 
 FILTERED_VAR = re.compile(r"\{\{\s*[^}]*[|(][^}]*\}\}")
@@ -59,8 +80,26 @@ NOT_COPY = re.compile(
 )
 
 SPLIT_TAIL_OPENERS = {
-    "and", "or", "but", "is", "are", "was", "were", "means", "readout",
-    "in", "on", "at", "to", "of", "for", "with", "by", "from", "as", "that",
+    "and",
+    "or",
+    "but",
+    "is",
+    "are",
+    "was",
+    "were",
+    "means",
+    "readout",
+    "in",
+    "on",
+    "at",
+    "to",
+    "of",
+    "for",
+    "with",
+    "by",
+    "from",
+    "as",
+    "that",
 }
 
 MIN_LEN = 12

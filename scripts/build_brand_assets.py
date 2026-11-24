@@ -3,6 +3,7 @@
 Geometry is defined on a 512-unit grid and scaled per output size, so the
 mark stays identical from the 300px preview down to 16px favicons.
 """
+
 from pathlib import Path
 
 from PIL import Image, ImageDraw

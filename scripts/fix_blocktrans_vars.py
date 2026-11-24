@@ -40,9 +40,7 @@ def rewrite_block(match: re.Match[str]) -> str:
 
     new_body = body
     for alias, expr in seen.items():
-        new_body = re.sub(
-            r"\{\{\s*" + re.escape(expr) + r"\s*\}\}", "{{ " + alias + " }}", new_body
-        )
+        new_body = re.sub(r"\{\{\s*" + re.escape(expr) + r"\s*\}\}", "{{ " + alias + " }}", new_body)
 
     bindings = " ".join(f"{a}={e}" for a, e in seen.items())
     if TAG_WITH.search(tag):
@@ -72,11 +70,7 @@ def main() -> int:
         if new == source:
             continue
         len(BLOCK.findall(new)) - 0
-        sum(
-            1
-            for m in BLOCK.finditer(new)
-            if any("." in v for v in VAR.findall(m.group("body")))
-        )
+        sum(1 for m in BLOCK.finditer(new) if any("." in v for v in VAR.findall(m.group("body"))))
         # Count how many blocks actually differ from the original.
         orig = {m.group(0) for m in BLOCK.finditer(source)}
         fixed = sum(1 for m in BLOCK.finditer(new) if m.group(0) not in orig)

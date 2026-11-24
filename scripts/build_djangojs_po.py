@@ -19,11 +19,9 @@ import re
 from pathlib import Path
 
 GETTEXT_CALL = re.compile(r"""gettext\(\s*(['"])((?:\\.|(?!\1).)*)\1\s*\)""")
-NGETTEXT_CALL = re.compile(
-    r"""ngettext\(\s*(['"])((?:\\.|(?!\1).)*)\1\s*,\s*(['"])((?:\\.|(?!\3).)*)\3\s*,"""
-)
+NGETTEXT_CALL = re.compile(r"""ngettext\(\s*(['"])((?:\\.|(?!\1).)*)\1\s*,\s*(['"])((?:\\.|(?!\3).)*)\3\s*,""")
 
-HEADER = r'''msgid ""
+HEADER = r"""msgid ""
 msgstr ""
 "Project-Id-Version: wanchurk-studio\n"
 "Report-Msgid-Bugs-To: \n"
@@ -32,7 +30,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh_Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-'''
+"""
 
 
 def collect(root: Path) -> tuple[dict[str, set[str]], dict[tuple[str, str], set[str]]]:
@@ -158,17 +156,11 @@ def main() -> int:
             continue
         if singular in reuse and reuse[singular]:
             blocks.append(
-                f'msgid "{escape(singular)}"\n'
-                f'msgid_plural "{escape(plural)}"\n'
-                f'msgstr[0] "{escape(reuse[singular])}"'
+                f'msgid "{escape(singular)}"\nmsgid_plural "{escape(plural)}"\nmsgstr[0] "{escape(reuse[singular])}"'
             )
             reused += 1
             continue
-        blocks.append(
-            f'msgid "{escape(singular)}"\n'
-            f'msgid_plural "{escape(plural)}"\n'
-            f'msgstr[0] ""'
-        )
+        blocks.append(f'msgid "{escape(singular)}"\nmsgid_plural "{escape(plural)}"\nmsgstr[0] ""')
         missing.append(f"{singular} | {plural}")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)

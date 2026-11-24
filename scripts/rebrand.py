@@ -15,6 +15,7 @@ Use it for identifiers that reach stored data or the wire protocol: HKDF
 database names and migration names. Changing those silently invalidates data
 already on disk, which is why they are opt-in rather than renamed by default.
 """
+
 import os
 import sys
 from pathlib import Path

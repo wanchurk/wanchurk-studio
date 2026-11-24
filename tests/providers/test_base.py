@@ -9,9 +9,9 @@ from providers.base import SocialProvider
 from providers.exceptions import APIError, RateLimitError
 from providers.types import AuthType, PostType
 
-
 # Messaging-only providers are in the registry for the inbox but publish no posts.
 MESSAGING_ONLY_PLATFORMS = {"whatsapp"}
+
 
 class TestProviderRegistry:
     """Test provider registry completeness and get_provider()."""

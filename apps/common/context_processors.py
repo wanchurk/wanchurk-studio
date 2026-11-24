@@ -2,7 +2,6 @@
 
 from django.db.models import Count, Q
 
-
 # The four columns apps/composer creates for a new workspace. Their names are
 # UI copy, so they translate; a user-created column is data and stays verbatim.
 SEEDED_IDEA_COLUMNS = frozenset({"Unassigned", "To Do", "In Progress", "Done"})
@@ -132,10 +131,7 @@ def sidebar_context(request):
         # user named, so a name that happens to match a dictionary key ("Title")
         # must stay verbatim.
         sidebar_idea_columns = (
-            [
-                {"id": str(g.id), "label": lookup(g.name) if g.name in SEEDED_IDEA_COLUMNS else g.name}
-                for g in groups
-            ]
+            [{"id": str(g.id), "label": lookup(g.name) if g.name in SEEDED_IDEA_COLUMNS else g.name} for g in groups]
             if groups.exists()
             else []
         )

@@ -459,9 +459,7 @@ def calculated_metrics_note(
     listed = get_text_list(calculated, "and")
     from apps.common.branding import resolve_brand_name
 
-    return (
-        f"Underlying data comes from {platform}. The {listed} are calculated by {resolve_brand_name()}, not reported by {platform}."
-    )
+    return f"Underlying data comes from {platform}. The {listed} are calculated by {resolve_brand_name()}, not reported by {platform}."
 
 
 def hero_chart_metrics(account: SocialAccount) -> list[str]:

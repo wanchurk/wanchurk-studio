@@ -71,7 +71,6 @@ def test_every_page_is_linked_from_every_page(client):
 def test_accept_terms_links_to_legal_pages(client, db):
     """A user who has not yet accepted is shown the page with real links, not bare text."""
     from django.contrib.auth import get_user_model
-    from django.utils import timezone
 
     user = get_user_model().objects.create_user(
         email="terms@example.com", password="testpass123", name="Terms User", tos_accepted_at=None
