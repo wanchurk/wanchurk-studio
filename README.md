@@ -21,6 +21,24 @@ wanchurk-studio is a self-hosted multi-platform social media operations platform
 
 **Tech stack**: Django + PostgreSQL + Tailwind CSS. One-command start with Docker; deployable to Railway, Render, and Heroku.
 
+## Screenshots
+
+**Publish & schedule** — month calendar with drag-and-drop rescheduling, a queue with posting slots, drafts, approvals and published history.
+
+![Publish calendar](.github/assets/studio-calendar.webp)
+
+| | |
+|---|---|
+| **Post composer** — per-platform caption and media overrides, live preview, templates, and character counters.<br><img src=".github/assets/studio-post-editor.webp" alt="Post composer"> | **Idea board** — a Kanban flow to capture and plan content before it becomes a post.<br><img src=".github/assets/studio-idea-board.webp" alt="Idea board"> |
+| **Unified inbox** — comments, mentions, DMs and reviews from every channel in one queue, with saved replies.<br><img src=".github/assets/studio-social-inbox.webp" alt="Social inbox"> | **Analytics** — per-post and per-channel KPIs, trend charts and engagement breakdowns.<br><img src=".github/assets/studio-analytics.webp" alt="Analytics"> |
+| **Media library** — folders, tags, type filters and a picker shared across every workspace.<br><img src=".github/assets/studio-media-library.webp" alt="Media library"> | **Connect platforms** — 14 first-party integrations, each using your own developer credentials.<br><img src=".github/assets/studio-connect-channels.webp" alt="Connect a platform"> |
+| **Connected accounts** — connection health, scopes, token expiry and per-account status.<br><img src=".github/assets/studio-connected-accounts.webp" alt="Connected accounts"> | **Team members** — org → workspace → member roles, invitations and a separate Client role.<br><img src=".github/assets/studio-members.webp" alt="Team members"> |
+
+**Notifications** — per-event preferences and a workspace-wide activity feed.
+
+![Notifications](.github/assets/studio-notifications.webp)
+
+
 
 ## Features
 
