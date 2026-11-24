@@ -71,10 +71,13 @@
         </div>
     </form>
 
-    <!-- Email (read-only) -->
+    <!-- Email: shown read-only here; changes go through allauth's email manager -->
     <div class="mb-10">
         <label class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">{% trans "Email" %}</label>
-        <p class="text-sm" style="color: var(--text-secondary);">{{ user.email }}</p>
+        <div class="flex items-center justify-between gap-4">
+            <p class="text-sm" style="color: var(--text-secondary);">{{ user.email }}</p>
+            <a href="{% url 'account_email' %}" class="text-sm font-medium underline underline-offset-2" style="color: var(--text-primary);">{% trans "Change" %}</a>
+        </div>
     </div>
 
     <!-- Password section -->
