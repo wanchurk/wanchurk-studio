@@ -66,14 +66,16 @@ wanchurk-studio 是「跨境铺子」自建的多平台社媒运营平台，面�
 
 ### Hosted Version
 
- as this repository, with no setup or maintenance required.
+A hosted build runs this repository as-is, with no setup or maintenance required.
 
 If you'd rather self-host, choose one of the options below.
 
 ### One-Click Deploy
 
-| Heroku | Render | Railway |
-|:------:|:------:|:-------:|
+| [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/wanchurk/wanchurk-studio) | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/wanchurk/wanchurk-studio) | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/wanchurk-studio) |
+|:---:|:---:|:---:|
+
+Each button deploys this repository straight from its manifest — `Procfile` + `app.json` (Heroku), `render.yaml` (Render), `railway.toml` (Railway). **If this repo is private the one-click fetch won't run:** instead connect your GitHub account on the platform and pick the repo — Heroku via Git Integration, Render and Railway via "Deploy from repo".
 
 After deploying, set these environment variables in your platform's dashboard:
 

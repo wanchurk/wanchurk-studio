@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from apps.common.branding import resolve_brand_name
+
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from ninja import NinjaAPI
@@ -36,12 +38,12 @@ class NoncedSwagger(Swagger):
 
 
 api = NinjaAPI(
-    title="wanchurk-studio Agent API",
+    title=f"{resolve_brand_name()} Agent API",
     version="1.0.0",
     description=(
         "Programmatic access for external AI agents. Authentication is via "
         "scoped bearer tokens; create one from the Organization → API Keys "
-        "page in the wanchurk-studio settings.\n\n"
+        f"page in the {resolve_brand_name()} settings.\n\n"
         "**User-Agent.** Send a `User-Agent` header naming your client "
         "(e.g. `my-agent/1.0`). The hosted Studio sits behind Cloudflare, "
         "which rejects Python's standard-library default "

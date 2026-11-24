@@ -71,12 +71,15 @@ def generate_magic_link(workspace, client_user, created_by):
     magic_url = f"{app_url}/portal/{token.token}/"
 
     # Send email
+    from apps.common.branding import resolve_brand_name
+
     context = {
         "client_user": client_user,
         "workspace": workspace,
         "magic_url": magic_url,
         "created_by": created_by,
         "app_url": app_url,
+        "brand_name": resolve_brand_name(),
     }
 
     subject = f"{workspace.name} - Posts ready for your review"

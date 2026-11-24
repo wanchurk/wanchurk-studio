@@ -102,6 +102,9 @@ class AccountAdapter(DefaultAccountAdapter):
         )
 
     def render_mail(self, template_prefix, email, context, headers=None):
+        from apps.common.branding import resolve_brand_name
+
+        context = {**context, "brand_name": resolve_brand_name()}
         if "signup_url" in context:
             request = context.get("request")
             custom = custom_signup_url(request)

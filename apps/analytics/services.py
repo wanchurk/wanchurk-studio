@@ -457,8 +457,10 @@ def calculated_metrics_note(
         calculated.append("follower growth")
     calculated.append("% changes vs. the previous period")
     listed = get_text_list(calculated, "and")
+    from apps.common.branding import resolve_brand_name
+
     return (
-        f"Underlying data comes from {platform}. The {listed} are calculated by wanchurk-studio, not reported by {platform}."
+        f"Underlying data comes from {platform}. The {listed} are calculated by {resolve_brand_name()}, not reported by {platform}."
     )
 
 

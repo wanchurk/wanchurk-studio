@@ -121,6 +121,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.notifications.context_processors.unread_notification_count",
+                "apps.common.context_processors.brand",
                 "apps.common.context_processors.sidebar_context",
                 "apps.onboarding.context_processors.onboarding_checklist",
                 "apps.intelligence.context_processors.intelligence_flag",
@@ -798,7 +799,10 @@ if INTELLIGENCE_ENABLED:
 # --- White-label / localisation -------------------------------------------
 # Single source of truth for the product name shown in the UI. Templates keep
 # their upstream strings; the middleware rewrites them at render time.
-BRAND_NAME = env("BRAND_NAME", default="wanchurk-studio")
+# The name the product ships with. BRAND_NAME="" means "not white-labelled",
+# which is not the same as "render nothing": templates fall back to this.
+SHIPPED_BRAND_NAME = "wanchurk-studio"
+BRAND_NAME = env("BRAND_NAME", default=SHIPPED_BRAND_NAME)
 # "zh-hans" turns on the translation middleware; anything else leaves the UI English.
 UI_LANGUAGE = env("UI_LANGUAGE", default="zh-hans")
 # Re-read translations.json on change so dictionary edits need no restart.

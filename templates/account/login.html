@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static i18n allauth account socialaccount %}
 
-{% block title %}Log in · wanchurk-studio{% endblock %}
+{% block title %}Log in · {{ brand_name }}{% endblock %}
 
 {% block auth_content %}
 <style>
@@ -21,14 +21,14 @@
     <!-- Logo & Header -->
     <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-12 h-12 mb-4">
-            <img src="{% static 'img/wanchurk-studio-logo.png' %}" alt="wanchurk-studio" class="w-12 h-12 object-contain">
+            <img src="{% static 'img/wanchurk-studio-logo.png' %}" alt="{{ brand_name }}" class="w-12 h-12 object-contain">
         </div>
-        <span class="block text-[11px] font-semibold uppercase tracking-widest mb-2" style="color: #93a240;">{% trans "wanchurk-studio · Studio" %}</span>
+        <span class="block text-[11px] font-semibold uppercase tracking-widest mb-2" style="color: #93a240;">{% blocktrans with product=brand_name %}{{ product }} · Studio{% endblocktrans %}</span>
         <h1 class="text-2xl font-bold tracking-tight" style="color: var(--text-primary);">
             {% trans "Welcome back" %}
         </h1>
         <p class="text-sm mt-1" style="color: var(--text-secondary);">
-            {% if ui_is_zh %}登录 wanchurk-studio，管理社交媒体排期与审批。{% else %}Log in to wanchurk-studio | Social media scheduling &amp; approvals.{% endif %}
+            {% if ui_is_zh %}登录 {{ brand_name }}，管理社交媒体排期与审批。{% else %}Log in to {{ brand_name }} | Social media scheduling &amp; approvals.{% endif %}
         </p>
     </div>
 

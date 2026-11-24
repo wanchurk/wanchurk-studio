@@ -6,8 +6,10 @@ per-workspace and don't need database storage.
 
 from urllib.parse import urlsplit
 
+from apps.common.branding import resolve_brand_name
+
 FEED_CATEGORIES = [
-    {"slug": "wanchurk-favorites", "label": "wanchurk-studio Favorites"},
+    {"slug": "wanchurk-favorites", "label": f"{resolve_brand_name()} Favorites"},
     {"slug": "tech", "label": "Tech"},
     {"slug": "news", "label": "News"},
     {"slug": "business", "label": "Business"},

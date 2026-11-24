@@ -65,20 +65,20 @@ Usage: {% include "social_accounts/partials/_account_card.html" with account=acc
                 {% endcomment %}
                 <p class="text-xs text-stone-500 mb-2">
                     {% if account.revokes_platform_grant_on_disconnect %}
-                    {% blocktrans trimmed %}This revokes wanchurk-studio's access to the account.{% endblocktrans %}
+                    {% blocktrans trimmed with product=brand_name %}This revokes {{ product }}'s access to the account.{% endblocktrans %}
                     {% elif account.keeps_platform_grant_on_disconnect %}
-                    This removes the account from wanchurk-studio only. To revoke our access entirely,
-                    remove wanchurk-studio in Facebook &rsaquo; Settings &rsaquo; Apps and Websites.
+                    This removes the account from {{ brand_name }} only. To revoke our access entirely,
+                    remove {{ brand_name }} in Facebook &rsaquo; Settings &rsaquo; Apps and Websites.
                     {% else %}
-                    This removes the account from wanchurk-studio only. To revoke our access entirely,
-                    remove wanchurk-studio in your {{ account.get_platform_display }} settings.
+                    This removes the account from {{ brand_name }} only. To revoke our access entirely,
+                    remove {{ brand_name }} in your {{ account.get_platform_display }} settings.
                     {% endif %}
                 </p>
                 <p class="text-xs text-stone-500 mb-3">
                     {% if account.platform == "youtube" %}
                     {% blocktrans trimmed %}YouTube data, analytics and copied comments are deleted immediately, including notification copies. Your original uploads and posts shared with other channels stay.{% endblocktrans %}
                     {% else %}
-                    {% blocktrans trimmed %}Its analytics, inbox messages and posts made only for it are deleted from wanchurk-studio. Posts shared with other channels stay.{% endblocktrans %}
+                    {% blocktrans trimmed with product=brand_name %}Its analytics, inbox messages and posts made only for it are deleted from {{ product }}. Posts shared with other channels stay.{% endblocktrans %}
                     {% endif %}
                 </p>
                 <div class="flex gap-2 justify-end">

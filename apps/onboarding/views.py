@@ -177,11 +177,14 @@ def send_link_email(request, workspace_id, link_id):
     link_url = request.build_absolute_uri(reverse("onboarding:connection_page", kwargs={"token": link.token}))
     org = link.workspace.organization
 
+    from apps.common.branding import resolve_brand_name
+
     context = {
         "link_url": link_url,
         "org_name": org.name,
         "workspace_name": link.workspace.name,
         "expires_at": link.expires_at,
+        "brand_name": resolve_brand_name(),
     }
 
     text_content = render_to_string("onboarding/email/connection_link.txt", context)

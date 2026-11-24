@@ -1,6 +1,6 @@
 {% extends "layouts/settings.html" %}
 {% load i18n %}
-{% block title %}Profile - Settings - wanchurk-studio{% endblock %}
+{% block title %}Profile - Settings - {{ brand_name }}{% endblock %}
 {% block content %}
 <div class="max-w-2xl">
     <h2 class="text-xl font-semibold mb-8" style="color: var(--text-primary);">{% trans "Profile" %}</h2>
@@ -142,7 +142,7 @@
             <div>
                 <h3 class="text-base font-semibold mb-1" style="color: var(--text-primary);">{% trans "Delete your account" %}</h3>
                 <p class="text-sm" style="color: var(--text-secondary); max-width: 480px;">
-                    {% trans "When you delete your account, you lose access to wanchurk-studio account services, and we permanently delete your personal data." %}
+                    {% blocktrans with product=brand_name %}When you delete your account, you lose access to {{ product }} account services, and we permanently delete your personal data.{% endblocktrans %}
                 </p>
             </div>
 
@@ -176,7 +176,7 @@
                     <!-- Body -->
                     <div class="px-6 py-5">
                         <p class="text-sm" style="color: var(--text-secondary);">
-                            {% blocktrans trimmed %}Are you sure you want to delete your account? This action is permanent and cannot be undone. You will lose access to all wanchurk-studio services, and your personal data will be permanently deleted.{% endblocktrans %}
+                            {% blocktrans trimmed with product=brand_name %}Are you sure you want to delete your account? This action is permanent and cannot be undone. You will lose access to all {{ product }} services, and your personal data will be permanently deleted.{% endblocktrans %}
                         </p>
                     </div>
 

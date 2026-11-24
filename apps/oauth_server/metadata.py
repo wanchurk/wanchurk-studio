@@ -35,10 +35,12 @@ def authorization_server_metadata() -> dict:
 
 def protected_resource_metadata() -> dict:
     """RFC 9728 protected-resource metadata for the /api/v1/mcp endpoint."""
+    from apps.common.branding import resolve_brand_name
+
     return {
         "resource": f"{settings.MCP_PUBLIC_BASE_URL}/api/v1/mcp",
         "authorization_servers": [settings.MCP_OAUTH_ISSUER_URL],
         "scopes_supported": ["mcp"],
-        "resource_name": "wanchurk-studio MCP",
+        "resource_name": f"{resolve_brand_name()} MCP",
         "resource_documentation": f"{settings.MCP_PUBLIC_BASE_URL}/api/v1/docs",
     }

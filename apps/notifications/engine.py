@@ -24,6 +24,7 @@ from django.db.models import Count, F, Min, Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from apps.common.branding import resolve_brand_name
 from apps.common.mail import EmailNotSentError, send_or_raise
 from apps.settings_manager.defaults import APP_DEFAULTS
 
@@ -364,6 +365,7 @@ def _dispatch_email(delivery: NotificationDelivery) -> None:
         "notification": notification,
         "user": user,
         "app_url": getattr(settings, "APP_URL", "http://localhost:8000"),
+        "brand_name": resolve_brand_name(),
     }
 
     text_content = render_to_string("notifications/email/notification.txt", context)
@@ -769,6 +771,7 @@ def _send_digest_email(user, event_type: str | None, notifications: list) -> Non
         "user": user,
         "date": timezone.now(),
         "app_url": getattr(settings, "APP_URL", "http://localhost:8000"),
+        "brand_name": resolve_brand_name(),
     }
 
     text_content = render_to_string("notifications/email/digest.txt", context)

@@ -5,15 +5,7 @@
 #
 #, fuzzy
 msgid ""
-msgstr ""
-"Project-Id-Version: wanchurk-studio\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-21 06:09+0000\n"
-"Language: zh_Hans\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+msgstr "Project-Id-Version: %(product)s\nReport-Msgid-Bugs-To: \nPOT-Creation-Date: 2026-11-21 06:09+0000\nLanguage: zh_Hans\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\n"
 
 #: apps/accounts/views.py:94
 msgid "Photo removed."
@@ -284,8 +276,8 @@ msgid "Approval workflow updated."
 msgstr "审批流程已更新。"
 
 #: templates/account/accept_terms.html:7
-msgid "Accept Terms - wanchurk-studio"
-msgstr "接受条款 - wanchurk-studio"
+msgid "Accept Terms - %(brand)s"
+msgstr "接受条款 - %(brand)s"
 
 #: templates/account/accept_terms.html:24
 msgid "Almost there"
@@ -355,11 +347,6 @@ msgstr "登录"
 #: templates/account/verification_sent.html:42
 msgid "Back to sign in"
 msgstr "返回登录"
-
-#: templates/account/login.html:26 templates/account/signup.html:26
-#: templates/oauth2_provider/authorize.html:9
-msgid "wanchurk-studio"
-msgstr "wanchurk-studio"
 
 #: templates/account/login.html:28 templates/client_portal/dashboard.html:10
 msgid "Welcome back"
@@ -511,10 +498,8 @@ msgid "Create your account"
 msgstr "创建你的账号"
 
 #: templates/account/signup.html:31
-msgid ""
-"Sign up for wanchurk-studio | Schedule posts and run approvals across 10+ "
-"platforms."
-msgstr "注册 wanchurk-studio | 在 10+ 个平台上安排发布并运行审批。"
+msgid "Sign up for %(product)s | Schedule posts and run approvals across 10+ platforms."
+msgstr "注册 %(product)s | 在 10+ 个平台上安排发布并运行审批。"
 
 #: templates/account/signup.html:60
 #, python-format
@@ -661,25 +646,16 @@ msgid "Delete your account"
 msgstr "删除你的账号"
 
 #: templates/accounts/settings.html:145
-msgid ""
-"When you delete your account, you lose access to wanchurk-studio account "
-"services, and we permanently delete your personal data."
-msgstr ""
-"删除账号后，你将无法再使用 wanchurk-studio 账号服务，我们会永久删除你的个人"
-"数据。"
+msgid "When you delete your account, you lose access to %(product)s account services, and we permanently delete your personal data."
+msgstr "删除账号后，你将无法再使用 %(product)s 账号服务，我们会永久删除你的个人数据。"
 
 #: templates/accounts/settings.html:152
 msgid "Delete Account"
 msgstr "删除账号"
 
 #: templates/accounts/settings.html:179
-msgid ""
-"Are you sure you want to delete your account? This action is permanent and "
-"cannot be undone. You will lose access to all wanchurk-studio services, "
-"and your personal data will be permanently deleted."
-msgstr ""
-"你确定要删除账号吗？此操作是永久的，无法撤销。你将失去对所有 wanchurk-studio "
-"Studio 服务的访问权限，你的个人数据将被永久删除。"
+msgid "Are you sure you want to delete your account? This action is permanent and cannot be undone. You will lose access to all %(product)s services, and your personal data will be permanently deleted."
+msgstr "你确定要删除账号吗？此操作是永久的，无法撤销。你将失去对所有 %(product)s Studio 服务的访问权限，你的个人数据将被永久删除。"
 
 #: templates/accounts/settings.html:196
 msgid "Yes, delete my account"
@@ -715,8 +691,8 @@ msgid "Engagement rate"
 msgstr "互动率"
 
 #: templates/analytics/_engagement_card.html:7
-msgid "Calculated by wanchurk-studio"
-msgstr "由系统计算"
+msgid "Calculated by %(product)s"
+msgstr "由 %(product)s 计算"
 
 #: templates/analytics/_engagement_card.html:16
 msgid "Not enough data to calculate yet."
@@ -724,8 +700,8 @@ msgstr "数据不足，暂无法计算。"
 
 #: templates/analytics/_engagement_card.html:30
 #: templates/analytics/_hero_chart.html:7
-msgid "Estimated by wanchurk-studio"
-msgstr "由系统估算"
+msgid "Estimated by %(product)s"
+msgstr "由 %(product)s 估算"
 
 #: templates/analytics/_hero_chart.html:6
 #, python-format
@@ -795,8 +771,8 @@ msgid "Followers"
 msgstr "粉丝数"
 
 #: templates/analytics/_page_header.html:86
-msgid "Calculated by wanchurk-studio from the change in follower totals"
-msgstr "由系统根据粉丝总量变化计算"
+msgid "Calculated by %(product)s from the change in follower totals"
+msgstr "由 %(product)s 根据粉丝总量变化计算"
 
 #: templates/analytics/_post_detail.html:32
 msgid "Post copy"
@@ -836,8 +812,8 @@ msgid "Page %(table_page)s of %(table_total_pages)s"
 msgstr "第 %(table_page)s / %(table_total_pages)s 页"
 
 #: templates/analytics/_stat_card.html:7
-msgid "Daily average · calculated by wanchurk-studio"
-msgstr "日均 · 由系统计算"
+msgid "Daily average · calculated by %(product)s"
+msgstr "日均 · 由 %(product)s 计算"
 
 #: templates/analytics/no_accounts.html:20
 msgid "Connect an account to see analytics"
@@ -1884,8 +1860,8 @@ msgid "No posts are waiting for your review right now"
 msgstr "当前没有等待你审批的内容"
 
 #: templates/client_portal/approval_queue.html:48
-msgid "Powered by wanchurk-studio · Secure approval link"
-msgstr "由 wanchurk-studio 提供支持 · 安全审批链接"
+msgid "Powered by %(product)s · Secure approval link"
+msgstr "由 %(product)s 提供支持 · 安全审批链接"
 
 #: templates/client_portal/dashboard.html:12
 #, python-format
@@ -4506,8 +4482,8 @@ msgstr "搜索共享素材…"
 
 #: templates/members/accept_invite.html:7
 #, python-format
-msgid "Join %(invitation_organization_name)s - wanchurk-studio"
-msgstr "加入 %(invitation_organization_name)s - wanchurk-studio"
+msgid "Join %(invitation_organization_name)s - %(brand)s"
+msgstr "加入 %(invitation_organization_name)s - %(brand)s"
 
 #: templates/members/accept_invite.html:85
 #: templates/members/accept_invite.html:119
@@ -4517,11 +4493,8 @@ msgstr "加入 %(invitation_organization_name)s"
 
 #: templates/members/accept_invite.html:86
 #, python-format
-msgid ""
-"%(invitation_invited_by_display_name)s invited you to join their team on "
-"wanchurk-studio."
-msgstr ""
-"%(invitation_invited_by_display_name)s 邀请你加入其在 wanchurk-studio 的团队。"
+msgid "%(invitation_invited_by_display_name)s invited you to join their team on %(product)s."
+msgstr "%(invitation_invited_by_display_name)s 邀请你加入其在 %(product)s 的团队。"
 
 #: templates/members/accept_invite.html:126
 msgid "Sign Up to Join"
@@ -4533,8 +4506,8 @@ msgstr "登录后加入"
 
 #: templates/members/email/invite.html:13
 #, python-format
-msgid "Join %(org_name)s on wanchurk-studio"
-msgstr "加入 wanchurk-studio 上的 %(org_name)s"
+msgid "Join %(org_name)s on %(product)s"
+msgstr "加入 %(product)s 上的 %(org_name)s"
 
 #: templates/members/email/invite.html:22
 msgid "Hi there,"
@@ -4557,14 +4530,12 @@ msgstr "该邀请 7 天后过期。若已过期，请向团队管理员索取新
 
 #: templates/members/email/invite.html:46
 #, python-format
-msgid ""
-"You're receiving this because someone invited you to %(org_name)s on "
-"wanchurk-studio."
-msgstr "你收到此邮件是因为有人邀请你加入 wanchurk-studio 上的 %(org_name)s。"
+msgid "You're receiving this because someone invited you to %(org_name)s on %(product)s."
+msgstr "你收到此邮件是因为有人邀请你加入 %(product)s 上的 %(org_name)s。"
 
 #: templates/members/invite_expired.html:7
-msgid "Invitation Expired - wanchurk-studio"
-msgstr "邀请已过期 - wanchurk-studio"
+msgid "Invitation Expired - %(brand)s"
+msgstr "邀请已过期 - %(brand)s"
 
 #: templates/members/invite_expired.html:50
 msgid "Invitation Expired"
@@ -4577,8 +4548,8 @@ msgid ""
 msgstr "此邀请链接已失效。可能已过期或已被使用。请联系组织管理员重新发送邀请。"
 
 #: templates/members/invite_expired.html:54
-msgid "Go to wanchurk-studio"
-msgstr "前往 wanchurk-studio"
+msgid "Go to %(product)s"
+msgstr "前往 %(product)s"
 
 #: templates/members/list.html:13
 #: templates/members/partials/invite_modal.html:15
@@ -4842,18 +4813,16 @@ msgstr "授权 %(name)s？"
 
 #: templates/oauth2_provider/authorize.html:15
 #, python-format
-msgid ""
-"%(name)s wants to connect to your wanchurk-studio workspace with the "
-"following permissions:"
-msgstr "%(name)s 想以以下权限连接到你的 wanchurk-studio 工作区："
+msgid "%(name)s wants to connect to your %(product)s workspace with the following permissions:"
+msgstr "%(name)s 想以以下权限连接到你的 %(product)s 工作区："
 
 #: templates/oauth2_provider/authorize.html:42
 msgid "Authorize"
 msgstr "授权"
 
 #: templates/oauth2_provider/authorize.html:46
-msgid "You can revoke this access at any time from wanchurk-studio."
-msgstr "你可以随时在 wanchurk-studio 中撤销此授权。"
+msgid "You can revoke this access at any time from %(product)s."
+msgstr "你可以随时在 %(product)s 中撤销此授权。"
 
 #: templates/oauth2_provider/authorize.html:48
 msgid "Something went wrong"
@@ -5121,8 +5090,8 @@ msgid "dev.to"
 msgstr "dev.to"
 
 #: templates/partials/_review_banner.html:30
-msgid "Enjoying wanchurk-studio?"
-msgstr "喜欢 wanchurk-studio 吗？"
+msgid "Enjoying %(product)s?"
+msgstr "喜欢 %(product)s 吗？"
 
 #: templates/partials/_review_banner.html:31
 msgid ""
@@ -5311,8 +5280,8 @@ msgid "Disconnect"
 msgstr "断开连接"
 
 #: templates/social_accounts/partials/_account_card.html:69
-msgid "This revokes wanchurk-studio's access to the account."
-msgstr "此操作将撤销 wanchurk-studio 对该账号的访问权限。"
+msgid "This revokes %(product)s's access to the account."
+msgstr "此操作将撤销 %(product)s 对该账号的访问权限。"
 
 #: templates/social_accounts/partials/_account_card.html:80
 msgid ""
@@ -5324,12 +5293,8 @@ msgstr ""
 "内容以及与其他渠道共享的帖子会保留。"
 
 #: templates/social_accounts/partials/_account_card.html:82
-msgid ""
-"Its analytics, inbox messages and posts made only for it are deleted from "
-"wanchurk-studio. Posts shared with other channels stay."
-msgstr ""
-"该渠道的分析数据、收件箱消息和仅为其创建的内容将从 wanchurk-studio 中删除，与其他"
-"渠道共享的帖子会保留。"
+msgid "Its analytics, inbox messages and posts made only for it are deleted from %(product)s. Posts shared with other channels stay."
+msgstr "该渠道的分析数据、收件箱消息和仅为其创建的内容将从 %(product)s 中删除，与其他渠道共享的帖子会保留。"
 
 #: templates/social_accounts/partials/_account_card.html:117
 msgid "Some features are unavailable."

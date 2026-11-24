@@ -45,6 +45,6 @@
         {% endif %}
     </div>
 
-    <p class="text-center text-[0.6875rem] mt-10 w-full" style="color: var(--text-tertiary);">{% trans "Powered by wanchurk-studio · Secure approval link" %}</p>
+    <p class="text-center text-[0.6875rem] mt-10 w-full" style="color: var(--text-tertiary);">{% blocktrans with product=brand_name %}Powered by {{ product }} · Secure approval link{% endblocktrans %}</p>
 </div>
 {% endblock %}

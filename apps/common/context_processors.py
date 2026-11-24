@@ -8,6 +8,22 @@ from django.db.models import Count, Q
 SEEDED_IDEA_COLUMNS = frozenset({"Unassigned", "To Do", "In Progress", "Done"})
 
 
+def brand(request):
+    """Expose the operator's brand name to every request-rendered template.
+
+    Templates must never hard-code the name: a deployment re-brands by setting
+    BRAND_NAME, and a literal would survive that change. An empty BRAND_NAME
+    means "no override", so fall back to the shipped name rather than rendering
+    an empty title.
+
+    Email bodies render without a request object and therefore cannot use this;
+    they receive the brand through their own context.
+    """
+    from apps.common.branding import resolve_brand_name
+
+    return {"brand_name": resolve_brand_name()}
+
+
 def sidebar_context(request):
     """Inject sidebar data into every template context.
 

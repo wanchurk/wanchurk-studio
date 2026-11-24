@@ -552,15 +552,18 @@ def _send_invite_email(invitation) -> bool:
     app_url = getattr(settings, "APP_URL", "http://localhost:8000").rstrip("/")
     accept_url = f"{app_url}/members/invite/{invitation.token}/accept/"
 
+    from apps.common.branding import resolve_brand_name
+
     context = {
         "invitation": invitation,
         "accept_url": accept_url,
         "org_name": invitation.organization.name,
         "invited_by": invitation.invited_by,
         "app_url": app_url,
+        "brand_name": resolve_brand_name(),
     }
 
-    subject = f"You've been invited to join {invitation.organization.name} on wanchurk-studio"
+    subject = f"You've been invited to join {invitation.organization.name} on {resolve_brand_name()}"
     text_content = render_to_string("members/email/invite.txt", context)
     html_content = render_to_string("members/email/invite.html", context)
 
