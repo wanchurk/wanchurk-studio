@@ -27,11 +27,10 @@ EMAIL_RECIPIENT_DAILY_LIMIT = -1
 # Disable CSP in tests
 CSP_REPORT_ONLY = True
 
-# The upstream test suite asserts on upstream English copy and the upstream brand
-# name. The Chinese UI and the white-label rename are deployment choices layered
-# on top of the project, so tests run against upstream behaviour: language back to
-# English, brand resets to the upstream name. Tests that cover the switcher or the
-# re-branding set what they need explicitly.
+# Most of the suite asserts on the English copy and on the built-in brand name, so
+# tests run in that configuration; the Chinese UI and a configured brand are
+# deployment choices layered on top of it. Tests that cover the language switcher
+# or a configured brand set what they need explicitly.
 UI_LANGUAGE = "en"
 BRAND_NAME = ""
 

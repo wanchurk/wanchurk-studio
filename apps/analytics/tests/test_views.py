@@ -79,7 +79,7 @@ def test_instagram_direct_account_is_listed_and_available(owner_client, workspac
 
 @pytest.mark.django_db
 def test_disabled_platform_account_stays_listed_with_a_reason(owner_client, workspace, settings):
-    # Asserts on upstream English copy; the deployment UI is Chinese by default and
+    # Asserts on the English copy; the deployment UI is Chinese by default and
     # the translator would render "No data" as 暂无数据.
     settings.UI_LANGUAGE = "en"
     """The reported bug: the account vanished from the switcher entirely.

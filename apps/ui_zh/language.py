@@ -3,8 +3,8 @@
 The UI is translated at render time by ``apps.ui_zh.middleware`` rather than
 through Django's i18n framework, so the language is not a locale setting — it is
 a switch that decides whether that middleware rewrites the HTML at all. English
-is the upstream original, so switching to English means "do nothing"; switching
-to Chinese means "run the dictionary".
+is the source text, so switching to English means "do nothing"; switching to
+Chinese means "run the dictionary".
 
 The choice lives in a cookie, not on the user model: it must work for anonymous
 visitors on the login page, and it must survive a logout. No migration, no DB

@@ -143,7 +143,7 @@ def sidebar_context(request):
     if org_membership and org_membership.org_role in ("owner", "admin"):
         can_create_workspace = True
 
-    # Trustpilot review ask removed: it pointed at the upstream product.
+    # Trustpilot review ask removed: it pointed at an external review page.
     show_review_banner = False
 
     return {

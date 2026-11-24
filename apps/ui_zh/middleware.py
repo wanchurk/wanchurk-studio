@@ -1,18 +1,18 @@
 """Render-time Chinese UI and white-label branding.
 
-The upstream project does not use Django's i18n at all: 249 templates and every
-Python string are hard-coded English, with no gettext calls, no LocaleMiddleware
-and no locale directory. Two options existed:
+The app does not route its copy through Django's i18n: templates and Python
+strings carry the English source text, and the translation is applied at render
+time. Two options existed:
 
   1. Wrap ~1,600 strings in {% trans %} across 249 templates and translate a PO
-     file. Correct, but every template becomes a merge conflict on each upstream
-     pull, and the project ships updates regularly.
+     file. Correct, but every copy change then has to be mirrored in the
+     catalogue, and the template diffs get noisy.
   2. Translate the rendered HTML in middleware against a dictionary held here.
 
-Option 2 keeps every template byte-identical to upstream. Upstream updates apply
-cleanly; anything newly added in English shows up untranslated (visible, not
-broken) and gets added to the dictionary. It is also reversible: drop the
-middleware and the app is back to English.
+Option 2 keeps every template byte-identical to the English source, so template
+edits apply cleanly; anything newly added in English shows up untranslated
+(visible, not broken) and gets added to the dictionary. It is also reversible:
+drop the middleware and the app is back to English.
 
 The same middleware applies white-label branding, so the brand appears in one
 place (settings.BRAND_NAME) instead of being hard-coded in templates.
@@ -129,7 +129,7 @@ def _brand_map() -> list[tuple[str, str]]:
     brand = getattr(settings, "BRAND_NAME", "") or ""
     if not brand:
         return []
-    # Upstream spells it several ways; collapse them all to the operator's brand.
+    # The shipped name is spelled several ways; collapse them all to the operator's brand.
     return [
         ("wanchurk-studio", brand),
         ("wanchurk-studio", brand),
@@ -153,7 +153,7 @@ def translate_text(text: str) -> str:
         return text
 
     # Exact dictionary hit first, on the untouched source text. Brand rewriting
-    # must not run before this, or keys containing the upstream name never match.
+    # must not run before this, or keys containing the shipped name never match.
     exact = _TRANSLATIONS.get(original)
     if exact is not None:
         return text.replace(text.strip(), exact, 1)
@@ -179,8 +179,8 @@ def translate_text(text: str) -> str:
 def brand_text(text: str) -> str:
     """Re-brand only — used when the UI language is English.
 
-    English is the upstream original, so no dictionary runs; but the operator's
-    white-label brand must still replace the upstream product name.
+    English is the source text, so no dictionary runs; but the operator's
+    white-label brand must still replace the shipped product name.
     """
     if not text or not HAS_LATIN.search(text):
         return text

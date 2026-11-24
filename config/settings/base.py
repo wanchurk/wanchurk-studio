@@ -796,9 +796,10 @@ if INTELLIGENCE_ENABLED:
             )
 
 
-# --- White-label / localisation -------------------------------------------
-# Single source of truth for the product name shown in the UI. Templates keep
-# their upstream strings; the middleware rewrites them at render time.
+# --- Branding / localisation ---------------------------------------------
+# Single source of truth for the product name shown in the UI. Templates read it
+# from the brand context processor; the middleware rewrites leftover literals at
+# render time.
 # The name the product ships with. BRAND_NAME="" means "not white-labelled",
 # which is not the same as "render nothing": templates fall back to this.
 SHIPPED_BRAND_NAME = "wanchurk-studio"

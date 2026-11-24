@@ -1,4 +1,4 @@
-"""Assertions here are on upstream English copy.
+"""Assertions here are on the English copy.
 
 The deployment UI defaults to Chinese and the translator middleware rewrites visible
 text, so any assertion on an English string fails unless the language is pinned.

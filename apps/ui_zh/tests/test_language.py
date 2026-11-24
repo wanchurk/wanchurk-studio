@@ -1,7 +1,7 @@
 """Tests for the per-visitor UI language switcher.
 
 The switcher is a render-time switch, not Django i18n: Chinese runs the
-dictionary, English leaves the upstream strings alone (branding still applies).
+dictionary, English leaves the source strings alone (branding still applies).
 """
 
 from __future__ import annotations
