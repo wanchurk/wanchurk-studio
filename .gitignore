@@ -222,3 +222,6 @@ theme/static/css/dist/
 # Local deployment notes (contain credentials context) — never commit
 .local-notes.txt
 .rebrand_backup/
+
+# 本地审计产物（含截图与本机地址，不入库）
+/output/
