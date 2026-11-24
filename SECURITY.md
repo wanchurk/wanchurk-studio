@@ -12,7 +12,9 @@ If you discover a security vulnerability in wanchurk-studio, please report it re
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-Instead, please email **security@example.com** with:
+Instead, use **Report a vulnerability** on the repository's Security tab
+(https://github.com/wanchurk/wanchurk-studio/security/advisories/new), which opens a
+private advisory only the maintainers can see, with:
 
 - A description of the vulnerability
 - Steps to reproduce
