@@ -10,18 +10,16 @@
 
 ## About wanchurk-studio
 
-wanchurk-studio 是「跨境铺子」自建的多平台社媒运营平台，面向出海品牌、跨境卖家和社媒代运营团队。它把内容排期、多平台发布、统一收件箱和效果分析收进同一个工作区，中文界面开箱即用。
+wanchurk-studio is a self-hosted multi-platform social media operations platform for cross-border brands, sellers, and social media agencies. It brings content scheduling, multi-platform publishing, a unified inbox, and analytics into one workspace. The UI ships in Simplified Chinese.
 
-**核心定位**
+**Core principles**
 
-- **直连官方 API** — 发布与数据读取直接对接各平台第一方接口，不经第三方聚合服务，链路与失败原因都掌握在自己手里。
-- **一处管理所有渠道** — Facebook、Instagram、LinkedIn、TikTok、YouTube、Pinterest、Threads、Bluesky、Mastodon、Google 商家资料、DEV.to。
-- **团队与客户协作** — 组织 → 工作区 → 成员三级权限，可为外部客户开放审批入口，不需要对方注册账号。
-- **中文界面、白标部署** — 界面语言和品牌可按需替换，适合自有品牌或代运营场景自建。
+- **Direct to official APIs** — Publishing and data reads go straight to each platform's first-party API, with no third-party aggregation layer, so you own every request path and failure reason.
+- **One place for every channel** — Facebook, Instagram, LinkedIn, TikTok, YouTube, Pinterest, Threads, Bluesky, Mastodon, Google Business Profile, and DEV.to.
+- **Team and client collaboration** — Three-level permissions (organization → workspace → member). External clients can be given an approval link without creating an account.
+- **Localized UI, white-label deployment** — The interface language and brand can be replaced, which suits self-owned brands and agency setups.
 
-**技术栈**：Django + PostgreSQL + Tailwind CSS，Docker 一键启动，支持 Railway / Render / Heroku 部署。
-
-> wanchurk-studio is a self-hosted multi-platform social media operations platform with a built-in Simplified Chinese UI, aimed at cross-border brands and social media agencies.
+**Tech stack**: Django + PostgreSQL + Tailwind CSS. One-command start with Docker; deployable to Railway, Render, and Heroku.
 
 
 ## Features
