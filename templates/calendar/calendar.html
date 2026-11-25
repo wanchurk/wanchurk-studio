@@ -39,6 +39,16 @@
     /* Fix parent overflow clipping the calendar */
     main:has(#publish-body) > div { overflow: visible !important; }
 
+    /* Month view: a month can span six week rows. Clipping those into a
+       viewport-height pane hid the last week (its dates were unreachable
+       without discovering an inner scrollbar), so let the month grid take its
+       natural height and scroll the page instead. Week and day views keep the
+       inner scroll they were designed around. */
+    #calendar-content[data-view="month"] {
+        overflow-y: visible;
+        flex: 0 0 auto;
+    }
+
     /* Calendar-specific styles */
     .cal-day {
         min-height: 80px;
@@ -49,7 +59,9 @@
         background: white;
     }
     @media (min-width: 768px) {
-        .cal-day { min-height: 130px; padding: 8px; }
+        /* 110px matches the organisation-level calendar. At 130px a six-week
+           month could not fit the pane and pushed its last row out of sight. */
+        .cal-day { min-height: 110px; padding: 8px; }
     }
     .cal-day:hover { background: #FAFAF9; }
     .cal-day.past { background: #F5F5F4; }

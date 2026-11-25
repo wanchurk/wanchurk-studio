@@ -95,7 +95,7 @@ Toolbar: nav arrows + period + Today + view dropdown | right: filter dropdowns.
     </div>
 
     <!-- Calendar content area (swapped by HTMX) -->
-    <div id="calendar-content" class="flex-1 overflow-y-auto min-h-0">
+    <div id="calendar-content" class="flex-1 overflow-y-auto min-h-0" data-view="{{ view_type }}">
         {% if view_type == 'month' %}
             {% include "calendar/partials/month_grid.html" %}
         {% elif view_type == 'week' %}
