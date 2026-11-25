@@ -6,7 +6,6 @@ services:
       - .env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.production
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/wanchurk
     depends_on:
       postgres:
         condition: service_healthy
@@ -47,6 +46,10 @@ services:
       # Read-only so Caddy can serve uploads but never write into MEDIA_ROOT.
       - media_data:/app/media:ro
     environment:
+      # Caddyfile targets {$APP_DOMAIN:localhost}. Without this the container
+      # falls back to "localhost", which gets a self-signed certificate and
+      # serves nothing useful for the real domain.
+      - APP_DOMAIN=${APP_DOMAIN:-localhost}
       # Set CADDY_MEDIA_ROOT=/var/empty in .env when STORAGE_BACKEND=s3: the
       # named volume outlives the switch, and Caddy cannot read Django's
       # SERVE_MEDIA. See the Caddyfile.
