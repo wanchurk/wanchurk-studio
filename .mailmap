@@ -1,0 +1,11 @@
+# Canonical author identity for this repository.
+#
+# Work committed from different machines and tooling picked up several author
+# addresses. They all belong to the same person, so collapse them onto the
+# address used for the project.
+#
+# Format: <canonical name> <canonical email> <commit name> <commit email>
+
+Wanchurk <dev@kuajingpuzi.com> <wanchurk@WanchurkdeMacBook-Pro.local>
+Wanchurk <dev@kuajingpuzi.com> <abigail-gibson@zorvanthek.site>
+Wanchurk <dev@kuajingpuzi.com> <dev@kuajingpuzi.com>
