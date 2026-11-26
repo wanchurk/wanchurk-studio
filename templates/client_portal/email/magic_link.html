@@ -1,16 +1,17 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"></head>
-<body style="margin:0; padding:0; font-family: system-ui, -apple-system, sans-serif; background: #FAFAF9;">
+<head><meta charset="UTF-8">{% include "email/_dark_head.html" %}
+</head>
+<body style="margin:0; padding:0; font-family: system-ui, -apple-system, sans-serif; background: #FAFAF9;" class="em-page">
     <table width="100%" cellpadding="0" cellspacing="0" style="padding: 40px 20px;">
         <tr>
             <td align="center">
-                <table width="520" cellpadding="0" cellspacing="0" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #E7E5E4; overflow: hidden;">
+                <table width="520" cellpadding="0" cellspacing="0" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #E7E5E4; overflow: hidden;" class="em-card">
                     <!-- Header -->
                     <tr>
                         <td style="padding: 32px 32px 0 32px;">
-                            <p style="font-size: 15px; font-weight: 700; color: #1C1917; margin: 0;">
+                            <p style="font-size: 15px; font-weight: 700; color: #1C1917; margin: 0;" class="em-title">
                                 {{ workspace.name }}
                             </p>
                         </td>
@@ -18,10 +19,10 @@
                     <!-- Body -->
                     <tr>
                         <td style="padding: 24px 32px 32px 32px;">
-                            <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 8px 0;">
+                            <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 8px 0;" class="em-text">
                                 Hi {{ client_user.display_name }},
                             </p>
-                            <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 24px 0;">{% blocktrans trimmed with created_by_display_name=created_by.display_name %}
+                            <p style="font-size: 15px; color: #44403C; line-height: 1.6; margin: 0 0 24px 0;" class="em-text">{% blocktrans trimmed with created_by_display_name=created_by.display_name %}
                                 {{ created_by_display_name }} has shared content for your review. Click below to access your portal and approve or provide feedback on scheduled posts.
                             {% endblocktrans %}</p>
                             <!-- CTA Button -->
@@ -29,21 +30,21 @@
                                 <tr>
                                     <td align="center">
                                         <a href="{{ magic_url }}"
-                                           style="display: inline-block; padding: 12px 32px; background: #F97316; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 9999px;">
+                                           style="display: inline-block; padding: 12px 32px; background: #F97316; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 9999px;" class="em-btn">
                                             {% trans "Review Posts" %}
                                         </a>
                                     </td>
                                 </tr>
                             </table>
-                            <p style="font-size: 13px; color: #A8A29E; line-height: 1.6; margin: 24px 0 0 0;">
+                            <p style="font-size: 13px; color: #A8A29E; line-height: 1.6; margin: 24px 0 0 0;" class="em-muted">
                                 {% trans "This link is valid for 30 days. If it expires, ask your account manager for a new one." %}
                             </p>
                         </td>
                     </tr>
                     <!-- Footer -->
                     <tr>
-                        <td style="padding: 16px 32px; border-top: 1px solid #E7E5E4;">
-                            <p style="font-size: 12px; color: #A8A29E; margin: 0;">{% blocktrans trimmed with workspace_name=workspace.name %}
+                        <td style="padding: 16px 32px; border-top: 1px solid #E7E5E4;" class="em-rule">
+                            <p style="font-size: 12px; color: #A8A29E; margin: 0;" class="em-muted">{% blocktrans trimmed with workspace_name=workspace.name %}
                                 You're receiving this because you're a client of {{ workspace_name }}.
                             {% endblocktrans %}</p>
                         </td>

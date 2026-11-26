@@ -1,0 +1,51 @@
+{% comment %}
+Dark mode for the HTML mails.
+
+Email has no stylesheet cascade to lean on: every rule in these templates is an
+inline style attribute, and an inline style beats a class selector. So the dark
+rules below carry `!important`, which is the only thing that outranks an inline
+declaration, and the templates tag their elements with the em-* classes this
+block names.
+
+Two delivery paths, because mail clients disagree about dark mode:
+
+- `prefers-color-scheme` (Apple Mail, iOS, Outlook for Mac, Thunderbird,
+  Gmail on mobile) honours the media query below.
+- Outlook.com and Outlook on Windows do not report the media query; they set
+  `data-ogsc` on <html> and expect explicit overrides. Those rules therefore
+  sit outside the media query.
+
+The `color-scheme` meta and :root declaration are what stop Apple Mail from
+inverting the whole message itself, which would double-apply our colours.
+
+Not covered, deliberately: Allauth's mail templates. The only ones this repo
+overrides are plain text (`templates/account/email/*.txt`), and text mail has no
+colours to theme.
+{% endcomment %}
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<style>
+  :root { color-scheme: light dark; supported-color-schemes: light dark; }
+
+  @media (prefers-color-scheme: dark) {
+    .em-page   { background-color: #131110 !important; }
+    .em-card   { background-color: #1B1817 !important; border-color: #37322E !important; }
+    .em-sunken { background-color: #201D1B !important; border-color: #2A2623 !important; }
+    .em-rule   { border-color: #2A2623 !important; }
+    .em-title  { color: #F5F4F2 !important; }
+    .em-text   { color: #D3CFCA !important; }
+    .em-muted  { color: #8B857F !important; }
+    /* The orange button keeps its fill: it is the accent, and white on it is
+       readable in both themes. */
+    .em-btn, .em-btn a { background-color: #F97316 !important; color: #FFFFFF !important; }
+  }
+
+  /* Outlook.com / Outlook on Windows: forced dark, no media query. */
+  [data-ogsc] .em-page,   [data-ogsb] .em-page   { background-color: #131110 !important; }
+  [data-ogsc] .em-card,   [data-ogsb] .em-card   { background-color: #1B1817 !important; border-color: #37322E !important; }
+  [data-ogsc] .em-sunken, [data-ogsb] .em-sunken { background-color: #201D1B !important; }
+  [data-ogsc] .em-rule,   [data-ogsb] .em-rule   { border-color: #2A2623 !important; }
+  [data-ogsc] .em-title,  [data-ogsb] .em-title  { color: #F5F4F2 !important; }
+  [data-ogsc] .em-text,   [data-ogsb] .em-text   { color: #D3CFCA !important; }
+  [data-ogsc] .em-muted,  [data-ogsb] .em-muted  { color: #8B857F !important; }
+</style>

@@ -4,20 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% include "email/_dark_head.html" %}
 </head>
-<body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; background-color: #FAFAF9; color: #1C1917;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FAFAF9; padding: 40px 20px;">
+<body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; background-color: #FAFAF9; color: #1C1917;" class="em-page em-title">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FAFAF9; padding: 40px 20px;" class="em-page">
         <tr>
             <td align="center">
-                <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px; background: #FFFFFF; border-radius: 12px; border: 1px solid #E7E5E4; overflow: hidden;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px; background: #FFFFFF; border-radius: 12px; border: 1px solid #E7E5E4; overflow: hidden;" class="em-card">
                     <!-- Header -->
                     <tr>
                         <td style="padding: 32px 32px 24px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 20px; font-weight: 700; color: #1C1917; letter-spacing: -0.01em;">
+                            <h1 style="margin: 0; font-size: 20px; font-weight: 700; color: #1C1917; letter-spacing: -0.01em;" class="em-title">
                                 {% trans "Connect your social accounts" %}
                             </h1>
-                            <p style="margin: 8px 0 0; font-size: 15px; color: #57534E; line-height: 1.5;">{% blocktrans trimmed %}
-                                {{ org_name }} has invited you to connect your accounts to {% endblocktrans %}<strong style="color: #1C1917;">{{ workspace_name }}</strong>.
+                            <p style="margin: 8px 0 0; font-size: 15px; color: #57534E; line-height: 1.5;" class="em-text">{% blocktrans trimmed %}
+                                {{ org_name }} has invited you to connect your accounts to {% endblocktrans %}<strong style="color: #1C1917;" class="em-title">{{ workspace_name }}</strong>.
                             </p>
                         </td>
                     </tr>
@@ -32,15 +33,15 @@
                                 border-radius: 9999px;
                                 text-decoration: none;
                                 box-shadow: 0 4px 14px rgba(249,115,22,0.28);
-                            ">{% trans "Connect Accounts" %}</a>
+                            " class="em-btn">{% trans "Connect Accounts" %}</a>
                         </td>
                     </tr>
                     <!-- Instructions -->
                     <tr>
                         <td style="padding: 0 32px 24px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background: #FAFAF9; border-radius: 8px; padding: 16px;">
-                                <tr><td style="padding: 16px; font-size: 13px; color: #57534E; line-height: 1.7;">
-                                    <strong style="color: #1C1917;">{% trans "What to expect:" %}</strong><br>
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background: #FAFAF9; border-radius: 8px; padding: 16px;" class="em-sunken">
+                                <tr><td style="padding: 16px; font-size: 13px; color: #57534E; line-height: 1.7;" class="em-text">
+                                    <strong style="color: #1C1917;" class="em-title">{% trans "What to expect:" %}</strong><br>
                                     {% trans "1. You'll see a list of platforms to connect." %}<br>
                                     2. Click "Connect" on each one you'd like to link.<br>
                                     {% trans '3. Click "Done" when finished to notify your team.' %}
@@ -51,7 +52,7 @@
                     <!-- Expiry -->
                     <tr>
                         <td style="padding: 0 32px 28px; text-align: center;">
-                            <p style="margin: 0; font-size: 12px; color: #A8A29E;">
+                            <p style="margin: 0; font-size: 12px; color: #A8A29E;" class="em-muted">
                                 This link expires {{ expires_at|date:"M j, Y" }}.
                             </p>
                         </td>
@@ -61,7 +62,7 @@
                 <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px;">
                     <tr>
                         <td style="padding: 20px 32px; text-align: center;">
-                            <p style="margin: 0; font-size: 12px; color: #A8A29E;">{% blocktrans trimmed %}
+                            <p style="margin: 0; font-size: 12px; color: #A8A29E;" class="em-muted">{% blocktrans trimmed %}
                                 Sent by {{ org_name }}
                             {% endblocktrans %}</p>
                         </td>

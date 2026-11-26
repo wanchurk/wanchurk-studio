@@ -10,20 +10,21 @@
   table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
   body { margin: 0; padding: 0; width: 100% !important; }
 </style>
+{% include "email/_dark_head.html" %}
 </head>
-<body style="margin:0;padding:0;background-color:#FAFAF9;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1C1917;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FAFAF9;">
+<body style="margin:0;padding:0;background-color:#FAFAF9;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1C1917;" class="em-page em-title">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FAFAF9;" class="em-page">
 <tr><td align="center" style="padding:40px 20px;">
 
-  <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background-color:#FFFFFF;border-radius:12px;border:1px solid #E7E5E4;">
+  <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background-color:#FFFFFF;border-radius:12px;border:1px solid #E7E5E4;" class="em-card">
 
     <!-- Header -->
     <tr>
-      <td style="padding:28px 32px 20px;border-bottom:1px solid #F5F5F4;">
+      <td style="padding:28px 32px 20px;border-bottom:1px solid #F5F5F4;" class="em-rule">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="width:28px;height:28px;background-color:#F97316;border-radius:6px;text-align:center;vertical-align:middle;color:#FFFFFF;font-weight:700;font-size:13px;">P</td>
-            <td style="padding-left:10px;font-weight:700;font-size:15px;color:#1C1917;">{{ brand_name }}</td>
+            <td style="width:28px;height:28px;background-color:#F97316;border-radius:6px;text-align:center;vertical-align:middle;color:#FFFFFF;font-weight:700;font-size:13px;" class="em-btn">P</td>
+            <td style="padding-left:10px;font-weight:700;font-size:15px;color:#1C1917;" class="em-title">{{ brand_name }}</td>
           </tr>
         </table>
       </td>
@@ -32,8 +33,8 @@
     <!-- Title -->
     <tr>
       <td style="padding:28px 32px 12px;">
-        <h1 style="margin:0;font-size:20px;font-weight:700;color:#1C1917;">{{ heading }}</h1>
-        <p style="margin:8px 0 0;font-size:13px;color:#A8A29E;">{{ date|date:"N j, Y" }} &mdash; {{ total }} item{{ total|pluralize }}</p>
+        <h1 style="margin:0;font-size:20px;font-weight:700;color:#1C1917;" class="em-title">{{ heading }}</h1>
+        <p style="margin:8px 0 0;font-size:13px;color:#A8A29E;" class="em-muted">{{ date|date:"N j, Y" }} &mdash; {{ total }} item{{ total|pluralize }}</p>
       </td>
     </tr>
 
@@ -43,16 +44,16 @@
         {% for n in notifications %}
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
           <tr>
-            <td style="padding:12px 16px;background-color:#FAFAF9;border-radius:8px;border:1px solid #F5F5F4;">
-              <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#1C1917;">{{ n.title }}</p>
-              {% if n.body %}<p style="margin:0;font-size:13px;color:#78716C;line-height:1.5;">{{ n.body|truncatewords:30 }}</p>{% endif %}
-              <p style="margin:6px 0 0;font-size:11px;color:#A8A29E;">{{ n.created_at|timesince }} ago</p>
+            <td style="padding:12px 16px;background-color:#FAFAF9;border-radius:8px;border:1px solid #F5F5F4;" class="em-sunken em-rule">
+              <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#1C1917;" class="em-title">{{ n.title }}</p>
+              {% if n.body %}<p style="margin:0;font-size:13px;color:#78716C;line-height:1.5;" class="em-text">{{ n.body|truncatewords:30 }}</p>{% endif %}
+              <p style="margin:6px 0 0;font-size:11px;color:#A8A29E;" class="em-muted">{{ n.created_at|timesince }} ago</p>
             </td>
           </tr>
         </table>
         {% endfor %}
         {% if overflow %}
-        <p style="margin:4px 0 0;font-size:13px;color:#78716C;">{% blocktrans trimmed %}&hellip;and {{ overflow }} more.{% endblocktrans %}</p>
+        <p style="margin:4px 0 0;font-size:13px;color:#78716C;" class="em-text">{% blocktrans trimmed %}&hellip;and {{ overflow }} more.{% endblocktrans %}</p>
         {% endif %}
       </td>
     </tr>
@@ -62,7 +63,7 @@
       <td align="center" style="padding:0 32px 28px;">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="border-radius:9999px;background-color:#F97316;text-align:center;">
+            <td style="border-radius:9999px;background-color:#F97316;text-align:center;" class="em-btn">
               <a href="{{ app_url }}/notifications/" target="_blank" rel="noopener" style="display:inline-block;padding:10px 24px;color:#FFFFFF;font-size:13px;font-weight:600;text-decoration:none;">
                 {% trans "View All Notifications" %}
               </a>
@@ -74,8 +75,8 @@
 
     <!-- Footer -->
     <tr>
-      <td style="padding:20px 32px 28px;border-top:1px solid #F5F5F4;">
-        <p style="margin:0;font-size:12px;color:#A8A29E;line-height:1.5;">
+      <td style="padding:20px 32px 28px;border-top:1px solid #F5F5F4;" class="em-rule">
+        <p style="margin:0;font-size:12px;color:#A8A29E;line-height:1.5;" class="em-muted">
           {% trans "You received this because of your notification settings." %}
           <a href="{{ app_url }}/notifications/preferences/" style="color:#F97316;text-decoration:underline;">{% trans "Manage preferences" %}</a>
         </p>
