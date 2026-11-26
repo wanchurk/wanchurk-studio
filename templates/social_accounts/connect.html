@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block page_title %}Connect Social Account{% endblock %}
 {% block content %}
-<div class="max-w-4xl">
+<div class="w-full">
     <!-- Header -->
     <div class="mb-8">
         <a href="{% url 'social_accounts:list' workspace_id=workspace_id %}" class="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-700 transition-colors mb-4">
@@ -13,11 +13,14 @@
         <p class="text-sm text-stone-500 mt-1">{% trans "Select a platform to connect your social media account." %}</p>
     </div>
 
-    <!-- Platform grid -->
-    <div class="overflow-y-auto pr-1">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Platform grid
+         Previously capped at max-w-4xl (896px) and three columns, which left a
+         ~250px dead band down the right side of any wide viewport and read as a
+         missing fourth column. The grid now fills the content area: four
+         columns from 1280px, three below that, two on tablet. -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {% for value, label in platform_choices %}
-        <div class="relative bg-white rounded-xl border border-stone-200 p-5 transition-all duration-200 {% if value in configured_platforms or value == 'youtube' %}{% else %}opacity-60{% endif %}">
+        <div class="relative bg-white rounded-xl border border-stone-200 p-5 transition-all duration-200 {% if value in configured_platforms %}{% else %}opacity-60{% endif %}">
             <div class="flex items-start gap-4">
                 {% if value == "youtube" %}
                 {# Generic video glyph in neutral colours: no YouTube logo, red, or play-button shape. #}
@@ -85,12 +88,11 @@
             </div>
             {% endif %}
 
-            {% if value not in configured_platforms and value != 'youtube' %}
+            {% if value not in configured_platforms %}
             <div class="absolute inset-0 rounded-xl bg-white/40 cursor-not-allowed" title="{% trans 'Platform credentials not configured. Contact your administrator.' %}"></div>
             {% endif %}
         </div>
         {% endfor %}
-    </div>
     </div>
 </div>
 {% endblock %}

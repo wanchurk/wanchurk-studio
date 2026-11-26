@@ -1278,5 +1278,9 @@
   "This platform isn't fully configured, so real-time updates couldn't be set up.": "该平台尚未完整配置，因此无法设置实时更新。",
   "Nothing was sent to": "未发送至",
   "Your text is still in the box.": "您的文字仍保留在输入框中。",
-  "Change": "修改"
+  "Change": "修改",
+  "Appearance": "外观",
+  "Colour theme": "配色主题",
+  "Light": "浅色",
+  "Dark": "深色"
 }

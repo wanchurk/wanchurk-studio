@@ -18,7 +18,7 @@
                 {{ item.workspace.name }}
             </span>
             {% if item.workspace.is_archived %}
-            <span class="text-xs px-2 py-0.5 rounded-full" style="background: #FEF3C7; color: #92400E;">{% trans "Archived" %}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full" style="background: var(--warning-soft, #FEF3C7); color: var(--warning-700, #92400E);">{% trans "Archived" %}</span>
             {% endif %}
         </div>
         <div class="text-xs" style="color: var(--text-tertiary);">

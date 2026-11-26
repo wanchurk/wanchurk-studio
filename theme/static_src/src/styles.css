@@ -4,6 +4,13 @@
 @source "../../../templates/**/*.html";
 @source "../../../apps/**/templates/**/*.html";
 
+/* Dark mode is class-driven: `dark` on <html>, set before first paint by the
+   inline script in base.html so a dark-preferring visitor never sees a white
+   flash. Templates can use `dark:` utilities for new work; the legacy palette
+   remap at the end of this file covers the classes already in the 250+
+   templates that predate it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ═══════════════════════════════════════════════════════════════
    WHITE-LABEL TOKEN ARCHITECTURE
    Layer 1 → Brand Tokens   (swap these to white-label)
@@ -84,6 +91,14 @@
   --warning-500: #EAB308; --warning-50: #FEFCE8; --warning-700: #A16207;
   --error-500:   #EF4444; --error-50:   #FEF2F2; --error-700:   #B91C1C;
   --info-500:    #3B82F6; --info-50:    #EFF6FF; --info-700:    #1D4ED8;
+
+  /* Soft status fills. Templates write `background: var(--warning-soft,
+     #FEF3C7)` inline, which no utility remap can reach; naming them here
+     means the dark theme can re-point every one of those call sites. */
+  --success-soft: var(--success-50);
+  --warning-soft: var(--warning-50);
+  --error-soft:   var(--error-50);
+  --info-soft:    var(--info-50);
 
   /* Accent palette */
   --accent-teal:    #14B8A6; --accent-teal-soft:    #F0FDFA;
@@ -797,4 +812,217 @@ span.flatpickr-weekday {
 .bb-toggle input:disabled + .bb-toggle-track {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK THEME
+   ───────────────────────────────────────────────────────────────
+   Two layers, for the same reason the light theme has two:
+
+   1. The semantic tokens above are re-pointed, so everything that
+      already reads var(--surface-*), var(--text-*) or var(--border)
+      — the sidebar, cards, illustrations — follows without edits.
+
+   2. The palette utilities the templates actually use are remapped.
+      The 250+ templates were written against the light Tailwind
+      palette (bg-white, text-stone-900, ...) long before there was a
+      theme, and rewriting every one of them to semantic tokens is not
+      a change worth making in one step. These rules sit outside any
+      @layer, so they win over Tailwind's layered utilities.
+
+   When touching a template, prefer semantic tokens or `dark:`
+   utilities; the remap is here to cover what predates them.
+   ═══════════════════════════════════════════════════════════════ */
+
+html.dark {
+  color-scheme: dark;
+
+  /* The raw neutral ramp is inverted too, not only the semantic tokens.
+     Templates and the calendar's own <style> block reference
+     var(--neutral-100), var(--neutral-900) and friends directly in inline
+     styles, which no utility remap can reach. Inverting the ramp here fixes
+     every one of those at once. The light theme reads lighter numbers as
+     lighter surfaces; under dark they read as darker surfaces, and the text
+     numbers invert correspondingly. */
+  --neutral-950: #0F0D0B;
+  --neutral-900: #F5F4F2;
+  --neutral-800: #E8E6E3;
+  --neutral-700: #D3CFCA;
+  --neutral-600: #B4AEA8;
+  --neutral-500: #A29C96;
+  --neutral-400: #8B857F;
+  --neutral-300: #46403B;
+  --neutral-200: #37322E;
+  --neutral-100: #2A2623;
+  --neutral-50:  #221F1C;
+
+  /* Brand tints. These feed the soft component classes (.sidebar-nav-item.active,
+     .inbox-tab.active, .cal-filter-select, badges) that paint
+     background: var(--primary-soft) and colour: var(--brand-700). The 500/600
+     steps stay as they are: they are the orange you click, and they still read
+     on a dark surface. Only the tints and the dark-on-light text steps move. */
+  --brand-50:  #2A1A0C;
+  --brand-100: #37210E;
+  --brand-200: #6E3914;
+  --brand-700: #FDBA74;
+  --brand-800: #FED7AA;
+
+  /* Status text steps that are only ever used as foreground (verified across
+     the templates: --warning-700, --success-700, --error-700 and --info-700
+     are colours, never fills) plus the soft fills named above.
+     --error-500 stays put: it is both a text colour and the Delete button's
+     fill, and mid-red reads on dark either way. */
+  --warning-700: #FCD34D;
+  --success-700: #86EFAC;
+  --error-700:   #FCA5A5;
+  --info-700:    #93C5FD;
+  --warning-soft: #2A1F0B;
+  --success-soft: #12241A;
+  --error-soft:   #2C1414;
+  --info-soft:    #131F33;
+
+  /* Surfaces */
+  --surface-0: #1B1817;
+  --surface-page: #131110;
+  --surface-1: #201D1B;
+  --surface-2: #262220;
+  --surface-3: #302B28;
+  --border: #37322E;
+  --border-hover: #46403B;
+
+  /* Text */
+  --text-primary: #F5F4F2;
+  --text-secondary: #B4AEA8;
+  --text-tertiary: #A29C96;
+  --text-ghost: #8B857F;
+  --text-inverse: #1B1817;
+
+  /* Illustrations */
+  --color-illustration-border: #37322E;
+  --color-illustration-card: #201D1B;
+  --color-illustration-element: #302B28;
+  --color-illustration-secondary-element: #262220;
+
+  /* Shadows need more weight against a dark surface to read at all. */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.55), 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6), 0 8px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Surfaces ──────────────────────────────────────────────────── */
+
+html.dark .bg-white { background-color: var(--surface-0); }
+html.dark .bg-stone-50 { background-color: var(--surface-1); }
+html.dark .bg-stone-100 { background-color: var(--surface-2); }
+html.dark .bg-stone-200 { background-color: var(--surface-3); }
+html.dark .bg-stone-300 { background-color: #3A3431; }
+/* TikTok's tile and similar: keep the contrast so the white glyph survives. */
+html.dark .bg-stone-900 { background-color: #0E0C0B; }
+
+/* Translucent white is an overlay/hover wash in the light theme; on dark it
+   has to be a light wash instead, or it disappears. */
+html.dark .bg-white\/40 { background-color: rgba(27, 24, 23, 0.6); }
+html.dark .bg-white\/50 { background-color: rgba(27, 24, 23, 0.65); }
+html.dark .bg-white\/80 { background-color: rgba(27, 24, 23, 0.85); }
+html.dark .bg-white\/90 { background-color: rgba(27, 24, 23, 0.92); }
+
+/* ── Text ──────────────────────────────────────────────────────── */
+
+html.dark .text-stone-900 { color: #F5F4F2; }
+html.dark .text-stone-800 { color: #E8E6E3; }
+html.dark .text-stone-700 { color: #D3CFCA; }
+html.dark .text-stone-600 { color: #B4AEA8; }
+html.dark .text-stone-500 { color: #A29C96; }
+html.dark .text-stone-400 { color: #8B857F; }
+html.dark .text-stone-300 { color: #6F6963; }
+
+/* ── Borders, rings, dividers ──────────────────────────────────── */
+
+html.dark .border-stone-100 { border-color: #2A2623; }
+html.dark .border-stone-200 { border-color: #37322E; }
+html.dark .border-stone-300 { border-color: #46403B; }
+html.dark .ring-stone-100 { --tw-ring-color: #2A2623; }
+html.dark .ring-stone-200 { --tw-ring-color: #37322E; }
+html.dark .divide-stone-100 > :not([hidden]) ~ :not([hidden]) { border-color: #2A2623; }
+html.dark .divide-stone-200 > :not([hidden]) ~ :not([hidden]) { border-color: #37322E; }
+
+/* ── Brand accent ──────────────────────────────────────────────── */
+
+html.dark .bg-orange-50 { background-color: #2A1A0C; }
+html.dark .bg-orange-100 { background-color: #37210E; }
+html.dark .border-orange-200 { border-color: #6E3914; }
+html.dark .border-orange-300 { border-color: #8A4A1A; }
+html.dark .text-orange-600 { color: #FB923C; }
+html.dark .text-orange-700 { color: #FDBA74; }
+html.dark .hover\:bg-orange-100:hover { background-color: #44280F; }
+html.dark .hover\:bg-orange-50:hover { background-color: #321F0E; }
+
+/* ── Status tints (alerts, badges, message banners) ────────────── */
+
+html.dark .bg-red-50 { background-color: #2C1414; }
+html.dark .bg-red-100 { background-color: #3A1B1B; }
+html.dark .bg-green-50 { background-color: #12241A; }
+html.dark .bg-green-100 { background-color: #16301F; }
+html.dark .bg-blue-50 { background-color: #131F33; }
+html.dark .bg-amber-50 { background-color: #2A1F0B; }
+html.dark .bg-amber-100 { background-color: #3A2B0F; }
+html.dark .bg-yellow-50 { background-color: #2A2410; }
+html.dark .bg-emerald-50 { background-color: #0F2620; }
+html.dark .bg-sky-50 { background-color: #10202E; }
+html.dark .bg-indigo-50 { background-color: #1A1B33; }
+html.dark .bg-teal-50 { background-color: #0E2523; }
+html.dark .bg-rose-50 { background-color: #2A1218; }
+
+html.dark .text-red-700,
+html.dark .text-red-800 { color: #FCA5A5; }
+html.dark .text-green-700,
+html.dark .text-green-800 { color: #86EFAC; }
+html.dark .text-blue-700,
+html.dark .text-blue-800 { color: #93C5FD; }
+html.dark .text-amber-700,
+html.dark .text-amber-800 { color: #FCD34D; }
+html.dark .text-yellow-700 { color: #FDE047; }
+html.dark .text-emerald-700 { color: #6EE7B7; }
+html.dark .text-sky-700 { color: #7DD3FC; }
+html.dark .text-indigo-700 { color: #A5B4FC; }
+
+html.dark .border-red-200 { border-color: #5A2626; }
+html.dark .border-green-200 { border-color: #1F4A32; }
+html.dark .border-blue-200 { border-color: #22405F; }
+html.dark .border-amber-200 { border-color: #5C4415; }
+
+/* ── Interaction washes ────────────────────────────────────────── */
+
+/* opacity-60 marks a disabled control. On dark it cuts contrast that is
+   already lower, so the label inside ("Not Configured", a disabled key row)
+   drops below readable. Keep the distinction, drop the unreadability. */
+html.dark .opacity-60 { opacity: 0.8; }
+
+/* The light theme darkens rows on hover; on a dark surface that is invisible. */
+html.dark .hover\:bg-black\/\[0\.04\]:hover { background-color: rgba(255, 255, 255, 0.06); }
+html.dark .hover\:bg-black\/\[0\.02\]:hover { background-color: rgba(255, 255, 255, 0.04); }
+html.dark .hover\:bg-stone-50:hover { background-color: #262220; }
+html.dark .hover\:bg-stone-100:hover { background-color: #2E2A27; }
+html.dark .hover\:bg-stone-200:hover { background-color: #383230; }
+
+/* ── Form controls ─────────────────────────────────────────────── */
+
+html.dark ::placeholder { color: #7A746E; }
+html.dark input,
+html.dark select,
+html.dark textarea { color-scheme: dark; }
+/* Native option lists are painted by the OS, not by our CSS. */
+html.dark option { background-color: #262220; color: #F5F4F2; }
+
+/* ── Theme switch ──────────────────────────────────────────────── */
+
+/* Suppress the one-frame colour transition while the class is being swapped,
+   except for visitors who have not asked for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-switching,
+  html.theme-switching * {
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
 }

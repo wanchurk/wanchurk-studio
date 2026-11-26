@@ -387,6 +387,18 @@
         width: 12px; height: 12px; border: none; background: none;
         cursor: pointer; color: inherit; padding: 0;
     }
+
+    /* ── Dark theme ────────────────────────────────────────────────
+       Colours above are baked into this page; restate them for dark. */
+    html.dark .create-tab:hover { color: #F5F4F2; border-bottom-color: #46403B; }
+    html.dark .kanban-column { background: #201D1B; }
+    html.dark .kanban-cards.drag-over,
+    html.dark .kanban-column.column-drag-over { background: #2A1A0C; }
+    html.dark .idea-card { background: #1B1817; border-color: #37322E; }
+    html.dark .idea-card:hover { border-color: #46403B; }
+    html.dark .tag-chip { background: #2A1A0C; color: #FDBA74; }
+    html.dark .tag-chip button:hover { background: #37210E; }
+    html.dark .new-idea-inline:hover { color: #B4AEA8; }
 </style>
 {% endblock %}
 

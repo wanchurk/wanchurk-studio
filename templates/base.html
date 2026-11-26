@@ -17,6 +17,17 @@
         if (localStorage.getItem('sidebarCollapsed') === 'true') {
             document.documentElement.classList.add('sidebar-is-collapsed');
         }
+        // Resolve the colour theme before first paint. A stored choice wins;
+        // otherwise follow the OS. Doing this inline (not on DOMContentLoaded)
+        // is what stops a dark-mode visitor seeing a white flash.
+        (function () {
+            var stored = null;
+            try { stored = localStorage.getItem('theme'); } catch (e) {}
+            var dark = stored === 'dark' || (stored === null &&
+                window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (dark) { document.documentElement.classList.add('dark'); }
+            document.documentElement.dataset.themeSource = stored === null ? 'system' : 'user';
+        })();
     </script>
     <style>
         [x-cloak] { display: none !important; }
@@ -212,6 +223,81 @@
         document.body.addEventListener('htmx:configRequest', function(event) {
             event.detail.headers['X-CSRFToken'] = document.querySelector('[name=csrfmiddlewaretoken]').value;
         });
+    </script>
+
+    <script nonce="{{ request.csp_nonce }}">
+        // Colour theme switch. The initial class is applied inline in <head>;
+        // this only handles user choice and keeps the buttons in sync.
+        (function () {
+            var root = document.documentElement;
+            var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+            function stored() {
+                try { return localStorage.getItem('theme'); } catch (e) { return null; }
+            }
+
+            function isDark() {
+                var choice = stored();
+                if (choice === 'dark') return true;
+                if (choice === 'light') return false;
+                return !!(media && media.matches);
+            }
+
+            function sync() {
+                var current = isDark() ? 'dark' : 'light';
+                var options = document.querySelectorAll('[data-theme-option]');
+                for (var i = 0; i < options.length; i++) {
+                    var active = options[i].getAttribute('data-theme-option') === current;
+                    options[i].setAttribute('aria-pressed', active ? 'true' : 'false');
+                    options[i].classList.toggle('bg-white', active);
+                    options[i].classList.toggle('shadow-sm', active);
+                    options[i].classList.toggle('ring-1', active);
+                    options[i].classList.toggle('ring-stone-200', active);
+                    options[i].classList.toggle('font-semibold', active);
+                    options[i].classList.toggle('text-stone-900', active);
+                    options[i].classList.toggle('text-stone-400', !active);
+                    options[i].classList.toggle('hover:text-stone-600', !active);
+                }
+            }
+
+            function apply(choice, animate) {
+                try { localStorage.setItem('theme', choice); } catch (e) {}
+                root.dataset.themeSource = 'user';
+                if (animate) {
+                    root.classList.add('theme-switching');
+                    window.setTimeout(function () {
+                        root.classList.remove('theme-switching');
+                    }, 200);
+                }
+                root.classList.toggle('dark', choice === 'dark');
+                sync();
+            }
+
+            document.addEventListener('click', function (event) {
+                var button = event.target.closest ? event.target.closest('[data-theme-option]') : null;
+                if (!button) return;
+                event.preventDefault();
+                apply(button.getAttribute('data-theme-option'), true);
+            });
+
+            // Follow the OS until the visitor makes an explicit choice.
+            if (media) {
+                var onChange = function () {
+                    if (stored() === null) {
+                        root.classList.toggle('dark', media.matches);
+                        sync();
+                    }
+                };
+                if (media.addEventListener) media.addEventListener('change', onChange);
+                else if (media.addListener) media.addListener(onChange);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', sync);
+            } else {
+                sync();
+            }
+        })();
     </script>
 
     {% comment %}
@@ -856,6 +942,23 @@
                                 </button>
                             </form>
                             {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Appearance -->
+                    <div class="px-4 pb-3">
+                        <p class="text-[11px] font-medium text-stone-400 uppercase tracking-wide mb-1.5">{% trans "Appearance" %}</p>
+                        <div class="theme-switch flex items-center gap-1 p-0.5 bg-stone-100 rounded-lg" role="group" aria-label="{% trans 'Colour theme' %}">
+                            <button type="button" data-theme-option="light"
+                                    class="theme-option flex-1 inline-flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                                {% trans "Light" %}
+                            </button>
+                            <button type="button" data-theme-option="dark"
+                                    class="theme-option flex-1 inline-flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                                {% trans "Dark" %}
+                            </button>
                         </div>
                     </div>
 

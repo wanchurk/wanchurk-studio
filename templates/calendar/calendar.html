@@ -352,6 +352,58 @@
 
     /* Play slideUp only on HTMX-swapped tab content, not initial server render */
     .tab-slide-in { animation: slideUp 200ms cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* ── Dark theme ────────────────────────────────────────────────
+       The rules above bake light colours into this page, and inline
+       style attributes on the legend win over any stylesheet. Both are
+       restated here for dark so the month grid does not stay a white
+       slab on a dark page. */
+    html.dark .cal-day { background: #1B1817; }
+    html.dark .cal-day:hover { background: #262220; }
+    html.dark .cal-day.past { background: #201D1B; }
+    html.dark .cal-day.past:hover { background: #262220; }
+    html.dark .cal-day.today { background: #2A1A0C; }
+    html.dark .cal-day .day-num { color: #D3CFCA; }
+    html.dark .cal-day.past .day-num { color: #8B857F; }
+
+    html.dark .status-draft            { background: #2A2623; color: #B4AEA8; border-color: #37322E; }
+    html.dark .status-pending_review,
+    html.dark .status-pending_client,
+    html.dark .status-changes_requested { background: #2A1A0C; color: #FDBA74; border-color: #6E3914; }
+    html.dark .status-scheduled        { background: #131F33; color: #93C5FD; border-color: #22405F; }
+    html.dark .status-published        { background: #12241A; color: #86EFAC; border-color: #1F4A32; }
+    html.dark .status-approved         { background: #0E2523; color: #5EEAD4; border-color: #134E4A; }
+    html.dark .status-rejected         { background: #2C1414; color: #FCA5A5; border-color: #5A2626; }
+
+    /* Legend labels: inline colours replaced by these classes. */
+    .legend-draft      { color: #57534E; }
+    .legend-pending    { color: #C2410C; }
+    .legend-approved   { color: #0F766E; }
+    .legend-scheduled  { color: #1D4ED8; }
+    .legend-publishing { color: #4338CA; }
+    .legend-published  { color: #15803D; }
+    .legend-failed     { color: #B91C1C; }
+
+    html.dark .legend-draft      { color: #A29C96; }
+    html.dark .legend-pending    { color: #FDBA74; }
+    html.dark .legend-approved   { color: #5EEAD4; }
+    html.dark .legend-scheduled  { color: #93C5FD; }
+    html.dark .legend-publishing { color: #A5B4FC; }
+    html.dark .legend-published  { color: #86EFAC; }
+    html.dark .legend-failed     { color: #FCA5A5; }
+
+    /* View switcher and filter dropdowns: this block hardcodes white/stone. */
+    html.dark .view-btn { color: #A29C96; }
+    html.dark .view-btn:hover { color: #F5F4F2; background: #2A2623; }
+    html.dark .view-btn.active { color: #FDBA74; background: #2A1A0C; border-color: #6E3914; }
+    html.dark .publish-filter-select,
+    html.dark .cal-filter-select {
+        color: #B4AEA8;
+        background-color: #1B1817;
+        border-color: #37322E;
+    }
+    html.dark .publish-filter-select:hover,
+    html.dark .cal-filter-select:hover { border-color: #46403B; }
 </style>
 {% endblock %}
 

@@ -26,9 +26,9 @@
         <!-- Org Role Badge -->
         <div class="flex-shrink-0">
             {% if member.membership.org_role == "owner" %}
-            <span class="text-xs font-medium px-2.5 py-1 rounded-full" style="background: #FEF3C7; color: #92400E;">{% trans "Owner" %}</span>
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full" style="background: var(--warning-soft, #FEF3C7); color: var(--warning-700, #92400E);">{% trans "Owner" %}</span>
             {% elif member.membership.org_role == "admin" %}
-            <span class="text-xs font-medium px-2.5 py-1 rounded-full" style="background: #DBEAFE; color: #1E40AF;">{% trans "Admin" %}</span>
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full" style="background: var(--info-soft, #DBEAFE); color: var(--info-700, #1E40AF);">{% trans "Admin" %}</span>
             {% else %}
             <span class="text-xs font-medium px-2.5 py-1 rounded-full" style="background: var(--neutral-100); color: var(--text-secondary);">{% trans "Member" %}</span>
             {% endif %}
