@@ -6,6 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
 
+def skip_last_workspace_tracking(view_func):
+    """Resolve URL-scoped RBAC context without recording the user's last workspace."""
+    view_func.skip_last_workspace_tracking = True
+    return view_func
+
+
 def require_org_role(min_role):
     """Decorator that requires a minimum org role.
 

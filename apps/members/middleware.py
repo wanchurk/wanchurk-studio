@@ -109,7 +109,8 @@ class RBACMiddleware:
         request.workspace_membership = ws_membership
 
         # Keep last_workspace_id in sync so global pages show the right workspace
-        if request.user.last_workspace_id != ws_membership.workspace_id:
+        track_last_workspace = not getattr(view_func, "skip_last_workspace_tracking", False)
+        if track_last_workspace and request.user.last_workspace_id != ws_membership.workspace_id:
             request.user.last_workspace_id = ws_membership.workspace_id
             request.user.save(update_fields=["last_workspace_id"])
 
