@@ -64,3 +64,66 @@ class SidebarConnectChannelsTests(TestCase):
         self.assertIn(VIDEO_GLYPH, rows["YouTube"])
         self.assertNotIn("youtube-label", rows["YouTube"])
         self.assertNotIn("icon-red.png", rows["YouTube"])
+
+    def test_sidebar_groups_are_collapsed_and_link_each_account(self):
+        facebook = SocialAccount.objects.create(
+            workspace=self.ws, platform="facebook", account_platform_id="fb-1", account_name="Page A"
+        )
+        inactive = SocialAccount.objects.create(
+            workspace=self.ws,
+            platform="facebook",
+            account_platform_id="fb-2",
+            account_name="Page B",
+            connection_status=SocialAccount.ConnectionStatus.ERROR,
+        )
+        insta = SocialAccount.objects.create(
+            workspace=self.ws, platform="instagram_login", account_platform_id="ig-1", account_name="Instagram A"
+        )
+        instagram_via_meta = SocialAccount.objects.create(
+            workspace=self.ws, platform="instagram", account_platform_id="ig-2", account_name="Instagram B"
+        )
+
+        response = self.client.get(reverse("calendar:calendar", kwargs={"workspace_id": self.ws.id}))
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        groups = {
+            platform: attrs
+            for attrs, platform in re.findall(r'<details\b([^>]*?data-channel-platform="([^"]+)"[^>]*)>', html)
+        }
+        self.assertEqual(set(groups), {"facebook", "instagram"})
+        self.assertEqual(html.count('data-channel-platform="facebook"'), 1)
+        self.assertNotRegex(groups["facebook"], r"\bopen\b")
+        self.assertNotRegex(groups["instagram"], r"\bopen\b")
+        for account in (facebook, inactive, insta, instagram_via_meta):
+            url = reverse("social_accounts:detail", kwargs={"workspace_id": self.ws.id, "account_id": account.id})
+            self.assertContains(response, f'href="{url}"')
+        reconnect = reverse("social_accounts:reconnect", kwargs={"workspace_id": self.ws.id, "account_id": inactive.id})
+        self.assertContains(response, f'action="{reconnect}"')
+
+    def test_sidebar_does_not_link_to_management_for_read_only_roles(self):
+        WorkspaceMembership.objects.filter(user=self.user, workspace=self.ws).update(workspace_role="viewer")
+        account = SocialAccount.objects.create(
+            workspace=self.ws, platform="facebook", account_platform_id="fb-1", account_name="Company Page"
+        )
+        response = self.client.get(reverse("calendar:calendar", kwargs={"workspace_id": self.ws.id}))
+        self.assertContains(response, "Company Page")
+        url = reverse("social_accounts:detail", kwargs={"workspace_id": self.ws.id, "account_id": account.id})
+        self.assertNotContains(response, f'href="{url}"')
+        self.assertEqual(self.client.get(url).status_code, 403)
+
+    def test_read_only_sidebar_shows_disconnected_state_without_a_reconnect_button(self):
+        WorkspaceMembership.objects.filter(user=self.user, workspace=self.ws).update(workspace_role="viewer")
+        account = SocialAccount.objects.create(
+            workspace=self.ws,
+            platform="facebook",
+            account_platform_id="fb-offline",
+            account_name="Offline Page",
+            connection_status=SocialAccount.ConnectionStatus.DISCONNECTED,
+        )
+        self.client.cookies["ui_lang"] = "zh"
+        response = self.client.get(reverse("calendar:calendar", kwargs={"workspace_id": self.ws.id}))
+        self.assertContains(response, "Offline Page")
+        sidebar = response.content.decode().split('data-channel-platform="facebook"', 1)[1].split("</details>", 1)[0]
+        self.assertIn("已断开", sidebar)
+        url = reverse("social_accounts:reconnect", kwargs={"workspace_id": self.ws.id, "account_id": account.id})
+        self.assertNotContains(response, f'action="{url}"')

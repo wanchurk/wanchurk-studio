@@ -40,6 +40,7 @@
         html.sidebar-is-collapsed .sidebar-initial .sidebar-section-label-wrap,
         html.sidebar-is-collapsed .sidebar-initial .sidebar-badge { display: none; }
         html.sidebar-is-collapsed .sidebar-initial .sidebar-new-label,
+        html.sidebar-is-collapsed .sidebar-initial .sidebar-channel-list,
         html.sidebar-is-collapsed .sidebar-initial .sidebar-connect-channels,
         html.sidebar-is-collapsed .sidebar-initial .sidebar-review-banner { display: none; }
         /* Collapsed child overrides before Alpine */
@@ -773,66 +774,7 @@
                 {% endif %}
 
                 {% if request.workspace %}
-                {% if sidebar_channels or sidebar_unhealthy_channels %}
-                <!-- Channels -->
-                <div class="group flex items-center justify-between mt-3.5 sidebar-section-label-wrap">
-                    <div class="sidebar-section-label" style="padding-top:0">{% if ui_is_zh %}渠道{% else %}Channels{% endif %}</div>
-                    <a href="{% url 'social_accounts:connect' workspace_id=request.workspace.id %}"
-                       class="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-stone-400 hover:text-stone-600 transition-all mr-2 sidebar-nav-label"
-                       title="{% trans 'Connect a channel' %}">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </a>
-                </div>
-                {% for channel in sidebar_channels %}
-                <a href="{% url 'social_accounts:list' workspace_id=request.workspace.id %}" class="sidebar-nav-item" title="{% if channel.platform == 'youtube' %}YouTube · {% endif %}{{ channel.account_name|default:channel.account_handle }} · {{ channel.queued_post_count|default:0 }} upcoming post{{ channel.queued_post_count|default:0|pluralize }}">
-                    <div class="relative flex-shrink-0">
-                        {% if channel.avatar_url %}
-                        <img src="{{ channel.avatar_url }}" alt="" class="w-7 h-7 rounded-full object-cover">
-                        {% else %}
-                        <div class="w-7 h-7 rounded-full bg-stone-200 flex items-center justify-center text-[11px] font-semibold text-stone-500">{{ channel.account_name|default:channel.account_handle|make_list|first|upper }}</div>
-                        {% endif %}
-                        {% if channel.platform != "youtube" %}<div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                            {% include "partials/_platform_icon.html" with platform=channel.platform size="sm" %}
-                        </div>{% endif %}
-                    </div>
-                    {% if channel.platform == "youtube" %}
-                    <span class="sidebar-nav-label min-w-0 flex-1" style="line-height:1.35;">
-                        <span class="block text-[11px] font-semibold text-stone-500">YouTube</span>
-                        <span class="block truncate">{{ channel.account_name|default:channel.account_handle }}</span>
-                    </span>
-                    {% else %}<span class="sidebar-nav-label truncate">{{ channel.account_name|default:channel.account_handle }}</span>{% endif %}
-                    <span class="sidebar-badge">{{ channel.queued_post_count|default:0 }}</span>
-                </a>
-                {% endfor %}
-                {% endif %}
-
-                {% for channel in sidebar_unhealthy_channels %}
-                <div class="sidebar-nav-item flex items-center gap-2">
-                    <div class="relative flex-shrink-0 opacity-60">
-                        {% if channel.avatar_url %}
-                        <img src="{{ channel.avatar_url }}" alt="" class="w-7 h-7 rounded-full object-cover grayscale" x-data @error="$el.style.display='none';$el.nextElementSibling.style.display='flex'">
-                        <div class="w-7 h-7 rounded-full bg-stone-200 items-center justify-center text-[11px] font-semibold text-stone-500" style="display:none">{{ channel.account_name|default:channel.account_handle|make_list|first|upper }}</div>
-                        {% else %}
-                        <div class="w-7 h-7 rounded-full bg-stone-200 flex items-center justify-center text-[11px] font-semibold text-stone-500">{{ channel.account_name|default:channel.account_handle|make_list|first|upper }}</div>
-                        {% endif %}
-                        {% if channel.platform != "youtube" %}<div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                            {% include "partials/_platform_icon.html" with platform=channel.platform size="sm" %}
-                        </div>{% endif %}
-                    </div>
-                    {% if channel.platform == "youtube" %}
-                    <span class="sidebar-nav-label min-w-0 flex-1 text-stone-400" style="line-height:1.35;">
-                        <span class="block text-[11px] font-semibold">YouTube</span>
-                        <span class="block truncate">{{ channel.account_name|default:channel.account_handle }}</span>
-                    </span>
-                    {% else %}<span class="sidebar-nav-label truncate flex-1 text-stone-400 opacity-60">{{ channel.account_name|default:channel.account_handle }}</span>{% endif %}
-                    <form method="post" action="{% url 'social_accounts:reconnect' workspace_id=request.workspace.id account_id=channel.id %}" class="sidebar-nav-label">
-                        {% csrf_token %}
-                        <button type="submit" class="inline-flex items-center px-2 py-0.5 text-[11px] font-semibold text-orange-700 bg-orange-50 rounded-full hover:bg-orange-100 transition-colors cursor-pointer" title="Reconnect {{ channel.account_name|default:channel.account_handle }}">
-                            {% trans "Reconnect" %}
-                        </button>
-                    </form>
-                </div>
-                {% endfor %}
+                {% include "partials/_sidebar_channel_groups.html" %}
 
                 <!-- Connect channels (hidden when collapsed) -->
                 {% if sidebar_connectable_platforms %}

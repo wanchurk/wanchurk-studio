@@ -1282,5 +1282,10 @@
   "Appearance": "外观",
   "Colour theme": "配色主题",
   "Light": "浅色",
-  "Dark": "深色"
+  "Dark": "深色",
+  "Connected on": "连接日期",
+  "No posts yet.": "暂无帖子",
+  "Recent posts on this account": "该账号的近期帖子",
+  "Subscribers": "订阅数",
+  "Untitled post": "未命名帖子"
 }

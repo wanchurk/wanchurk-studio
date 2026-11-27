@@ -176,6 +176,19 @@ body {
   color: var(--brand-700);
   font-weight: 600;
 }
+.sidebar-channel-toggle {
+  list-style: none;
+}
+.sidebar-channel-toggle::-webkit-details-marker {
+  display: none;
+}
+.sidebar-channel-group[open] .sidebar-channel-chevron {
+  transform: rotate(90deg);
+}
+/* Keep monochrome marks visible in the dark icon-only sidebar. */
+html.dark .sidebar-channel-icon > svg[fill="#000000"] {
+  fill: var(--text-primary);
+}
 .sidebar-section-label {
   font-size: 10px;
   font-weight: 700;
@@ -220,6 +233,7 @@ img.sidebar-logo-mark {
   .sidebar-collapsed .sidebar-nav-label,
   .sidebar-collapsed .sidebar-section-label,
   .sidebar-collapsed .sidebar-section-label-wrap,
+  .sidebar-collapsed .sidebar-channel-list,
   .sidebar-collapsed .sidebar-badge {
     display: none;
   }

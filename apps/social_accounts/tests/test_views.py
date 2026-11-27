@@ -1234,3 +1234,72 @@ class TestMastodonConnectView:
         response = authenticated_client.get(url)
         assert response.status_code == 200
         assert "连接 Mastodon".encode() in response.content
+
+
+@pytest.mark.django_db
+class TestAccountDetail:
+    """The sidebar channel link now opens a per-account detail page, not the
+    whole connected-accounts list."""
+
+    def _account(self, workspace, **overrides):
+        base = {
+            "workspace": workspace,
+            "platform": "instagram_login",
+            "account_platform_id": "ig-detail-1",
+            "account_name": "Detail Page",
+            "account_handle": "detailpage",
+            "oauth_access_token": "***",
+            "connection_status": SocialAccount.ConnectionStatus.CONNECTED,
+        }
+        base.update(overrides)
+        return SocialAccount.objects.create(**base)
+
+    def test_happy_path_renders_account_and_posts_section(self, authenticated_client, workspace, user):
+        from apps.composer.models import PlatformPost, Post
+
+        account = self._account(workspace)
+        post = Post.objects.create(workspace=workspace, author=user, title="My Detail Post")
+        PlatformPost.objects.create(post=post, social_account=account, status=PlatformPost.Status.DRAFT)
+
+        url = reverse("social_accounts:detail", kwargs={"workspace_id": workspace.id, "account_id": account.id})
+        response = authenticated_client.get(url)
+        assert response.status_code == 200
+        body = response.content.decode()
+        # "Detail Page" = the account's name/header; "My Detail Post" = the post
+        # title rendered by the "recent posts" section, proving it actually
+        # iterated this account's posts. Both are pure data (no {% trans %}),
+        # so they survive the UI-language middleware.
+        assert "Detail Page" in body
+        assert "My Detail Post" in body
+        assert re.search(r'<a\b[^>]*href="' + re.escape(url) + r'"[^>]*aria-current="page"', body)
+
+    def test_recent_posts_show_account_specific_caption_when_untitled(self, authenticated_client, workspace, user):
+        from apps.composer.models import PlatformPost, Post
+
+        account = self._account(workspace)
+        sibling = self._account(workspace, account_platform_id="ig-other")
+        post = Post.objects.create(workspace=workspace, author=user)
+        PlatformPost.objects.create(post=post, social_account=account, platform_specific_caption="New shop photos")
+        other_post = Post.objects.create(workspace=workspace, author=user, title="Sibling account post")
+        PlatformPost.objects.create(post=other_post, social_account=sibling)
+
+        url = reverse("social_accounts:detail", kwargs={"workspace_id": workspace.id, "account_id": account.id})
+        body = authenticated_client.get(url).content.decode()
+        assert "New shop photos" in body
+        assert "Sibling account post" not in body
+
+    def test_scoped_to_workspace_returns_404(self, authenticated_client, workspace, user):
+        from apps.members.models import WorkspaceMembership
+        from apps.workspaces.models import Workspace
+
+        other = Workspace.objects.create(name="Other WS", organization=workspace.organization)
+        WorkspaceMembership.objects.create(user=user, workspace=other, workspace_role="manager")
+        account = self._account(workspace)
+        url = reverse("social_accounts:detail", kwargs={"workspace_id": other.id, "account_id": account.id})
+        assert authenticated_client.get(url).status_code == 404
+
+    def test_unknown_account_id_returns_404(self, authenticated_client, workspace):
+        import uuid
+
+        url = reverse("social_accounts:detail", kwargs={"workspace_id": workspace.id, "account_id": uuid.uuid4()})
+        assert authenticated_client.get(url).status_code == 404

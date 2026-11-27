@@ -28,15 +28,18 @@ def sidebar_context(request):
 
     Provides:
         sidebar_workspaces: list of workspace objects the user belongs to
-        sidebar_channels: connected social accounts for the current workspace
+        sidebar_channel_groups: accounts grouped by social network
         sidebar_connectable_platforms: platforms available to connect
     """
     if not hasattr(request, "user") or not request.user.is_authenticated:
         return {}
 
+    from apps.members.decorators import membership_permissions
     from apps.members.models import WorkspaceMembership
     from apps.social_accounts.models import AnalyticsPlatformConfig, PlatformVisibility, SocialAccount
 
+    permissions = membership_permissions(request)
+    can_manage_channels = bool(permissions.get("manage_social_accounts"))
     analytics_enabled_platforms = AnalyticsPlatformConfig.enabled_platforms()
 
     # User's workspaces (non-archived)
@@ -50,50 +53,40 @@ def sidebar_context(request):
     )
     sidebar_workspaces = [wm.workspace for wm in workspace_memberships]
 
-    # Connected channels for the current workspace
-    sidebar_channels = []
-    sidebar_unhealthy_channels = []
+    sidebar_channel_groups = []
+    sidebar_active_channel_id = None
     sidebar_connectable_platforms = []
-
     workspace = getattr(request, "workspace", None)
 
     if workspace:
         from apps.composer.models import PlatformPost
 
-        sidebar_channels = list(
+        match = getattr(request, "resolver_match", None)
+        if match and match.view_name == "social_accounts:detail":
+            sidebar_active_channel_id = match.kwargs.get("account_id")
+
+        channels = list(
             SocialAccount.objects.for_workspace(workspace.id)
-            .filter(connection_status=SocialAccount.ConnectionStatus.CONNECTED)
             .annotate(
                 queued_post_count=Count(
                     "platform_posts",
                     filter=Q(platform_posts__status=PlatformPost.Status.SCHEDULED),
                 )
             )
-            .order_by("platform", "account_name")
+            .order_by("account_name", "id")
         )
+        sidebar_channel_groups = _group_channels(channels, sidebar_active_channel_id)
 
-        sidebar_unhealthy_channels = list(
-            SocialAccount.objects.for_workspace(workspace.id)
-            .filter(
-                connection_status__in=[
-                    SocialAccount.ConnectionStatus.DISCONNECTED,
-                    SocialAccount.ConnectionStatus.ERROR,
-                    SocialAccount.ConnectionStatus.TOKEN_EXPIRING,
-                ]
+        if can_manage_channels:
+            # Suggestions are per integration, even when displayed channels
+            # use the same network under different authorization modes.
+            connected_platforms = {
+                ch.platform for ch in channels if ch.connection_status == SocialAccount.ConnectionStatus.CONNECTED
+            }
+            sidebar_connectable_platforms = sorted(
+                ((p, label) for p, label in PlatformVisibility.visible_choices() if p not in connected_platforms),
+                key=_connect_suggestion_rank,
             )
-            .order_by("platform", "account_name")
-        )
-
-        # Connectable platforms: not yet connected in this workspace.
-        # Show all known platforms (configured or not) so the sidebar
-        # always surfaces what can be connected. The connect page itself
-        # handles the "not configured" case with an admin prompt, and shares
-        # PlatformVisibility.visible_choices() with us so the two can't disagree.
-        connected_platforms = {ch.platform for ch in sidebar_channels}
-        sidebar_connectable_platforms = sorted(
-            ((p, label) for p, label in PlatformVisibility.visible_choices() if p not in connected_platforms),
-            key=_connect_suggestion_rank,
-        )
 
     # Unread inbox count for sidebar badge
     sidebar_unread_inbox_count = 0
@@ -149,8 +142,9 @@ def sidebar_context(request):
     return {
         "sidebar_workspaces": sidebar_workspaces,
         "can_create_workspace": can_create_workspace,
-        "sidebar_channels": sidebar_channels,
-        "sidebar_unhealthy_channels": sidebar_unhealthy_channels,
+        "sidebar_channel_groups": sidebar_channel_groups,
+        "sidebar_active_channel_id": sidebar_active_channel_id,
+        "sidebar_can_manage_channels": can_manage_channels,
         "sidebar_connectable_platforms": sidebar_connectable_platforms,
         "sidebar_unread_inbox_count": sidebar_unread_inbox_count,
         "sidebar_pending_approvals": sidebar_pending_approvals,
@@ -159,15 +153,28 @@ def sidebar_context(request):
         "analytics_enabled_platforms": analytics_enabled_platforms,
         # The analytics views require view_analytics; hide the link from a role
         # (built-in contributor, or a custom role) that would only get a 403.
-        "sidebar_can_view_analytics": _can_view_analytics(request),
+        "sidebar_can_view_analytics": bool(permissions.get("view_analytics")),
         "show_review_banner": show_review_banner,
     }
 
 
-def _can_view_analytics(request):
-    from apps.members.decorators import membership_permissions
+_SIDEBAR_NETWORKS = {
+    "instagram_login": ("instagram", "Instagram"),
+    "linkedin_company": ("linkedin", "LinkedIn"),
+    "linkedin_personal": ("linkedin", "LinkedIn"),
+}
 
-    return bool(membership_permissions(request).get("view_analytics", False))
+
+def _group_channels(channels, active_channel_id):
+    """Group visually by social network without changing account/provider identifiers."""
+    groups = {}
+    for channel in channels:
+        platform, label = _SIDEBAR_NETWORKS.get(channel.platform, (channel.platform, channel.get_platform_display()))
+        group = groups.setdefault(platform, {"platform": platform, "label": label, "accounts": [], "active": False})
+        group["accounts"].append(channel)
+        if channel.id == active_channel_id:
+            group["active"] = True
+    return [groups[platform] for platform in sorted(groups)]
 
 
 # Display order for the sidebar's connect shortcuts, most-asked-for first.

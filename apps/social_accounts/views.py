@@ -199,6 +199,31 @@ def account_list(request, workspace_id):
 
 
 # ------------------------------------------------------------------
+# Account Detail
+# ------------------------------------------------------------------
+
+
+@login_required
+@require_permission("manage_social_accounts")
+@require_GET
+def account_detail(request, workspace_id, account_id):
+    """Show account metadata and this workspace's recent posts for the account."""
+    from apps.composer.models import PlatformPost
+
+    account = get_object_or_404(SocialAccount.objects.for_workspace(workspace_id), id=account_id)
+    recent_posts = (
+        PlatformPost.objects.filter(social_account=account, post__workspace_id=workspace_id)
+        .select_related("post")
+        .order_by("-created_at", "-id")[:10]
+    )
+    return render(
+        request,
+        "social_accounts/account_detail.html",
+        {"account": account, "recent_posts": recent_posts, "workspace_id": workspace_id},
+    )
+
+
+# ------------------------------------------------------------------
 # Connect Platform (OAuth redirect)
 # ------------------------------------------------------------------
 

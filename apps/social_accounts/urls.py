@@ -64,4 +64,10 @@ urlpatterns = [
         views.disconnect,
         name="disconnect",
     ),
+    # Per-account detail page (single connected account)
+    path(
+        "<uuid:workspace_id>/<uuid:account_id>/",
+        views.account_detail,
+        name="detail",
+    ),
 ]
