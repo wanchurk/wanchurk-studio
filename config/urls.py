@@ -34,6 +34,8 @@ urlpatterns = [
     path("workspace/<uuid:workspace_id>/", include("apps.composer.urls")),
     path("workspace/<uuid:workspace_id>/calendar/", include("apps.calendar.urls")),
     path("workspace/<uuid:workspace_id>/inbox/", include("apps.inbox.urls")),
+    path("workspace/<uuid:workspace_id>/commerce/inbox/", include("apps.commerce.urls")),
+    path("workspace/<uuid:workspace_id>/studio/", include("apps.composer.urls_studio")),
     path("workspace/<uuid:workspace_id>/analytics/", include("apps.analytics.urls")),
     path("webhooks/", include("apps.inbox.webhook_urls")),
     path("webhooks/", include("apps.common.webhook_urls")),

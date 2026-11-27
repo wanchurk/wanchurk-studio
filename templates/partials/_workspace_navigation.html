@@ -1,0 +1,73 @@
+{% load i18n %}
+{% with route=request.resolver_match %}
+{% if sidebar_can_create_posts %}
+<a href="{% url 'composer:create_landing' workspace_id=request.workspace.id %}"
+   class="sidebar-nav-item sidebar-workspace-root{% if route.app_name == 'composer' %} active{% endif %}"
+   title="{% trans 'Ideas' %}" aria-label="{% trans 'Ideas' %}"{% if route.app_name == 'composer' and route.url_name == 'create_landing' %} aria-current="page"{% endif %}>
+    {% include 'partials/_workspace_nav_icon.html' with icon='ideas' only %}
+    <span class="sidebar-nav-label">{% trans "Ideas" %}</span>
+</a>
+{% endif %}
+
+<details class="sidebar-workspace-section" name="workspace-tools" data-workspace-section="social"{% if route.app_name == 'calendar' or route.app_name == 'inbox' or route.app_name == 'approvals' %} open{% endif %}>
+    <summary class="sidebar-nav-item sidebar-workspace-summary{% if route.app_name == 'calendar' or route.app_name == 'inbox' or route.app_name == 'approvals' %} is-current{% endif %}"
+             @click="if (sidebarIsRail) { $event.preventDefault(); $el.parentElement.open = true; sidebarCollapsed = false }"
+             title="{% trans 'Social Media' %}" aria-label="{% trans 'Social Media' %}">
+        {% include 'partials/_workspace_nav_icon.html' with icon='social' only %}
+        <span class="sidebar-nav-label flex-1">{% trans "Social Media" %}</span>
+        {% if sidebar_can_use_inbox and sidebar_unread_inbox_count %}<span class="sidebar-badge workspace-section-unread tabular-nums">{{ sidebar_unread_inbox_count }}</span>{% endif %}
+        {% include 'partials/_workspace_nav_chevron.html' %}
+    </summary>
+    <div class="sidebar-workspace-children">
+        <a class="sidebar-workspace-leaf" href="{% url 'calendar:calendar' workspace_id=request.workspace.id %}"{% if route.app_name == 'calendar' or route.app_name == 'approvals' %} aria-current="page"{% endif %}>
+            <span>{% trans "Publish" %}</span>
+        </a>
+        {% if sidebar_can_use_inbox %}
+        <a class="sidebar-workspace-leaf" href="{% url 'inbox:feed' workspace_id=request.workspace.id %}"{% if route.app_name == 'inbox' %} aria-current="page"{% endif %}>
+            <span>{% trans "Social Inbox" %}</span>
+            {% if sidebar_unread_inbox_count %}<span class="sidebar-badge tabular-nums">{{ sidebar_unread_inbox_count }}</span>{% endif %}
+        </a>
+        {% endif %}
+    </div>
+</details>
+
+{% if sidebar_can_use_inbox %}
+<details class="sidebar-workspace-section" name="workspace-tools" data-workspace-section="commerce"{% if route.app_name == 'commerce' %} open{% endif %}>
+    <summary class="sidebar-nav-item sidebar-workspace-summary{% if route.app_name == 'commerce' %} is-current{% endif %}"
+             @click="if (sidebarIsRail) { $event.preventDefault(); $el.parentElement.open = true; sidebarCollapsed = false }"
+             title="{% trans 'Shop Support' %}" aria-label="{% trans 'Shop Support' %}">
+        {% include 'partials/_workspace_nav_icon.html' with icon='commerce' only %}
+        <span class="sidebar-nav-label flex-1">{% trans "Shop Support" %}</span>
+        {% include 'partials/_workspace_nav_chevron.html' %}
+    </summary>
+    <div class="sidebar-workspace-children">
+        <a class="sidebar-workspace-leaf" href="{% url 'commerce:inbox' workspace_id=request.workspace.id %}"{% if route.app_name == 'commerce' %} aria-current="page"{% endif %}>
+            <span>{% trans "Shop Inbox" %}</span>
+        </a>
+    </div>
+</details>
+{% endif %}
+
+{% if sidebar_can_create_posts %}
+<details class="sidebar-workspace-section" name="workspace-tools" data-workspace-section="creative"{% if route.app_name == 'studio' or route.app_name == 'media_library' %} open{% endif %}>
+    <summary class="sidebar-nav-item sidebar-workspace-summary{% if route.app_name == 'studio' or route.app_name == 'media_library' %} is-current{% endif %}"
+             @click="if (sidebarIsRail) { $event.preventDefault(); $el.parentElement.open = true; sidebarCollapsed = false }"
+             title="{% trans 'AI Studio' %}" aria-label="{% trans 'AI Studio' %}">
+        {% include 'partials/_workspace_nav_icon.html' with icon='creative' only %}
+        <span class="sidebar-nav-label flex-1">{% trans "AI Studio" %}</span>
+        {% include 'partials/_workspace_nav_chevron.html' %}
+    </summary>
+    <div class="sidebar-workspace-children">
+        <a class="sidebar-workspace-leaf" href="{% url 'studio:video' workspace_id=request.workspace.id %}"{% if route.app_name == 'studio' and route.url_name == 'video' %} aria-current="page"{% endif %}>
+            <span>{% trans "AI Video" %}</span>
+        </a>
+        <a class="sidebar-workspace-leaf" href="{% url 'studio:image' workspace_id=request.workspace.id %}"{% if route.app_name == 'studio' and route.url_name == 'image' %} aria-current="page"{% endif %}>
+            <span>{% trans "AI Image" %}</span>
+        </a>
+        <a class="sidebar-workspace-leaf" href="{% url 'media_library:index' workspace_id=request.workspace.id %}"{% if route.app_name == 'media_library' %} aria-current="page"{% endif %}>
+            <span>{% trans "Media Library" %}</span>
+        </a>
+    </div>
+</details>
+{% endif %}
+{% endwith %}

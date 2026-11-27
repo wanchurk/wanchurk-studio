@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block page_title %}{{ studio_title }}{% endblock %}
+{% block content %}
+<section class="ops-module" aria-labelledby="studio-title">
+    <header class="ops-module-header">
+        <div>
+            <p class="ops-eyebrow">{% trans 'AI Studio' %}</p>
+            <h1 id="studio-title">{{ studio_title }}</h1>
+            <p>{{ intro }}</p>
+        </div>
+        <div class="ops-actions">
+            <a class="ops-secondary" href="{% url 'composer:create_landing' workspace_id=workspace_id %}">{% trans 'Open Ideas' %}</a>
+            <a class="ops-secondary" href="{% url 'media_library:index' workspace_id=workspace_id %}?type={{ kind }}">{% trans 'Media Library' %}</a>
+        </div>
+    </header>
+    <div class="ops-notice">
+        <strong>{% trans 'Generation service not connected' %}</strong>
+        <p>{% trans 'You can prepare and save a brief. This page does not generate images or videos.' %}</p>
+    </div>
+    <div class="ops-panel ops-form-panel">
+        <h2>{% trans 'Prepare a brief' %}</h2>
+        <form method="post" class="ops-form">
+            {% csrf_token %}
+            {% include 'partials/_ops_form_fields.html' with form=brief_form %}
+            <button class="btn-brand" type="submit">{% trans 'Save to Ideas' %}</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

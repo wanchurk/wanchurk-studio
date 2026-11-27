@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block page_title %}{% trans 'Add buyer conversation' %}{% endblock %}
+{% block content %}
+<section class="ops-module" aria-labelledby="new-conversation-title">
+    <header class="ops-module-header">
+        <div>
+            <p class="ops-eyebrow">{% trans 'Commerce Support Inbox' %}</p>
+            <h1 id="new-conversation-title">{% trans 'Add buyer conversation' %}</h1>
+            <p>{% trans 'Paste a buyer message from your shop. Include only the information needed to follow up.' %}</p>
+        </div>
+        <a class="ops-secondary" href="{% url 'commerce:inbox' workspace_id=workspace_id %}">{% trans 'Back to inbox' %}</a>
+    </header>
+    <div class="ops-panel ops-form-panel">
+        <form method="post" class="ops-form" action="{% url 'commerce:create' workspace_id=workspace_id %}">
+            {% csrf_token %}
+            {% include 'partials/_ops_form_fields.html' %}
+            <button class="btn-brand" type="submit">{% trans 'Save conversation' %}</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

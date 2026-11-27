@@ -2,9 +2,11 @@
 
 import re
 import uuid
+from types import SimpleNamespace
 
 from django.template.loader import render_to_string
 from django.test import SimpleTestCase, TestCase
+from django.urls import reverse
 
 from apps.common.templatetags.common_extras import json_attr
 from apps.common.validators import MAX_TAG_LENGTH, MAX_TAGS, normalize_tags
@@ -92,6 +94,34 @@ class _StubAsset:
 class _StubWorkspace:
     def __init__(self, workspace_id):
         self.id = workspace_id
+
+
+class MediaLibraryStudioLinkTest(SimpleTestCase):
+    def _render(self, media_type, can_create_posts):
+        workspace = _StubWorkspace(uuid.uuid4())
+        html = render_to_string(
+            "media_library/library_index.html",
+            {
+                "workspace": workspace,
+                "request": SimpleNamespace(workspace=workspace),
+                "user": SimpleNamespace(is_authenticated=True),
+                "current_type": media_type,
+                "sidebar_can_create_posts": can_create_posts,
+            },
+        )
+        return workspace, html
+
+    def test_media_filter_links_back_to_its_creative_tool(self):
+        for kind in ("image", "video"):
+            with self.subTest(kind=kind):
+                workspace, html = self._render(kind, can_create_posts=True)
+                href = reverse(f"studio:{kind}", kwargs={"workspace_id": workspace.id})
+                self.assertIn(f'href="{href}"', html)
+
+    def test_read_only_member_has_no_creative_tool_link(self):
+        workspace, html = self._render("image", can_create_posts=False)
+        href = reverse("studio:image", kwargs={"workspace_id": workspace.id})
+        self.assertNotIn(f'href="{href}"', html)
 
 
 class TagInputTemplateTest(SimpleTestCase):

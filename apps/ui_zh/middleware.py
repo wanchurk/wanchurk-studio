@@ -43,7 +43,8 @@ SKIP_BLOCKS = re.compile(
 TEXTAREA_INNER = re.compile(r"(<textarea\b[^>]*>)(.*?)(</textarea>)", re.I | re.S)
 
 TEXT_ATTRS = ("placeholder", "title", "aria-label", "alt")
-ATTR_RE = re.compile(r"\b(" + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
+# Match real attribute names, not Alpine :title / x-bind:aria-label or data-title.
+ATTR_RE = re.compile(r"(?<=\s)(" + "|".join(TEXT_ATTRS) + r')="([^"]*)"', re.I)
 
 TAG_SPLIT = re.compile(r"(<[^>]+>)")
 

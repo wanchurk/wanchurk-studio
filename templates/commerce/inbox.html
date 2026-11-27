@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block page_title %}{% trans 'Commerce Support Inbox' %}{% endblock %}
+{% block content %}
+<section class="ops-module" aria-labelledby="commerce-title">
+    <header class="ops-module-header">
+        <div>
+            <p class="ops-eyebrow">{% trans 'Shop Support' %}</p>
+            <h1 id="commerce-title">{% trans 'Commerce Support Inbox' %}</h1>
+            <p>{% trans 'Keep buyer questions and reply drafts separate from social messages.' %}</p>
+        </div>
+        {% if can_triage %}
+        <a class="btn-brand" href="{% url 'commerce:create' workspace_id=workspace_id %}">{% trans 'Add buyer conversation' %}</a>
+        {% endif %}
+    </header>
+    <div class="ops-notice" id="commerce-connection-state">
+        <strong>{% trans 'No platforms connected' %}</strong>
+        <p>{% trans 'This inbox stores manually added conversations. It does not sync or send messages to shops.' %}</p>
+    </div>
+    <div class="ops-inbox-grid">
+        <section class="ops-panel ops-inbox-list" aria-label="{% trans 'Buyer conversations' %}">
+            <div class="ops-panel-heading">
+                <form method="get" class="ops-filter" action="{% url 'commerce:inbox' workspace_id=workspace_id %}">
+                    <input type="hidden" name="status" value="{{ status }}">
+                    <label for="commerce-platform">{% trans 'Platform' %}</label>
+                    <select id="commerce-platform" name="platform">
+                        <option value="">{% trans 'All platforms' %}</option>
+                        {% for value, label in platform_choices %}
+                        <option value="{{ value }}"{% if value == platform %} selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="ops-secondary" type="submit">{% trans 'Filter' %}</button>
+                </form>
+                <div class="ops-filters" aria-label="{% trans 'Conversation status' %}">
+                    <a href="{% url 'commerce:inbox' workspace_id=workspace_id %}{% querystring status='open' page=None %}"{% if status == 'open' %} aria-current="true"{% endif %}><span>{% trans 'Open' %}</span><span class="tabular-nums">{{ counts.open }}</span></a>
+                    <a href="{% url 'commerce:inbox' workspace_id=workspace_id %}{% querystring status='resolved' page=None %}"{% if status == 'resolved' %} aria-current="true"{% endif %}><span>{% trans 'Resolved' %}</span><span class="tabular-nums">{{ counts.resolved }}</span></a>
+                    <a href="{% url 'commerce:inbox' workspace_id=workspace_id %}{% querystring status='all' page=None %}"{% if status == 'all' %} aria-current="true"{% endif %}>{% trans 'All' %}</a>
+                </div>
+            </div>
+            {% if page.object_list %}
+            <ul class="ops-conversations">
+                {% for item in page %}
+                <li><a href="{% url 'commerce:conversation' workspace_id=workspace_id conversation_id=item.id %}{% querystring %}"{% if selected.id == item.id %} aria-current="page"{% endif %}>
+                    <span class="ops-row-subtitle"><span>{{ item.get_platform_display }}</span><span>{{ item.created_at|date:'m-d' }}</span></span>
+                    <code class="ops-row-title">{{ item.subject }}</code>
+                    <code class="ops-row-shop">{{ item.shop_name }}</code>
+                </a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="ops-list-empty">{% if status == 'open' %}{% trans 'No open conversations' %}{% else %}{% trans 'No conversations match this filter' %}{% endif %}</p>
+            {% endif %}
+            {% if page.has_other_pages %}
+            <nav class="ops-pagination" aria-label="{% trans 'Pages' %}">
+                {% if page.has_previous %}<a href="{% url 'commerce:inbox' workspace_id=workspace_id %}{% querystring page=page.previous_page_number %}">{% trans 'Previous' %}</a>{% endif %}
+                <span>{{ page.number }} / {{ page.paginator.num_pages }}</span>
+                {% if page.has_next %}<a href="{% url 'commerce:inbox' workspace_id=workspace_id %}{% querystring page=page.next_page_number %}">{% trans 'Next' %}</a>{% endif %}
+            </nav>
+            {% endif %}
+        </section>
+        <section class="ops-panel ops-inbox-detail{% if selected %} ops-has-selection{% endif %}" aria-label="{% trans 'Conversation details' %}">
+            {% if selected %}
+            <header>
+                <p class="ops-eyebrow">{{ selected.get_platform_display }}</p>
+                <h2><code>{{ selected.subject }}</code></h2>
+                <dl class="ops-metadata">
+                    <div><dt>{% trans 'Shop name' %}</dt><dd><code>{{ selected.shop_name }}</code></dd></div>
+                    {% if selected.buyer_alias %}<div><dt>{% trans 'Buyer alias' %}</dt><dd><code>{{ selected.buyer_alias }}</code></dd></div>{% endif %}
+                    {% if selected.order_reference %}<div><dt>{% trans 'Order reference' %}</dt><dd><code>{{ selected.order_reference }}</code></dd></div>{% endif %}
+                    <div><dt>{% trans 'Status' %}</dt><dd>{{ selected.get_status_display }}</dd></div>
+                </dl>
+            </header>
+            <div class="ops-message">
+                <h3>{% trans 'Buyer message' %}</h3>
+                <pre>{{ selected.body }}</pre>
+            </div>
+            {% if can_triage %}
+            {% if conflict_draft is not None %}
+            <div class="ops-notice mt-3" role="alert">
+                <strong>{% trans 'This conversation has changed. Your changes were not saved.' %}</strong>
+                <p>{% trans 'The form below shows the latest saved values. Review them before applying your changes again.' %}</p>
+            </div>
+            <div class="ops-message">
+                <h3>{% trans 'Your unsaved reply draft' %}</h3>
+                <pre>{{ conflict_draft }}</pre>
+            </div>
+            {% endif %}
+            <form method="post" class="ops-form" action="{% url 'commerce:update' workspace_id=workspace_id conversation_id=selected.id %}{% querystring %}">
+                {% csrf_token %}
+                {{ triage_form.revision }}
+                {% if triage_form.revision.errors %}
+                <p class="ops-footnote" role="alert"><a class="underline" href="{% url 'commerce:conversation' workspace_id=workspace_id conversation_id=selected.id %}{% querystring %}">{% trans 'Reopen this conversation before saving.' %}</a></p>
+                {% endif %}
+                {{ triage_form.non_field_errors }}
+                {% for field in triage_form.visible_fields %}
+                <div class="ops-form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="ops-field-optional">{% trans 'Optional' %}</span>{% endif %}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+                <p class="ops-footnote">{% trans 'Drafts stay in this workspace. To reply to the buyer, use your shop platform.' %}</p>
+                <button class="btn-brand" type="submit">{% trans 'Save changes' %}</button>
+            </form>
+            {% else %}
+            <div class="ops-message mt-3">
+                <h3>{% trans 'Reply draft' %}</h3>
+                {% if selected.reply_draft %}<pre>{{ selected.reply_draft }}</pre>{% else %}<p class="ops-footnote">{% trans 'No reply draft yet.' %}</p>{% endif %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="ops-empty">
+                {% include 'partials/_workspace_nav_icon.html' with icon='commerce' only %}
+                <h2>{% trans 'Select a conversation' %}</h2>
+                <p>{% trans 'Picked conversations appear here with the original message and its reply draft.' %}</p>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</section>
+{% endblock %}

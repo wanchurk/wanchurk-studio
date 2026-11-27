@@ -145,6 +145,8 @@ def sidebar_context(request):
         "sidebar_channel_groups": sidebar_channel_groups,
         "sidebar_active_channel_id": sidebar_active_channel_id,
         "sidebar_can_manage_channels": can_manage_channels,
+        "sidebar_can_use_inbox": bool(permissions.get("use_inbox")),
+        "sidebar_can_create_posts": bool(permissions.get("create_posts")),
         "sidebar_connectable_platforms": sidebar_connectable_platforms,
         "sidebar_unread_inbox_count": sidebar_unread_inbox_count,
         "sidebar_pending_approvals": sidebar_pending_approvals,

@@ -229,3 +229,14 @@ def test_sentence_with_a_slash_still_translates():
     from apps.ui_zh.middleware import translate_text
 
     assert translate_text("Save Changes") == "保存修改"
+
+
+def test_static_attribute_copy_is_translated_but_alpine_expressions_are_not():
+    from apps.ui_zh.middleware import translate_html
+
+    html = '<button :title="emoji.n" x-bind:aria-label="emoji.n" data-title="New" title="New">New</button>'
+    result = translate_html(html)
+    assert ':title="emoji.n"' in result
+    assert 'x-bind:aria-label="emoji.n"' in result
+    assert 'data-title="New"' in result
+    assert ' title="新建">新建</button>' in result

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./operations.css";
 
 /* Scan all template directories for Tailwind class usage */
 @source "../../../templates/**/*.html";
