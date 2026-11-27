@@ -86,6 +86,7 @@ class ThreadsProvider(SocialProvider):
             "threads_content_publish",
             "threads_manage_insights",
             "threads_manage_replies",
+            "threads_read_replies",
         ]
 
     @property
@@ -107,6 +108,7 @@ class ThreadsProvider(SocialProvider):
             "state": state,
             "scope": ",".join(self.required_scopes),
             "response_type": "code",
+            "auth_type": "reauthenticate",
         }
         return f"{AUTH_URL}?{urlencode(params)}"
 
